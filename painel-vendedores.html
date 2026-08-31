@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MaxDistrib · Painel do Vendedor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+:root{--blk:#111;--wht:#fff;--gld:#F4C430;--gldh:#D4A820;--red:#E53935;--rdd:#C62828;--g1:#F8F8F8;--g2:#E5E5E5;--g3:#999;--g4:#555;--g5:#222;--r:6px;--rl:10px;--rxl:16px;--ff:'Inter',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--ff);color:var(--g5);background:var(--g1);line-height:1.5;-webkit-font-smoothing:antialiased;min-width:320px}
+a{text-decoration:none;color:inherit}button,input,select{font-family:var(--ff)}button{cursor:pointer;border:none}
+
+.sidebar{width:240px;min-height:100dvh;background:var(--blk);color:var(--wht);position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column;transition:transform .25s}
+.sidebar-head{padding:15px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-head .mk{width:32px;height:32px;background:var(--gld);color:var(--blk);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px}
+.sidebar-head span{font-weight:700;font-size:13px}
+.sidebar-nav{flex:1;overflow-y:auto;padding:6px 0}
+.sidebar-link{display:flex;align-items:center;gap:8px;padding:9px 14px;margin:2px 8px;border-radius:var(--r);font-size:12px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .1s;background:none;width:calc(100% - 16px);text-align:left}
+.sidebar-link:hover{background:rgba(255,255,255,.05);color:var(--wht)}
+.sidebar-link.on{background:var(--gld);color:var(--blk);font-weight:700}
+.sidebar-foot{padding:10px 16px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px;font-size:10px}
+.sidebar-av{width:28px;height:28px;border-radius:50%;background:var(--gld);color:var(--blk);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;flex-shrink:0}
+
+.main{margin-left:240px;min-height:100dvh}
+.topbar{background:var(--wht);border-bottom:1px solid var(--g2);padding:0 18px;height:50px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar .bc{font-size:11.5px;color:var(--g3)}.topbar .bc span{color:var(--g5);font-weight:700}
+.mob-btn{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--g5);padding:3px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:95}
+.content{padding:18px;min-height:calc(100dvh - 50px)}
+.panel{display:none}.panel.on{display:block;animation:fi .2s ease}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:18px}
+.stat-card{background:var(--wht);border:1px solid var(--g2);border-radius:var(--rl);padding:15px;display:flex;align-items:center;gap:10px;transition:box-shadow .15s}
+.stat-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.stat-icon{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.stat-icon.b{background:#F5F5F5;color:var(--blk)}.stat-icon.g{background:#E8F5E9;color:#2E7D32}.stat-icon.y{background:#FFF3CD;color:#856404}
+.stat-info h3{font-size:9.5px;font-weight:600;color:var(--g3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.stat-info .val{font-size:18px;font-weight:800;color:var(--blk)}.stat-info .sub{font-size:9.5px;color:var(--g3)}
+
+.table-card{background:var(--wht);border:1px solid var(--g2);border-radius:var(--rl);overflow:hidden;margin-bottom:16px}
+.table-head{padding:12px 15px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.table-head h2{font-size:13.5px;font-weight:700;color:var(--blk)}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:500px}
+table thead th{padding:7px 10px;text-align:left;font-size:9.5px;font-weight:700;color:var(--g3);text-transform:uppercase;letter-spacing:.04em;background:var(--g1);border-bottom:1px solid var(--g2);white-space:nowrap}
+table tbody td{padding:7px 10px;font-size:11.5px;border-bottom:1px solid var(--g2);color:var(--g4)}table tbody tr:hover{background:#FFFDE7}table tbody tr:last-child td{border-bottom:none}
+
+.badge{display:inline-flex;padding:2px 7px;border-radius:20px;font-size:9.5px;font-weight:700}
+.badge-ok{background:#E8F5E9;color:#2E7D32}.badge-w{background:#FFF3CD;color:#856404}.badge-c{background:#FFEBEE;color:var(--red)}.badge-n{background:#F5F5F5;color:var(--g3)}
+
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--r);font-size:11.5px;font-weight:700;transition:all .1s;white-space:nowrap}
+.btn-p{background:var(--blk);color:var(--wht)}.btn-p:hover{background:var(--g5)}
+.btn-g{background:var(--gld);color:var(--blk)}.btn-g:hover{background:var(--gldh)}
+.btn-gh{background:transparent;color:var(--g3);padding:4px 6px}.btn-gh:hover{background:var(--g1);color:var(--g5)}
+
+.chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-bottom:18px}
+.chart-card{background:var(--wht);border:1px solid var(--g2);border-radius:var(--rl);padding:15px}
+.chart-card h3{font-size:12.5px;font-weight:700;color:var(--blk);margin-bottom:12px}
+
+.meta-bar{background:var(--g1);border-radius:8px;height:28px;overflow:hidden;margin:8px 0;position:relative}
+.meta-fill{height:100%;background:linear-gradient(90deg,var(--gld),#E6C422);border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:800;color:var(--blk);transition:width 1s ease}
+.meta-info{display:flex;justify-content:space-between;font-size:10.5px;color:var(--g3);margin-top:4px}
+
+.link-box{background:var(--g1);border:1.5px dashed var(--g2);border-radius:var(--r);padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-family:monospace}
+.link-box span{color:var(--gld);font-weight:700}
+
+.client-card{background:var(--wht);border:1px solid var(--g2);border-radius:var(--rl);padding:15px;margin-bottom:8px;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:space-between}
+.client-card:hover{border-color:var(--gld);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.client-card .cl-name{font-weight:700;color:var(--blk);font-size:13px}
+.client-card .cl-stats{text-align:right;font-size:11px;color:var(--g3)}
+.client-card .cl-stats strong{display:block;color:var(--blk);font-size:14px}
+
+.client-detail{background:var(--wht);border:1px solid var(--g2);border-radius:var(--rl);padding:18px;margin-bottom:12px}
+.client-detail h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.client-detail h3 button{background:none;border:none;font-size:18px;cursor:pointer;padding:2px 6px}
+
+.empty-state{padding:28px 14px;text-align:center;color:var(--g3)}.empty-state .ic{font-size:32px;margin-bottom:6px}.empty-state h4{color:var(--g5);font-size:12.5px}.empty-state p{font-size:11px}
+
+.fg{margin-bottom:10px}.fg label{display:block;font-size:11px;font-weight:700;color:var(--g5);margin-bottom:2px}
+.fi{width:100%;padding:7px 10px;border:1.5px solid var(--g2);border-radius:var(--r);font-size:12px;color:var(--g5);background:var(--wht);outline:none}.fi:focus{border-color:var(--gld)}
+
+input[type="range"]{width:100%;appearance:none;height:6px;background:var(--g2);border-radius:3px;outline:none}
+input[type="range"]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:var(--gld);cursor:pointer}
+
+ @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.mob-btn{display:block}.content{padding:10px}.stats{grid-template-columns:repeat(2,1fr);gap:7px}.chart-row{grid-template-columns:1fr}}
+@media(max-width:420px){.stats{grid-template-columns:1fr 1fr;gap:6px}.stat-card{padding:11px;gap:7px}.stat-icon{width:32px;height:32px;font-size:14px}.stat-info .val{font-size:15px}}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar(true)"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head"><div class="mk">LS</div><span>Painel do Vendedor</span></div>
+  <nav class="sidebar-nav">
+    <button class="sidebar-link stag-link on" data-tag="dash" onclick="openTag('dash')">📊 Dashboard</button>
+    <button class="sidebar-link stag-link" data-tag="pedidos" onclick="openTag('pedidos')">📋 Pedidos por Cliente</button>
+    <button class="sidebar-link stag-link" data-tag="clientes" onclick="openTag('clientes')">👥 Meus Clientes</button>
+    <button class="sidebar-link stag-link" data-tag="link" onclick="openTag('link')">🔗 Meu Link</button>
+    <button class="sidebar-link stag-link" data-tag="metas" onclick="openTag('metas')">🎯 Minhas Metas</button>
+    <button class="sidebar-link stag-link" data-tag="rank" onclick="openTag('rank')">🏆 Ranking</button>
+  </nav>
+  <div class="sidebar-foot"><div class="sidebar-av">LS</div><div><div style="font-weight:700;font-size:10.5px">Lucas Silva</div><div style="color:rgba(255,255,255,.3);font-size:8.5px">Vendedor</div></div></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="mob-btn" onclick="toggleSidebar()">☰</button>
+      <div class="bc" id="breadcrumb">Painel · <span>Dashboard</span></div>
+    </div>
+  </div>
+  <div class="content" id="pageRoot"></div>
+</main>
+
+<script>
+var VENDOR_NAME = 'Lucas Silva';
+
+// Mock data - orders by client
+var allOrders = [
+  {id:1,client:'Mateus Oliveira',product:'Whey Protein 900g',qty:5,price:149.90,date:'2026-07-01',status:'retirado'},
+  {id:2,client:'Mateus Oliveira',product:'Creatina 300g',qty:3,price:89.90,date:'2026-07-03',status:'retirado'},
+  {id:3,client:'Mateus Oliveira',product:'Multivitamínico',qty:2,price:54.90,date:'2026-07-05',status:'retirado'},
+  {id:4,client:'Ana Beatriz',product:'Creatina 300g',qty:3,price:89.90,date:'2026-07-01',status:'retirado'},
+  {id:5,client:'Ana Beatriz',product:'Pré-Treino Égide',qty:2,price:109.90,date:'2026-07-04',status:'separando'},
+  {id:6,client:'Carlos Eduardo',product:'Whey Protein 900g',qty:6,price:149.90,date:'2026-07-02',status:'retirado'},
+  {id:7,client:'Carlos Eduardo',product:'Barra Proteína Cx12',qty:3,price:154.80,date:'2026-07-05',status:'pendente'},
+  {id:8,client:'Fernanda Torres',product:'Barra Proteína Cx12',qty:4,price:154.80,date:'2026-07-02',status:'separando'},
+  {id:9,client:'Fernanda Torres',product:'Energético Cx24',qty:1,price:357.60,date:'2026-07-05',status:'retirado'},
+  {id:10,client:'João Victor',product:'Whey Protein 900g',qty:8,price:149.90,date:'2026-07-03',status:'retirado'},
+  {id:11,client:'João Victor',product:'Creatina 300g',qty:2,price:89.90,date:'2026-07-06',status:'pendente'},
+  {id:12,client:'Mariana Costa',product:'Multivitamínico',qty:3,price:54.90,date:'2026-07-03',status:'pendente'},
+  {id:13,client:'Pedro Santos',product:'Energético Cx24',qty:2,price:357.60,date:'2026-07-04',status:'pendente'},
+  {id:14,client:'Rafael Lima',product:'Creatina 300g',qty:6,price:89.90,date:'2026-07-04',status:'retirado'},
+  {id:15,client:'Rafael Lima',product:'Hipercalórico 3kg',qty:2,price:119.90,date:'2026-07-06',status:'pendente'},
+  {id:16,client:'Juliana Souza',product:'Pré-Treino Égide',qty:4,price:109.90,date:'2026-07-05',status:'separando'},
+  {id:17,client:'Larissa Alves',product:'Barra Proteína Cx12',qty:5,price:154.80,date:'2026-07-06',status:'pendente'},
+  {id:18,client:'Gabriel Nunes',product:'Ômega 3 120caps',qty:4,price:49.90,date:'2026-07-06',status:'retirado'}
+];
+
+var rankData = [
+  {v:'Lucas Silva',val:5940,q:45},{v:'Marina Costa',val:4820,q:38},{v:'Pedro Santos',val:4150,q:32},
+  {v:'Ana Oliveira',val:3890,q:29},{v:'Rafael Lima',val:2780,q:21},{v:'Juliana Souza',val:1980,q:15},
+  {v:'Carlos Eduardo',val:1540,q:11},{v:'Fernanda Torres',val:980,q:7}
+];
+
+// Meta do vendedor - armazenada em localStorage
+function getMeta() {
+  try { var r = localStorage.getItem('md_meta_' + VENDOR_NAME); if (r) return parseFloat(r); } catch(e) {}
+  return 15000;
+}
+function setMeta(v) { localStorage.setItem('md_meta_' + VENDOR_NAME, v); }
+
+function formatMoney(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+function formatDate(d) { return new Date(d + 'T00:00:00').toLocaleDateString('pt-BR'); }
+
+function toggleSidebar(force) {
+  var s = document.getElementById('sidebar'), o = document.getElementById('overlay');
+  if (force === true) { s.classList.remove('open'); o.style.display = 'none'; return; }
+  s.classList.toggle('open'); o.style.display = s.classList.contains('open') ? 'block' : 'none';
+}
+
+function getClients() {
+  var names = [];
+  allOrders.forEach(function(o) { if (names.indexOf(o.client) < 0) names.push(o.client); });
+  return names;
+}
+
+function getClientOrders(clientName) {
+  return allOrders.filter(function(o) { return o.client === clientName; });
+}
+
+// ============= NAVIGATION =============
+function openTag(tag) {
+  var links = document.querySelectorAll('.stag-link');
+  for (var i = 0; i < links.length; i++) { links[i].classList.remove('on'); }
+  var al = document.querySelector('[data-tag="' + tag + '"]');
+  if (al) al.classList.add('on');
+  var titles = {dash:'Dashboard',pedidos:'Pedidos por Cliente',clientes:'Meus Clientes',link:'Meu Link',metas:'Minhas Metas',rank:'Ranking'};
+  document.getElementById('breadcrumb').innerHTML = 'Painel · <span>' + (titles[tag] || tag) + '</span>';
+  var r = document.getElementById('pageRoot'); r.innerHTML = '';
+  var fns = {dash:rDash,pedidos:rPed,clientes:rCli,link:rLink,metas:rMeta,rank:rRank};
+  (fns[tag] || rDash)(r);
+  toggleSidebar(true);
+}
+
+// ============= DASHBOARD =============
+function rDash(ct) {
+  var todayV = allOrders.filter(function(o) { return o.date >= '2026-07-06'; }).reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  var weekV = allOrders.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  var tp = allOrders.reduce(function(s,o) { return s + o.qty; }, 0);
+  var pend = allOrders.filter(function(o) { return o.status === 'pendente'; }).length;
+  var clist = getClients();
+  ct.innerHTML =
+    '<div class="stats">' +
+      '<div class="stat-card"><div class="stat-icon g">💰</div><div class="stat-info"><h3>Vendas Hoje</h3><div class="val">' + formatMoney(todayV) + '</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon b">📅</div><div class="stat-info"><h3>Vendas na Semana</h3><div class="val">' + formatMoney(weekV) + '</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon y">📦</div><div class="stat-info"><h3>Produtos Vendidos</h3><div class="val">' + tp + ' un</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon" style="background:#FFEBEE;color:var(--red)">📋</div><div class="stat-info"><h3>Pedidos Pendentes</h3><div class="val">' + pend + '</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon g">👥</div><div class="stat-info"><h3>Clientes</h3><div class="val">' + clist.length + '</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon b">📊</div><div class="stat-info"><h3>Ticket Médio</h3><div class="val">' + formatMoney(weekV / allOrders.length) + '</div></div></div>' +
+    '</div>' +
+    '<div class="chart-row">' +
+      '<div class="chart-card"><h3>Vendas por Dia (Semana)</h3><div style="height:200px"><canvas id="chDash"></canvas></div></div>' +
+      '<div class="chart-card"><h3>Últimos Pedidos</h3>' +
+        allOrders.slice(-6).reverse().map(function(o) {
+          return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--g2);font-size:11.5px"><span>' + o.product + ' x' + o.qty + '</span><span style="color:var(--g3)">' + o.client + '</span><span style="font-weight:700">' + formatMoney(o.price * o.qty) + '</span><span class="badge ' + (o.status === 'retirado' ? 'badge-ok' : o.status === 'separando' ? 'badge-w' : 'badge-c') + '">' + o.status + '</span></div>';
+        }).join('') +
+      '</div>' +
+    '</div>';
+  setTimeout(function() {
+    var c = document.getElementById('chDash'); if (!c) return;
+    var days = {}; allOrders.forEach(function(o) { days[o.date] = (days[o.date] || 0) + (o.price * o.qty); });
+    var dk = Object.keys(days).sort();
+    new Chart(c, {type:'bar',data:{labels:dk,datasets:[{label:'R$',data:dk.map(function(d) { return days[d]; }),backgroundColor:'#F4C430',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+  }, 200);
+}
+
+// ============= PEDIDOS POR CLIENTE =============
+function rPed(ct) {
+  var clients = getClients();
+  ct.innerHTML =
+    '<div style="margin-bottom:14px;display:flex;gap:6px;flex-wrap:wrap" id="pedTabs">' +
+      '<button class="btn btn-p btn-sm on" onclick="showAllOrders(this)">Todos os Pedidos</button>' +
+      clients.map(function(cl) { return '<button class="btn btn-gh btn-sm" onclick="showClientOrders(&quot;' + cl + '&quot;, this)">' + cl + '</button>'; }).join('') +
+    '</div>' +
+    '<div id="pedContent">' + buildAllOrdersTable(allOrders) + '</div>';
+}
+
+function buildAllOrdersTable(orders) {
+  return '<div class="table-card"><div class="table-wrap"><table><thead><tr><th>Data</th><th>Cliente</th><th>Produto</th><th>Qtd</th><th>Valor</th><th>Status</th><th></th></tr></thead><tbody>' +
+    orders.slice().reverse().map(function(o) {
+      return '<tr><td>' + formatDate(o.date) + '</td><td style="font-weight:600">' + o.client + '</td><td>' + o.product + '</td><td>' + o.qty + '</td><td style="font-weight:700">' + formatMoney(o.price * o.qty) + '</td><td><span class="badge ' + (o.status === 'retirado' ? 'badge-ok' : o.status === 'separando' ? 'badge-w' : 'badge-c') + '">' + o.status + '</span></td><td>' + (o.status === 'pendente' ? '<button class="btn btn-g btn-sm">Aprovar</button> <button class="btn btn-gh btn-sm">Desconto</button>' : o.status === 'separando' ? '<span style="font-size:10px;color:var(--g3)">Aguardando</span>' : '<span style="font-size:10px;color:#2E7D32">✅</span>') + '</td></tr>';
+    }).join('') +
+  '</tbody></table></div></div>';
+}
+
+function showAllOrders(btn) {
+  document.querySelectorAll('#pedTabs button').forEach(function(b) { b.className = 'btn btn-gh btn-sm'; });
+  btn.className = 'btn btn-p btn-sm on';
+  document.getElementById('pedContent').innerHTML = buildAllOrdersTable(allOrders);
+}
+
+function showClientOrders(clientName, btn) {
+  document.querySelectorAll('#pedTabs button').forEach(function(b) { b.className = 'btn btn-gh btn-sm'; });
+  btn.className = 'btn btn-p btn-sm on';
+  var cos = getClientOrders(clientName);
+  var totalQ = cos.reduce(function(s,o) { return s + o.qty; }, 0);
+  var totalV = cos.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  // Find most ordered product
+  var prodCounts = {};
+  cos.forEach(function(o) { prodCounts[o.product] = (prodCounts[o.product] || 0) + o.qty; });
+  var topProd = Object.entries(prodCounts).sort(function(a,b) { return b[1] - a[1]; })[0];
+  document.getElementById('pedContent').innerHTML =
+    '<div class="stats" style="margin-bottom:14px">' +
+      '<div class="stat-card"><div class="stat-icon b">📦</div><div class="stat-info"><h3>Total Pedidos</h3><div class="val">' + totalQ + ' un</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon g">💰</div><div class="stat-info"><h3>Total Gasto</h3><div class="val">' + formatMoney(totalV) + '</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon y">⭐</div><div class="stat-info"><h3>Mais Pedido</h3><div class="val">' + (topProd ? topProd[0] : '—') + '</div><div class="sub">' + (topProd ? topProd[1] + ' un' : '') + '</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon b">📅</div><div class="stat-info"><h3>Compras</h3><div class="val">' + cos.length + '</div><div class="sub">pedidos</div></div></div>' +
+    '</div>' +
+    '<div class="chart-row"><div class="chart-card"><h3>Histórico de Compras — ' + clientName + '</h3><div style="height:180px"><canvas id="chCl"></canvas></div></div></div>' +
+    buildAllOrdersTable(cos);
+  setTimeout(function() {
+    var c = document.getElementById('chCl'); if (!c) return;
+    var days = {}; cos.forEach(function(o) { days[o.date] = (days[o.date] || 0) + (o.price * o.qty); });
+    var dk = Object.keys(days).sort();
+    new Chart(c, {type:'bar',data:{labels:dk,datasets:[{label:'R$',data:dk.map(function(d) { return days[d]; }),backgroundColor:'#F4C430',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+  }, 200);
+}
+
+// ============= MEUS CLIENTES =============
+function rCli(ct) {
+  var clients = getClients();
+  ct.innerHTML = '<h2 style="font-size:14px;font-weight:700;margin-bottom:12px">Meus Clientes (' + clients.length + ')</h2>' +
+    clients.map(function(cl) {
+      var cos = getClientOrders(cl);
+      var total = cos.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+      var last = cos[cos.length - 1];
+      var prods = {}; cos.forEach(function(o) { prods[o.product] = (prods[o.product] || 0) + o.qty; });
+      var topP = Object.entries(prods).sort(function(a,b) { return b[1] - a[1]; })[0];
+      return '<div class="client-card" onclick="openClientDetail(&quot;' + cl + '&quot;)"><div><div class="cl-name">' + cl + '</div><div style="font-size:10.5px;color:var(--g3);margin-top:2px">Mais pedido: <strong>' + (topP ? topP[0] : '—') + '</strong> · Dias com compra: ' + (new Set(cos.map(function(o) { return o.date; }))).size + '</div></div><div class="cl-stats">' + formatMoney(total) + '<span style="font-size:10px;color:var(--g3)">' + cos.length + ' pedidos</span></div></div>';
+    }).join('');
+}
+function openClientDetail(clientName) {
+  var cos = getClientOrders(clientName);
+  var total = cos.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  var prods = {}; cos.forEach(function(o) { prods[o.product] = (prods[o.product] || 0) + o.qty; });
+  var topP = Object.entries(prods).sort(function(a,b) { return b[1] - a[1]; })[0];
+  var ct = document.getElementById('pageRoot');
+  ct.innerHTML =
+    '<div class="client-detail">' +
+      '<h3><button onclick="openTag(&quot;clientes&quot;)">←</button> ' + clientName + '</h3>' +
+      '<div class="stats" style="margin-bottom:14px">' +
+        '<div class="stat-card"><div class="stat-icon g">💰</div><div class="stat-info"><h3>Total Gasto</h3><div class="val">' + formatMoney(total) + '</div></div></div>' +
+        '<div class="stat-card"><div class="stat-icon b">📦</div><div class="stat-info"><h3>Pedidos</h3><div class="val">' + cos.length + '</div></div></div>' +
+        '<div class="stat-card"><div class="stat-icon y">⭐</div><div class="stat-info"><h3>Produto Favorito</h3><div class="val">' + (topP ? topP[0] : '—') + '</div><div class="sub">' + (topP ? topP[1] + ' un' : '') + '</div></div></div>' +
+        '<div class="stat-card"><div class="stat-icon b">📅</div><div class="stat-info"><h3>Dias Ativo</h3><div class="val">' + (new Set(cos.map(function(o) { return o.date; }))).size + '</div></div></div>' +
+      '</div>' +
+      '<div class="chart-card" style="margin-bottom:14px"><h3>Produtos Mais Pedidos</h3><div style="height:200px"><canvas id="chPrd"></canvas></div></div>' +
+      '<h3 style="font-size:13px;font-weight:700;margin-bottom:8px">Histórico Completo</h3>' +
+      buildAllOrdersTable(cos) +
+    '</div>';
+  setTimeout(function() {
+    var c = document.getElementById('chPrd'); if (!c) return;
+    var prods = {}; cos.forEach(function(o) { prods[o.product] = (prods[o.product] || 0) + o.qty; });
+    var sorted = Object.entries(prods).sort(function(a,b) { return b[1] - a[1]; });
+    new Chart(c, {type:'bar',data:{labels:sorted.map(function(d) { return d[0]; }),datasets:[{label:'Un',data:sorted.map(function(d) { return d[1]; }),backgroundColor:['#F4C430','#111','#333','#555','#777'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+  }, 200);
+}
+
+// ============= MEU LINK =============
+function rLink(ct) {
+  var total = allOrders.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  ct.innerHTML =
+    '<div class="chart-card" style="margin-bottom:14px"><h3>🔗 Meu Link de Vendedor</h3><p style="font-size:12px;color:var(--g3);margin-bottom:10px">Compartilhe este link. Todo pedido feito por ele é vinculado a você.</p><div class="link-box"><span>maxdistrib.com.br/<strong style="color:var(--gld)">lucas</strong></span><button class="btn btn-g btn-sm" onclick="navigator.clipboard.writeText(&quot;maxdistrib.com.br/lucas&quot;);alert(&quot;Link copiado!&quot;)">📋 Copiar</button></div><div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap"><button class="btn btn-g btn-sm" onclick="window.open(&quot;https://wa.me/?text=Veja%20os%20melhores%20suplementos:%20maxdistrib.com.br/lucas&quot;)">📱 WhatsApp</button></div></div>' +
+    '<div class="stats"><div class="stat-card"><div class="stat-icon g">👥</div><div class="stat-info"><h3>Clientes pelo Link</h3><div class="val">' + getClients().length + '</div></div></div><div class="stat-card"><div class="stat-icon b">💰</div><div class="stat-info"><h3>Vendas pelo Link</h3><div class="val">' + formatMoney(total) + '</div></div></div></div>';
+}
+
+// ============= METAS (EDITÁVEL) =============
+function rMeta(ct) {
+  var metaVal = getMeta();
+  var atingido = allOrders.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  var pct = Math.round((atingido / metaVal) * 100);
+  ct.innerHTML =
+    '<div class="chart-card" style="margin-bottom:14px"><h3>🎯 Minha Meta — Julho 2026</h3>' +
+      '<div class="fg"><label>Ajustar meta mensal (R$)</label><div style="display:flex;gap:8px;align-items:center"><input type="range" class="fi" id="metaRange" min="5000" max="50000" step="500" value="' + metaVal + '" oninput="updateMetaDisplay()" style="flex:1;padding:0;border:none"><input type="number" class="fi" id="metaInput" value="' + metaVal + '" onchange="updateMetaFromInput()" style="width:110px"></div></div>' +
+      '<div style="display:flex;justify-content:space-between;margin:10px 0 6px;font-size:12px"><span>Progresso</span><span style="font-weight:700">' + pct + '%</span></div>' +
+      '<div class="meta-bar"><div class="meta-fill" style="width:' + Math.min(pct, 100) + '%">' + Math.min(pct, 100) + '%</div></div>' +
+      '<div class="meta-info"><span>' + formatMoney(atingido) + ' atingido</span><span>Meta: <strong id="metaLabel">' + formatMoney(metaVal) + '</strong></span></div>' +
+      '<p style="margin-top:10px;font-size:11.5px;color:var(--g3)">Faltam <strong style="color:var(--red)">' + formatMoney(Math.max(0, metaVal - atingido)) + '</strong> para bater a meta.</p>' +
+    '</div>' +
+    '<div class="stats">' +
+      '<div class="stat-card"><div class="stat-icon g">📅</div><div class="stat-info"><h3>Meta Semanal</h3><div class="val">' + formatMoney(metaVal / 4) + '</div><div class="sub">' + formatMoney(atingido) + ' atingido</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon y">🏆</div><div class="stat-info"><h3>Meta Creatina</h3><div class="val">30 un</div><div class="sub">18 vendidos · 60%</div></div></div>' +
+      '<div class="stat-card"><div class="stat-icon b">💰</div><div class="stat-info"><h3>Comissão Est.</h3><div class="val">' + formatMoney(atingido * 0.1) + '</div><div class="sub">10% sobre vendas</div></div></div>' +
+    '</div>';
+}
+function updateMetaDisplay() {
+  var v = parseInt(document.getElementById('metaRange').value);
+  document.getElementById('metaInput').value = v;
+  document.getElementById('metaLabel').textContent = formatMoney(v);
+  var atingido = allOrders.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  var pct = Math.round((atingido / v) * 100);
+  document.querySelector('.meta-fill').style.width = Math.min(pct, 100) + '%';
+  document.querySelector('.meta-fill').textContent = Math.min(pct, 100) + '%';
+  setMeta(v);
+}
+function updateMetaFromInput() {
+  var v = parseInt(document.getElementById('metaInput').value) || 5000;
+  document.getElementById('metaRange').value = v;
+  document.getElementById('metaLabel').textContent = formatMoney(v);
+  var atingido = allOrders.reduce(function(s,o) { return s + (o.price * o.qty); }, 0);
+  var pct = Math.round((atingido / v) * 100);
+  document.querySelector('.meta-fill').style.width = Math.min(pct, 100) + '%';
+  document.querySelector('.meta-fill').textContent = Math.min(pct, 100) + '%';
+  setMeta(v);
+}
+
+// ============= RANKING =============
+function rRank(ct) {
+  var myIdx = rankData.findIndex(function(r) { return r.v === VENDOR_NAME; });
+  ct.innerHTML =
+    '<div class="table-card"><div class="table-head"><h2>🏆 Ranking de Vendedores</h2><span class="badge badge-w">Julho 2026</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Vendedor</th><th>Vendas</th><th>Produtos</th></tr></thead><tbody>' +
+      rankData.map(function(r,i) {
+        return '<tr style="' + (r.v === VENDOR_NAME ? 'background:#FFFDE7;font-weight:600' : '') + '"><td style="font-weight:800;font-size:13px;color:' + (i === 0 ? 'var(--gld)' : i === 1 ? '#999' : i === 2 ? '#C2855B' : 'var(--g3)') + '">#' + (i + 1) + '</td><td>' + r.v + (r.v === VENDOR_NAME ? ' ⭐' : '') + '</td><td style="font-weight:700">' + formatMoney(r.val) + '</td><td>' + r.q + ' un</td></tr>';
+      }).join('') +
+    '</tbody></table></div></div>' +
+    '<div style="margin-top:14px;font-size:12px;color:var(--g3);text-align:center">⭐ Sua posição: <strong style="color:var(--blk)">#' + (myIdx + 1) + ' de ' + rankData.length + '</strong> · ' + formatMoney(rankData[myIdx].val) + ' em vendas</div>';
+}
+
+// ============= INIT =============
+openTag('dash');
+console.log('✅ Painel do Vendedor carregado! ' + getClients().length + ' clientes, ' + allOrders.length + ' pedidos.');
+</script>
+</body>
+</html>

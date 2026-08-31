@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>MaxDistrib · Suplementos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+:root{
+--pri:#5C4A3A;--pri-light:#7A6552;--pri-bg:#F8F3EE;--pri-border:#E8DDD2;
+--acc:#C2855B;--acc-light:#E8C9B0;--acc-bg:#FDF6F1;
+--green:#6B8E5A;--green-light:#E8F0E2;
+--amber:#C7903A;--amber-light:#FDF0DC;
+--red:#B8453A;--red-light:#FBE8E6;
+--white:#fff;--bg:#FBF7F4;--text:#3A2E28;--muted:#8B7E74;--border:#E8E0D5;
+--shadow-sm:0 1px 3px rgba(92,74,58,.06);--shadow-md:0 4px 14px rgba(92,74,58,.08);--shadow-lg:0 8px 28px rgba(92,74,58,.1);
+--radius:8px;--radius-lg:12px;--radius-xl:20px;--font:'Inter',-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--text);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;min-width:320px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}button,input,select{font-family:var(--font)}button{cursor:pointer;border:none}
+
+.tb{background:var(--pri);color:#fff;padding:6px 0;font-size:11.5px}
+.tb-in{max-width:1260px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.tb-it{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.tb-it span{opacity:.9;display:flex;align-items:center;gap:4px}
+.tb-badge{background:var(--acc);color:#fff;padding:3px 12px;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer;transition:background .15s}
+.tb-badge:hover{background:var(--pri-light)}
+
+.header{background:var(--white);box-shadow:0 2px 12px rgba(0,0,0,.04);position:sticky;top:0;z-index:100}
+.header-in{max-width:1260px;margin:0 auto;padding:11px 20px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-mk{width:38px;height:38px;background:linear-gradient(135deg,var(--pri),var(--pri-light));border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:17px}
+.logo-tx strong{display:block;font-size:16px;font-weight:800;color:var(--pri);line-height:1.1}
+.logo-tx small{font-size:9.5px;color:var(--acc);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+
+.srch{position:relative;width:100%}
+.srch input{width:100%;padding:9px 42px 9px 14px;border:1.5px solid var(--border);border-radius:50px;font-size:13px;color:var(--text);outline:none;background:var(--bg);transition:all .15s}
+.srch input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(194,133,91,.1);background:var(--white)}
+.srch-b{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:var(--acc);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+
+.ha{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.ha-btn{background:none;border:none;padding:7px;border-radius:var(--radius);color:var(--text);display:flex;flex-direction:column;align-items:center;gap:1px;font-size:9.5px;font-weight:600;cursor:pointer;transition:all .12s;position:relative}
+.ha-btn:hover{background:var(--bg);color:var(--pri)}
+.ha-btn svg{width:18px;height:18px}
+.ha-badge{position:absolute;top:1px;right:1px;background:var(--acc);color:#fff;font-size:8.5px;font-weight:800;width:15px;height:15px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid #fff}
+.btn-pri{background:var(--pri);color:#fff;padding:7px 14px;border-radius:var(--radius);font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:background .15s}
+.btn-pri:hover{background:var(--pri-light)}
+.hamb{display:none;background:none;border:none;font-size:22px;color:var(--text);padding:4px;line-height:1}
+
+.nav{background:var(--pri);border-top:1px solid rgba(255,255,255,.08)}
+.nav-in{max-width:1260px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between}
+.nav-lk{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav-lk a{color:rgba(255,255,255,.88);padding:11px 15px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .12s;border-bottom:2px solid transparent}
+.nav-lk a:hover,.nav-lk a.ac{color:#fff;border-bottom-color:var(--acc);background:rgba(255,255,255,.05)}
+.mob-menu{display:none;position:absolute;top:100%;left:0;right:0;background:var(--pri);z-index:200;box-shadow:var(--shadow-lg)}
+.mob-menu a{display:flex;align-items:center;gap:8px;color:#fff;padding:13px 18px;font-size:13px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.08)}
+.mob-menu.on{display:block}
+
+.hero{position:relative;overflow:hidden}
+.hero-sl{display:none;background:linear-gradient(135deg,var(--pri),#3D2E23);color:#fff;padding:55px 18px;text-align:center;position:relative}
+.hero-sl.on{display:flex;align-items:center;justify-content:center}
+.hero-sl::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 65% 50%,rgba(194,133,91,.12),transparent 60%)}
+.hero-in{max-width:800px;position:relative;z-index:1}
+.hbadge{display:inline-flex;align-items:center;gap:5px;background:rgba(194,133,91,.2);border:1px solid rgba(194,133,91,.3);color:var(--acc);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:14px}
+.hero-in h1{font-size:clamp(24px,4vw,40px);font-weight:800;line-height:1.15;margin-bottom:10px}.hero-in h1 span{color:var(--acc-light)}
+.hero-in p{font-size:14px;color:rgba(255,255,255,.7);max-width:520px;margin:0 auto 20px}
+.hero-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s;border:none}
+.dot.on{background:var(--acc);width:18px;border-radius:3px}
+
+.sec{padding:50px 0}.sec-in{max-width:1260px;margin:0 auto;padding:0 20px}
+.sec-hd{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;gap:10px;flex-wrap:wrap}
+.sec-ey{font-size:10.5px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}
+.sec-tt{font-size:clamp(19px,2.5vw,24px);font-weight:800;color:var(--pri)}.sec-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.btn-vt{background:none;border:2px solid var(--pri);color:var(--pri);padding:6px 14px;border-radius:var(--radius);font-size:12px;font-weight:700;white-space:nowrap;transition:all .15s;cursor:pointer}
+.btn-vt:hover{background:var(--pri);color:#fff}
+
+.benefits{padding:28px 0;border-bottom:1px solid var(--border)}.benefits-in{max-width:1260px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.bcard{display:flex;align-items:center;gap:12px;padding:13px;border-radius:var(--radius-lg);border:1.5px solid var(--border);transition:all .15s}
+.bcard:hover{border-color:var(--acc);box-shadow:var(--shadow-sm)}
+.bcard-ic{width:40px;height:40px;border-radius:var(--radius);background:var(--pri-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+.bcard-tx strong{display:block;font-size:12px;font-weight:700;color:var(--pri)}.bcard-tx span{font-size:10.5px;color:var(--muted)}
+
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.cat-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);cursor:pointer;transition:all .2s;border:1.5px solid transparent;text-align:center}
+.cat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--acc)}
+.cat-img{height:90px;display:flex;align-items:center;justify-content:center;font-size:40px}
+.cat-body{padding:11px}.cat-body h4{font-size:13px;font-weight:700;color:var(--pri);margin-bottom:2px}.cat-body span{font-size:10.5px;color:var(--muted)}
+
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pcard{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all .2s;display:flex;flex-direction:column;cursor:pointer}
+.pcard:hover{box-shadow:var(--shadow-md);border-color:var(--pri)}
+.pimg{height:155px;display:flex;align-items:center;justify-content:center;font-size:50px;background:var(--bg);position:relative;overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.pcard:hover .pimg img{transform:scale(1.04)}
+.pbadges{position:absolute;top:7px;left:7px;display:flex;gap:3px;flex-wrap:wrap}
+.pbadge{padding:2px 7px;border-radius:20px;font-size:9px;font-weight:800}.pbadge-h{background:#FDF0DC;color:var(--amber)}.pbadge-n{background:var(--green-light);color:var(--green)}.pbadge-o{background:var(--red-light);color:var(--red)}
+.pbody{padding:13px;flex:1;display:flex;flex-direction:column}
+.pbrand{font-size:10px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.pname{font-size:13px;font-weight:700;color:var(--pri);line-height:1.3;margin-bottom:4px}
+.pcat{font-size:10.5px;color:var(--muted);margin-bottom:8px}
+.pprice{font-size:15px;font-weight:800;color:var(--acc);margin-bottom:2px}
+.pprice-ref{font-size:10.5px;color:var(--muted);margin-bottom:8px;display:none}
+.pfoot{margin-top:auto;display:flex;gap:5px}
+.btn-buy{flex:1;background:var(--pri);color:#fff;padding:8px;border-radius:var(--radius);font-size:11.5px;font-weight:700;transition:background .15s;border:none;cursor:pointer;text-align:center}
+.btn-buy:hover{background:var(--pri-light)}
+.btn-cart{width:34px;height:34px;background:var(--bg);border-radius:var(--radius);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.btn-cart:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(58,46,40,.55);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.modal-ov.on{display:flex}
+.modal{background:var(--white);border-radius:var(--radius-xl);width:92%;max-width:460px;max-height:88dvh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-hd h3{font-size:14.5px;font-weight:700}.modal-bd{padding:18px}.modal-ft{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.form-grp{margin-bottom:12px}.form-grp label{display:block;font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:3px}
+.form-in{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:12.5px;color:var(--text);background:var(--white);outline:none;transition:border .15s}
+.form-in:focus{border-color:var(--acc);box-shadow:0 0 0 2px rgba(194,133,91,.08)}
+.form-sel{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238B7E74' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 18px;border-radius:var(--radius);font-size:12.5px;font-weight:700;transition:all .12s;white-space:nowrap;cursor:pointer}
+.btn-p{background:var(--pri);color:#fff}.btn-p:hover{background:var(--pri-light)}
+.btn-o{background:var(--white);color:var(--pri);border:1.5px solid var(--pri)}.btn-o:hover{background:var(--pri-bg)}
+.btn-w{width:100%;justify-content:center}
+.login-tabs{display:flex;background:var(--bg);border-radius:var(--radius);padding:3px;margin-bottom:18px}
+.login-tab{flex:1;padding:8px;border-radius:6px;border:none;background:transparent;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;font-family:var(--font)}
+.login-tab.on{background:var(--white);color:var(--pri);font-weight:700;box-shadow:var(--shadow-sm)}
+small.sm{display:block;color:var(--muted);font-size:10.5px;margin-top:2px}
+
+.cart-sb{position:fixed;right:0;top:0;bottom:0;width:370px;max-width:100%;background:var(--white);z-index:400;box-shadow:-4px 0 28px rgba(0,0,0,.12);transform:translateX(100%);transition:transform .28s ease;display:flex;flex-direction:column}
+.cart-sb.on{transform:translateX(0)}
+.cart-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:399}.cart-ov.on{display:block}
+.cart-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cart-hd h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+.cart-items{flex:1;overflow-y:auto;padding:14px 18px}
+.cart-it{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cart-img{width:46px;height:46px;background:var(--bg);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.cart-img img{width:100%;height:100%;object-fit:cover}
+.cart-info{flex:1;font-size:11.5px}.cart-info strong{display:block;font-size:12px;font-weight:700;color:var(--pri)}.cart-info span{color:var(--muted)}
+.cart-qt{display:flex;align-items:center;gap:3px;margin-top:5px}.cart-qt button{width:22px;height:22px;border-radius:4px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-size:12px}
+.cart-ft{padding:14px 18px;border-top:1px solid var(--border)}
+.cart-tot{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:14px}.cart-tot strong{font-weight:700}.cart-tot .vl{font-size:18px;font-weight:800;color:var(--acc)}
+.cart-ft .btn-w{margin-bottom:6px}
+
+.wpp{position:fixed;bottom:20px;right:20px;width:52px;height:52px;background:#25D366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 14px rgba(37,211,102,.3);z-index:50;cursor:pointer;transition:transform .2s;border:none}
+.wpp:hover{transform:scale(1.06)}
+
+.foot{background:var(--pri);color:#fff;padding:44px 0 0}.foot-in{max-width:1260px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px}
+.foot h4{color:#fff;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.foot a{display:block;color:rgba(255,255,255,.45);font-size:12px;padding:3px 0;transition:color .15s}.foot a:hover{color:var(--acc-light)}
+.foot-bt{border-top:1px solid rgba(255,255,255,.08);margin-top:32px;padding:14px 20px;text-align:center;color:rgba(255,255,255,.3);font-size:11px}
+
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;background:var(--acc-bg);color:var(--acc)}
+
+@media(max-width:1100px){.cat-grid{grid-template-columns:repeat(3,1fr)}.pgrid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){
+.header-in{grid-template-columns:auto 1fr;gap:8px}.ha{grid-column:1/-1;justify-content:flex-end;gap:4px;flex-wrap:wrap}
+.nav{display:none}.hamb{display:flex}.pgrid{grid-template-columns:repeat(2,1fr);gap:12px}.cat-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+.benefits-in{grid-template-columns:repeat(2,1fr);gap:10px}.foot-in{grid-template-columns:1fr 1fr}
+.cart-sb{width:100%}.sec{padding:36px 0}
+}
+@media(max-width:420px){
+.pgrid{grid-template-columns:1fr 1fr;gap:10px}.cat-grid{gap:6px}.cat-img{height:68px;font-size:32px}
+.benefits-in{grid-template-columns:1fr}.pimg{height:120px;font-size:40px}
+.hero-sl{padding:38px 14px}.btn-pri{font-size:10.5px;padding:6px 10px}
+.header-in{padding:9px 12px;gap:5px}.logo-tx strong{font-size:13px}
+.tb-in{font-size:10px;padding:0 10px;justify-content:center;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="cart-ov" id="cartOv" onclick="tCart()"></div>
+
+<div class="tb"><div class="tb-in">
+<div class="tb-it"><span>📧 contato@maxdistrib.com.br</span><span>📱 (81) 99901-2345</span></div>
+<div class="tb-it"><span>✅ Frete grátis acima de R$ 2.000</span><span>📍 Recife, PE</span></div>
+<button class="tb-badge" onclick="opLogin()">🔐 Entrar / Cadastrar</button>
+</div></div>
+
+<header class="header"><div class="header-in">
+<a href="#" class="logo"><div class="logo-mk">MD</div><div class="logo-tx"><strong>MaxDistrib</strong><small>Suplementos Premium</small></div></a>
+<div class="srch"><input type="text" id="srchIn" placeholder="Buscar suplementos, marcas..." oninput="ftCat()"><button class="srch-b" onclick="ftCat()">🔍</button></div>
+<div class="ha">
+<button class="ha-btn">❤️<span>Salvos</span></button>
+<button class="ha-btn" onclick="tCart()" style="position:relative">🛒<span>Carrinho</span><div class="ha-badge" id="cartBg">0</div></button>
+<button class="btn-pri" onclick="opLogin()">👤 <span id="uLabel">Entrar</span></button>
+<button class="hamb" onclick="tMob()">☰</button>
+</div></div>
+<nav class="nav" style="position:relative"><div class="nav-in"><div class="nav-lk">
+<a href="#" class="ac">🏠 Início</a><a href="#cat" onclick="scr('cat')">📦 Categorias</a><a href="#mv" onclick="scr('mv')">🔥 Mais Vendidos</a><a href="#todos" onclick="scr('todos')">📋 Catálogo</a><a href="#">🏷️ Marcas</a><a href="#" onclick="opLogin()">🤝 Revendedor</a><a href="#" style="color:var(--acc-light)">⚡ Ofertas</a>
+</div></div><div class="mob-menu" id="mobM"><a href="#">🏠 Início</a><a href="#cat">📦 Categorias</a><a href="#mv">🔥 Mais Vendidos</a><a href="#todos">📋 Catálogo</a><a href="#" onclick="opLogin()">🤝 Revendedor</a><a href="#" style="color:var(--acc-light)">⚡ Ofertas</a></div></nav>
+</header>
+
+<section class="hero">
+<div class="hero-sl on" id="sl0"><div class="hero-in"><div class="hbadge">⚡ Para lojistas, academias e revendedores</div><h1>Suplementos com preço<br>de <span>distribuidora</span></h1><p>Catálogo completo com os melhores preços do mercado. Revenda com margem real — sua loja sempre abastecida com produtos originais.</p><button class="btn btn-p btn-w" style="max-width:260px;margin:0 auto;font-size:13.5px;padding:11px" onclick="opLogin()">Cadastre-se e veja preços exclusivos →</button></div></div>
+<div class="hero-sl" id="sl1"><div class="hero-in"><div class="hbadge">🤝 Revendedor VIP</div><h1>Preços exclusivos<br>para <span>revendedores</span></h1><p>Faça login como revendedor e veja o preço de custo + referência da loja. Saiba exatamente sua margem em cada produto.</p><button class="btn btn-p btn-w" style="max-width:260px;margin:0 auto;font-size:13.5px;padding:11px" onclick="opLogin()">Acessar Área do Revendedor →</button></div></div>
+<div class="hero-sl" id="sl2"><div class="hero-in"><div class="hbadge">🔐 Escolha seu vendedor</div><h1>Seu <span>vendedor</span><br>sempre por perto</h1><p>Na hora do cadastro, escolha o vendedor que vai te atender. Ele recebe seu pedido, aplica descontos e acompanha tudo.</p><button class="btn btn-p btn-w" style="max-width:260px;margin:0 auto;font-size:13.5px;padding:11px" onclick="opLogin()">Escolher meu vendedor →</button></div></div>
+<div class="hero-dots"><button class="dot on" onclick="goSl(0)"></button><button class="dot" onclick="goSl(1)"></button><button class="dot" onclick="goSl(2)"></button></div>
+</section>
+
+<section class="benefits"><div class="benefits-in">
+<div class="bcard"><div class="bcard-ic">📦</div><div class="bcard-tx"><strong>+1.200 Produtos</strong><span>Catálogo completo</span></div></div>
+<div class="bcard"><div class="bcard-ic">🚚</div><div class="bcard-tx"><strong>Entrega Brasil</strong><span>Frete grátis +R$2.000</span></div></div>
+<div class="bcard"><div class="bcard-ic">💰</div><div class="bcard-tx"><strong>Preço de Atacado</strong><span>Margem para revenda</span></div></div>
+<div class="bcard"><div class="bcard-ic">🔐</div><div class="bcard-tx"><strong>Revendedor VIP</strong><span>Preços no login</span></div></div>
+</div></section>
+
+<section class="sec" id="cat" style="background:var(--white)"><div class="sec-in"><div class="sec-hd"><div><p class="sec-ey">Navegue pelo catálogo</p><h2 class="sec-tt">Categorias</h2></div><button class="btn-vt">Ver todas →</button></div><div class="cat-grid" id="catG"></div></div></section>
+
+<section class="sec" id="mv"><div class="sec-in"><div class="sec-hd"><div><p class="sec-ey">Mais pedidos da semana</p><h2 class="sec-tt">Mais Vendidos</h2></div><button class="btn-vt">Ver catálogo →</button></div><div class="pgrid" id="pgHot"></div></div></section>
+
+<section class="sec" id="todos" style="background:var(--white)"><div class="sec-in"><div class="sec-hd"><div><p class="sec-ey">Catálogo completo</p><h2 class="sec-tt">Todos os Produtos</h2></div><span class="tag" id="cntTag"></span></div><div class="pgrid" id="pgAll"></div></div></section>
+
+<footer class="foot"><div class="foot-in"><div><div class="logo" style="margin-bottom:12px"><div class="logo-mk" style="background:var(--acc)">MD</div><div class="logo-tx"><strong style="color:#fff">MaxDistrib</strong><small>Suplementos Premium</small></div></div><p style="color:rgba(255,255,255,.35);font-size:12px;line-height:1.7">Distribuidora de suplementos para lojistas, academias, mercados e revendedores. Preços de atacado com margem real para o seu negócio.</p></div>
+<div><h4>Categorias</h4><a href="#">Proteínas</a><a href="#">Creatinas</a><a href="#">Aminoácidos</a><a href="#">Pré-Treinos</a><a href="#">Vitaminas</a><a href="#">Barras & Snacks</a></div>
+<div><h4>Links</h4><a href="#">Sobre</a><a href="#" onclick="opLogin()">Revendedor</a><a href="#">Privacidade</a><a href="#">Termos</a><a href="#">Contato</a></div>
+<div><h4>Contato</h4><p style="color:rgba(255,255,255,.35);font-size:12px;line-height:1.8">📱 (81) 99901-2345<br>📧 contato@maxdistrib.com.br<br>📍 Av. Caxangá, 4.500<br>Recife, PE</p></div></div><div class="foot-bt">© 2026 MaxDistrib · CNPJ 12.345.678/0001-90</div></footer>
+
+<div class="cart-sb" id="cartSb"><div class="cart-hd"><h3>🛒 Carrinho</h3><button class="btn" style="background:transparent;font-size:18px;padding:2px 6px" onclick="tCart()">✕</button></div><div class="cart-items" id="cartIt"><p style="text-align:center;color:var(--muted);padding:40px 0;font-size:13px">Seu carrinho está vazio</p></div><div class="cart-ft"><div class="cart-tot"><strong>Total</strong><span class="vl" id="cartTt">R$ 0,00</span></div><button class="btn btn-p btn-w" onclick="chk()">Finalizar Pedido</button><button class="btn btn-o btn-w" onclick="tCart()">Continuar Comprando</button></div></div>
+
+<div class="modal-ov" id="loginM"><div class="modal" id="loginB"></div></div>
+<a href="https://wa.me/5581999012345" class="wpp" target="_blank" title="WhatsApp">💬</a>
+
+<script>
+const prods=[{id:1,n:'Whey Protein Concentrado 900g',cat:'Proteínas',br:'Max Titanium',img:'https://images.unsplash.com/photo-1620288627223-53302f4e8c74?w=400&h=400&fit=crop&auto=format',dp:89,rp:149.90,q:72,mn:20,sld:348,hot:true},{id:2,n:'Creatina Monohidratada 300g',cat:'Creatinas',br:'Max Titanium',img:'https://images.unsplash.com/photo-1593095948071-474c5cc2c1cf?w=400&h=400&fit=crop&auto=format',dp:45,rp:89.90,q:54,mn:25,sld:215,hot:true},{id:3,n:'BCAA 2400 120 Cápsulas',cat:'Aminoácidos',br:'Max Titanium',img:'',dp:35,rp:69.90,q:0,mn:15,sld:95,hot:false},{id:4,n:'Pré-Treino Égide 300g',cat:'Pré-Treinos',br:'Max Titanium',img:'https://images.unsplash.com/photo-1579722821273-0f8bbc628fe5?w=400&h=400&fit=crop&auto=format',dp:55,rp:109.90,q:42,mn:20,sld:187,hot:true},{id:5,n:'Glutamina 300g',cat:'Aminoácidos',br:'Integral Médica',img:'',dp:40,rp:79.90,q:7,mn:12,sld:63,hot:false},{id:6,n:'Multivitamínico Daily V 60 caps',cat:'Vitaminas',br:'Max Titanium',img:'https://images.unsplash.com/photo-1579113800032-c38bd7635818?w=400&h=400&fit=crop&auto=format',dp:28,rp:54.90,q:85,mn:30,sld:156,hot:false},{id:7,n:'Termogênico Hot Burn 120 caps',cat:'Termogênicos',br:'Integral Médica',img:'',dp:42,rp:84.90,q:4,mn:10,sld:72,hot:false},{id:8,n:'Barra de Proteína 24g Cx 12un',cat:'Barras',br:'Max Titanium',img:'https://images.unsplash.com/photo-1622485831126-0349ff5eb6fb?w=400&h=400&fit=crop&auto=format',dp:78,rp:154.80,q:130,mn:40,sld:302,hot:true},{id:9,n:'Hipercalórico Mass 15000 3kg',cat:'Hipercalóricos',br:'Max Titanium',img:'',dp:65,rp:119.90,q:38,mn:15,sld:87,hot:false},{id:10,n:'Ômega 3 1000mg 120 caps',cat:'Vitaminas',br:'VitaFor',img:'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=400&fit=crop&auto=format',dp:22.90,rp:49.90,q:68,mn:20,sld:43,hot:false},{id:11,n:'Colágeno Hidrolisado Tipo 2 300g',cat:'Saúde',br:'Sanavita',img:'',dp:34.50,rp:69.90,q:41,mn:15,sld:112,hot:false},{id:12,n:'Energético Monster 473ml Cx 24',cat:'Bebidas',br:'Monster Energy',img:'https://images.unsplash.com/photo-1622543925917-763c34d1b2e9?w=400&h=400&fit=crop&auto=format',dp:180,rp:357.60,q:56,mn:20,sld:490,hot:true}];
+const cats=['Proteínas','Creatinas','Aminoácidos','Pré-Treinos','Vitaminas','Termogênicos','Barras','Hipercalóricos','Bebidas','Saúde'];
+const vends=['Lucas Silva','Marina Costa','Pedro Santos','Ana Oliveira','Rafael Lima','Juliana Souza','Carlos Eduardo','Fernanda Torres'];
+let user=null, cart=[], slIdx=0;
+
+function fR(v){return'R$ '+v.toFixed(2).replace('.',',')}
+function to(m){let t=document.createElement('div');t.style.cssText='position:fixed;top:16px;right:16px;z-index:999;background:#fff;border-radius:8px;padding:9px 14px;box-shadow:0 4px 16px rgba(0,0,0,.12);font-size:12px;font-weight:600;animation:ti .25s ease;border-left:3px solid var(--green)';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},2600)}
+
+function rAll(){rCat();rP('pgHot',prods.filter(p=>p.hot));rP('pgAll',prods);document.getElementById('cntTag').textContent=prods.length+' produtos';uCart()}
+function rCat(){document.getElementById('catG').innerHTML=cats.map((c,i)=>{let cl=['#FDF6F1','#F4F8F0','#F8F3EE','#FEF6F5','#FDF0DC','#F4F8F0','#FDF6F1','#F8F3EE','#FEF6F5','#FDF0DC'];let ic=['🥛','⚡','💊','🚀','💚','🔥','🍫','📦','🥤','✨'];let cnt=prods.filter(p=>p.cat===c).length;return`<div class="cat-card" onclick="ftCat('${c}')"><div class="cat-img" style="background:linear-gradient(135deg,${cl[i]},${cl[i]}88)">${ic[i]}</div><div class="cat-body"><h4>${c}</h4><span>${cnt} produtos</span></div></div>`}).join('')}
+function rP(gid,arr){let g=document.getElementById(gid);if(!g)return;let isR=user&&user.tp==='rev';g.innerHTML=arr.map(p=>{let prc=isR?p.dp:p.rp,lb=isR?'Distribuidor':'Loja';return`<div class="pcard"><div class="pimg" style="background:var(--bg)">${p.img?`<img src="${p.img}" alt="${p.n}" onerror="this.style.display='none';this.parentElement.textContent='${p.cat.charAt(0)}'">`:p.cat.charAt(0)}<div class="pbadges">${p.q===0?'<span class="pbadge pbadge-o">Indisponível</span>':p.q<=p.mn?'<span class="pbadge pbadge-o">Últimas</span>':''}${p.hot?'<span class="pbadge pbadge-h">🔥 Top</span>':''}${p.sld>200?'<span class="pbadge pbadge-n">+'+p.sld+' vendidos</span>':''}</div></div><div class="pbody"><p class="pbrand">${p.br}</p><p class="pname">${p.n}</p><p class="pcat">${p.cat} · ${p.q>0?p.q+' un.':'Esgotado'}</p><p class="pprice">${fR(prc)}</p><p class="pprice-ref" style="display:${isR?'block':'none'}"><strong>${lb}</strong> · Loja: ${fR(p.rp)} · Margem: ${fR(p.rp-p.dp)}</p><div class="pfoot">${p.q>0?`<button class="btn-buy" onclick="addC(${p.id})">Comprar</button><button class="btn-cart" onclick="addC(${p.id})">🛒</button>`:'<button class="btn-buy" style="background:var(--muted);cursor:default">Indisponível</button>'}</div></div></div>`}).join('')}
+function ftCat(c){if(c){document.getElementById('todos').scrollIntoView({behavior:'smooth'});let f=prods.filter(p=>p.cat===c);rP('pgAll',f);document.getElementById('cntTag').textContent=f.length+' produtos · '+c}else{let q=document.getElementById('srchIn').value.toLowerCase();let f=q?prods.filter(p=>p.n.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)||p.br.toLowerCase().includes(q)):prods;rP('pgAll',f);document.getElementById('cntTag').textContent=f.length+' produtos'+(q?' · "'+q+'"':'');if(q)document.getElementById('todos').scrollIntoView({behavior:'smooth'})}}
+
+function addC(pid){let p=prods.find(x=>x.id===pid);if(!p||p.q<=0){to('Produto indisponível');return}let ex=cart.find(c=>c.id===pid);if(ex){ex.q++}else{cart.push({id:p.id,n:p.n,prc:user&&user.tp==='rev'?p.dp:p.rp,q:1,img:p.img})}uCart();rCart();to(p.n+' adicionado ao carrinho')}
+function rmC(pid){cart=cart.filter(c=>c.id!==pid);uCart();rCart()}
+function qC(pid,d){let c=cart.find(x=>x.id===pid);if(!c)return;c.q+=d;if(c.q<=0){rmC(pid);return}uCart();rCart()}
+function uCart(){let b=document.getElementById('cartBg'),t=cart.reduce((s,c)=>s+c.q,0);if(t>0){b.style.display='flex';b.textContent=t}else{b.style.display='none'}}
+function rCart(){let el=document.getElementById('cartIt'),tt=0;if(cart.length===0){el.innerHTML='<p style="text-align:center;color:var(--muted);padding:40px 0;font-size:13px">Seu carrinho está vazio</p>';document.getElementById('cartTt').textContent='R$ 0,00';return}el.innerHTML=cart.map(c=>{let sub=c.prc*c.q;tt+=sub;return`<div class="cart-it"><div class="cart-img">${c.img?`<img src="${c.img}" alt="">`:'📦'}</div><div class="cart-info"><strong>${c.n}</strong><span>${fR(c.prc)}/un</span><div class="cart-qt"><button onclick="qC(${c.id},-1)">−</button><span style="font-weight:700;font-size:12px;min-width:18px;text-align:center">${c.q}</span><button onclick="qC(${c.id},1)">+</button></div></div><div style="text-align:right"><strong style="color:var(--acc);font-size:13px">${fR(sub)}</strong><br><button style="background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;margin-top:3px" onclick="rmC(${c.id})">🗑️</button></div></div>`}).join('');document.getElementById('cartTt').textContent=fR(tt)}
+function tCart(){let s=document.getElementById('cartSb'),o=document.getElementById('cartOv');s.classList.toggle('on');o.classList.toggle('on');rCart()}
+function chk(){if(cart.length===0){to('Carrinho vazio');return}if(!user){to('Faça login primeiro');opLogin();return}let tt=cart.reduce((s,c)=>s+(c.prc*c.q),0),vi=user.vend?' · Vendedor: '+user.vend:'';alert('✅ Pedido simulado!\n\n'+cart.map(c=>c.n+' x'+c.q+' = '+fR(c.prc*c.q)).join('\n')+'\n\nTotal: '+fR(tt)+vi+'\n\n(Mock — será conectado ao backend real)');cart=[];uCart();rCart();tCart();to('Pedido enviado com sucesso! (mock)')}
+
+function opLogin(){let isL=!!user;document.getElementById('loginM').classList.add('on');document.getElementById('loginB').innerHTML=`<div class="modal-hd"><h3>${isL?'Minha Conta':'Entrar / Cadastrar'}</h3><button class="btn" style="background:transparent;font-size:16px;padding:2px 6px" onclick="clL()">✕</button></div><div class="modal-bd">${isL?`<div style="text-align:center;margin-bottom:16px"><div style="font-size:36px;margin-bottom:6px">${user.tp==='rev'?'🤝':'👤'}</div><h4 style="font-size:14px;font-weight:700;color:var(--pri)">${user.name}</h4><p style="color:var(--muted);font-size:12px">${user.email} · ${user.tp==='rev'?'Revendedor'+(user.vend?' — Vendedor: '+user.vend:''):'Cliente'}</p>${user.tp==='rev'?`<div style="margin-top:10px;padding:12px;background:var(--green-light);border-radius:var(--radius);font-size:11.5px;color:var(--green);font-weight:700">✅ Você vê preços de distribuidora + referência da loja para calcular sua margem de revenda.</div>`:''}</div><button class="btn btn-p btn-w" onclick="doLogout()">Sair da Conta</button>`:`<div class="login-tabs" id="lt"><button class="login-tab on" onclick="swLT('cliente')">Sou Cliente</button><button class="login-tab" onclick="swLT('revendedor')">Sou Revendedor</button></div><form onsubmit="doLogin(event)"><div class="form-grp"><label>Nome completo</label><input class="form-in" id="lfN" placeholder="Seu nome completo" required></div><div class="form-grp"><label>Email</label><input type="email" class="form-in" id="lfE" placeholder="seu@email.com" required></div><div class="form-grp"><label>WhatsApp</label><input class="form-in" id="lfP" placeholder="(81) 99999-9999"></div><div class="form-grp" id="vdG" style="display:none"><label>Escolha seu vendedor</label><select class="form-in form-sel" id="lfV"><option value="">Selecione um vendedor...</option>${vends.map(v=>`<option value="${v}">${v}</option>`).join('')}</select><small class="sm">O vendedor receberá comissão e poderá aplicar descontos nos seus pedidos.</small></div><button type="submit" class="btn btn-p btn-w" style="margin-top:4px">Entrar</button></form><p style="text-align:center;margin-top:12px;font-size:10.5px;color:var(--muted)">Dados mockados · Qualquer email funciona</p></div>`}`;document.getElementById('lfN')?.focus()}let lt='cliente';
+function swLT(t){lt=t;document.querySelectorAll('#lt .login-tab').forEach(b=>b.classList.remove('on'));event.target.classList.add('on');document.getElementById('vdG').style.display=t==='revendedor'?'block':'none'}
+function doLogin(e){e.preventDefault();let n=document.getElementById('lfN').value.trim(),em=document.getElementById('lfE').value.trim(),v=lt==='revendedor'?document.getElementById('lfV').value:'';if(!n||!em){to('Preencha nome e email');return}user={tp:lt,name:n,email:em,vend:v||undefined};clL();rAll();document.getElementById('uLabel').textContent=n.split(' ')[0];to('Bem-vindo'+ (lt==='revendedor'?' (Revendedor)':'') +', '+n.split(' ')[0]+'!')}
+function doLogout(){user=null;rAll();document.getElementById('uLabel').textContent='Entrar';clL();to('Saiu da conta')}
+function clL(){document.getElementById('loginM').classList.remove('on')}
+document.getElementById('loginM').addEventListener('click',function(e){if(e.target===this)clL()});
+
+function goSl(n){document.querySelectorAll('.hero-sl').forEach((s,i)=>s.classList.toggle('on',i===n));document.querySelectorAll('.hero-dots .dot').forEach((d,i)=>d.classList.toggle('on',i===n));slIdx=n}setInterval(()=>goSl((slIdx+1)%3),5000);
+function tMob(){document.getElementById('mobM').classList.toggle('on')}
+function scr(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.getElementById('mobM').classList.remove('on')}
+
+rAll();
+</script>
+</body>
+</html>

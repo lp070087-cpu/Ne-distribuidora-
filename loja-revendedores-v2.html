@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>MaxDistrib · Suplementos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+--blk:#111;--wht:#fff;--gld:#F4C430;--gld-h:#D4A820;--red:#E53935;--red-d:#C62828;
+--g1:#F8F8F8;--g2:#E5E5E5;--g3:#999;--g4:#555;--g5:#222;
+--sh-sm:0 1px 4px rgba(0,0,0,.06);--sh-md:0 4px 16px rgba(0,0,0,.1);--sh-lg:0 8px 30px rgba(0,0,0,.14);
+--r:6px;--rl:10px;--rxl:16px;--ff:'Inter',-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--ff);color:var(--g5);background:var(--wht);line-height:1.5;-webkit-font-smoothing:antialiased;min-width:320px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}button,input,select{font-family:var(--ff)}button{cursor:pointer;border:none}
+
+.tb{background:var(--blk);color:var(--wht);padding:5px 0;font-size:11px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.tb-it{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.tb-it span{opacity:.85}
+.tb-badge{background:var(--gld);color:var(--blk);padding:3px 11px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;transition:all .12s}.tb-badge:hover{background:var(--wht)}
+
+.hd{background:var(--wht);box-shadow:0 1px 8px rgba(0,0,0,.06);position:sticky;top:0;z-index:100}
+.hd-in{max-width:1240px;margin:0 auto;padding:10px 18px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.logo-mk{width:36px;height:36px;background:var(--blk);color:var(--gld);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px}
+.logo-tx strong{display:block;font-size:15px;font-weight:800;color:var(--blk);line-height:1.1}
+.logo-tx small{font-size:9px;color:var(--gld);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.srch{position:relative}.srch input{width:100%;padding:9px 40px 9px 13px;border:1.5px solid var(--g2);border-radius:50px;font-size:12.5px;color:var(--g5);outline:none;background:var(--g1);transition:all .15s}
+.srch input:focus{border-color:var(--gld);box-shadow:0 0 0 3px rgba(244,196,48,.12);background:var(--wht)}
+.srch-b{position:absolute;right:3px;top:50%;transform:translateY(-50%);background:var(--gld);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--blk);font-size:13px;font-weight:700}
+.ha{display:flex;align-items:center;gap:3px;flex-shrink:0}
+.ha-btn{background:none;border:none;padding:6px;border-radius:var(--r);color:var(--g5);display:flex;flex-direction:column;align-items:center;gap:1px;font-size:9px;font-weight:600;cursor:pointer;transition:all .1s;position:relative}
+.ha-btn:hover{background:var(--g1)}.ha-btn svg{width:17px;height:17px}
+.ha-badge{position:absolute;top:0;right:0;background:var(--red);color:var(--wht);font-size:8px;font-weight:800;width:14px;height:14px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid #fff}
+.btn-blk{background:var(--blk);color:var(--wht);padding:7px 14px;border-radius:var(--r);font-size:11.5px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:all .12s}.btn-blk:hover{background:var(--g5)}
+.btn-gld{background:var(--gld);color:var(--blk);padding:8px 18px;border-radius:var(--r);font-size:12px;font-weight:800;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .12s}.btn-gld:hover{background:var(--gld-h)}
+.hamb{display:none;background:none;border:none;font-size:21px;color:var(--g5);padding:3px;line-height:1}
+
+.nav{background:var(--blk)}.nav-in{max-width:1240px;margin:0 auto;padding:0 18px;display:flex;align-items:center}
+.nav-lk{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav-lk a{color:rgba(255,255,255,.88);padding:10px 14px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:all .1s;border-bottom:2px solid transparent}
+.nav-lk a:hover,.nav-lk a.ac{color:var(--gld);border-bottom-color:var(--gld);background:rgba(255,255,255,.04)}
+.mob-m{display:none;position:absolute;top:100%;left:0;right:0;background:var(--blk);z-index:200;box-shadow:var(--sh-lg)}
+.mob-m a{display:flex;align-items:center;gap:7px;color:var(--wht);padding:12px 16px;font-size:13px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.07)}.mob-m.on{display:block}
+
+.sec{padding:46px 0}.sec-in{max-width:1240px;margin:0 auto;padding:0 18px}
+.sec-hd{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:8px;flex-wrap:wrap}
+.sec-ey{font-size:10px;font-weight:700;color:var(--gld);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.sec-tt{font-size:clamp(18px,2.5vw,23px);font-weight:800;color:var(--blk)}
+.btn-vt{background:none;border:2px solid var(--blk);color:var(--blk);padding:5px 13px;border-radius:var(--r);font-size:11.5px;font-weight:700;white-space:nowrap;transition:all .12s;cursor:pointer}.btn-vt:hover{background:var(--blk);color:var(--wht)}
+
+.hero{background:var(--blk);color:var(--wht);position:relative;overflow:hidden;line-height:0}
+.hero-sl{display:none;position:relative}
+.hero-sl.on{display:block}
+.hero-sl img{width:100%;max-width:1240px;display:block;margin:0 auto}
+.hdots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:5}
+.hdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;border:none}.hdot.on{background:var(--gld);width:16px;border-radius:3px}
+
+.benefits{padding:24px 0;border-bottom:1px solid var(--g2)}.benefits-in{max-width:1240px;margin:0 auto;padding:0 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.bcard{display:flex;align-items:center;gap:10px;padding:11px;border-radius:var(--rl);border:1px solid var(--g2);transition:all .12s}.bcard:hover{border-color:var(--gld)}
+.bcard-ic{width:38px;height:38px;border-radius:var(--r);background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.bcard-tx strong{display:block;font-size:11.5px;font-weight:700;color:var(--blk)}.bcard-tx span{font-size:10px;color:var(--g3)}
+
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.cat-c{background:var(--wht);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-sm);cursor:pointer;transition:all .15s;border:1px solid var(--g2);text-align:center}
+.cat-c:hover{transform:translateY(-2px);box-shadow:var(--sh-md);border-color:var(--gld)}
+.cat-img{height:85px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.cat-body{padding:10px}.cat-body h4{font-size:12.5px;font-weight:700;color:var(--blk)}.cat-body span{font-size:10px;color:var(--g3)}
+
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.pcard{background:var(--wht);border:1px solid var(--g2);border-radius:var(--rl);overflow:hidden;transition:all .15s;display:flex;flex-direction:column;cursor:pointer}
+.pcard:hover{box-shadow:var(--sh-md);border-color:var(--blk)}
+.pimg{height:150px;display:flex;align-items:center;justify-content:center;font-size:45px;background:var(--g1);position:relative;overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:cover;transition:transform .3s}.pcard:hover .pimg img{transform:scale(1.03)}
+.pbadges{position:absolute;top:6px;left:6px;display:flex;gap:3px;flex-wrap:wrap}
+.pbadge{padding:2px 6px;border-radius:20px;font-size:8.5px;font-weight:800}.pbadge-h{background:#FFF3CD;color:#856404}.pbadge-n{background:#E8F5E9;color:#2E7D32}.pbadge-o{background:#FFEBEE;color:var(--red)}
+.pbody{padding:12px;flex:1;display:flex;flex-direction:column}
+.pbrand{font-size:9.5px;font-weight:700;color:var(--gld);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.pname{font-size:12.5px;font-weight:700;color:var(--blk);line-height:1.3;margin-bottom:3px}
+.pcat{font-size:10px;color:var(--g3);margin-bottom:7px}
+.ppr{font-size:14px;font-weight:800;color:var(--blk);margin-bottom:1px}
+.ppr-ref{font-size:10px;color:var(--g3);margin-bottom:7px;display:none}
+.pfoot{margin-top:auto;display:flex;gap:4px}
+.btn-buy{flex:1;background:var(--gld);color:var(--blk);padding:8px;border-radius:var(--r);font-size:11px;font-weight:700;transition:all .12s;border:none;cursor:pointer;text-align:center}.btn-buy:hover{background:var(--gld-h)}
+.btn-cart{width:32px;height:32px;background:var(--g1);border-radius:var(--r);border:1px solid var(--g2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .12s;flex-shrink:0}.btn-cart:hover{background:var(--blk);color:var(--wht)}
+
+/* === OFERTAS COM CONTAGEM === */
+.offers-hero{background:var(--blk);padding:0}
+.offers-ct{background:linear-gradient(180deg,var(--blk),#1A1A1A);color:var(--wht);text-align:center;padding:36px 18px 28px}
+.offers-ct .anda{font-size:30px;font-weight:900;color:var(--red);text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.offers-ct .sub{font-size:15px;font-weight:700;margin-bottom:4px}
+.offers-ct .timer-text{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:18px}
+.countdown{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cd-block{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:14px 18px;min-width:65px;text-align:center}
+.cd-block strong{display:block;font-size:30px;font-weight:900;color:var(--wht);line-height:1}
+.cd-block span{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-top:3px;display:block}
+.cd-sep{color:rgba(255,255,255,.3);font-size:26px;font-weight:800;display:flex;align-items:center}
+.offers-perks{display:flex;gap:20px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.offers-perks span{font-size:11.5px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:4px}
+.offers-perks span::before{content:'✓';color:var(--gld);font-weight:800}
+
+.offers-title{background:var(--blk);text-align:center;padding:20px 18px 30px}
+.offers-title h2{font-size:clamp(20px,3vw,30px);font-weight:900;color:var(--gld);text-transform:uppercase;letter-spacing:3px;margin-bottom:6px}
+.offers-title .badge-red{display:inline-block;background:var(--red);color:var(--wht);padding:3px 12px;border-radius:20px;font-size:10.5px;font-weight:700;margin-bottom:8px}
+.offers-divider{width:60px;height:3px;background:var(--gld);margin:8px auto 0}
+
+.combos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1240px;margin:0 auto;padding:20px 18px 46px}
+.combo-card{background:var(--wht);border:2px solid var(--g2);border-radius:var(--rxl);padding:22px;text-align:center;transition:all .2s;position:relative;overflow:hidden}
+.combo-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);border-color:var(--gld)}
+.combo-card.featured{border-color:var(--gld);box-shadow:0 0 0 4px rgba(244,196,48,.1)}
+.combo-card.featured::before{content:'MAIS VENDIDO';position:absolute;top:12px;right:-28px;background:var(--gld);color:var(--blk);font-size:8.5px;font-weight:800;padding:3px 30px;transform:rotate(45deg)}
+.combo-img{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:50px;margin-bottom:12px;background:var(--g1);border-radius:var(--rl)}
+.combo-img img{width:100%;height:100%;object-fit:contain;padding:10px}
+.combo-tag{display:inline-block;background:var(--red);color:var(--wht);padding:3px 10px;border-radius:20px;font-size:9.5px;font-weight:700;margin-bottom:10px}
+.combo-name{font-size:16px;font-weight:800;color:var(--blk);margin-bottom:5px}
+.combo-desc{font-size:12px;color:var(--g3);margin-bottom:12px;line-height:1.4}
+.combo-save{background:#FFF3CD;border-radius:var(--r);padding:8px;margin-bottom:12px}.combo-save strong{color:#856404;font-size:13px}.combo-save small{color:#9A7D0A;font-size:10.5px;display:block}
+.combo-price{font-size:20px;font-weight:900;color:var(--blk);margin-bottom:12px}.combo-price small{font-size:11px;color:var(--g3);font-weight:400;text-decoration:line-through;margin-left:6px}
+.combo-btn{width:100%;background:var(--gld);color:var(--blk);padding:10px;border-radius:var(--r);font-size:13px;font-weight:800;border:none;cursor:pointer;transition:all .12s}.combo-btn:hover{background:var(--gld-h)}
+
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(2px)}.modal-ov.on{display:flex}
+.modal{background:var(--wht);border-radius:var(--rxl);width:92%;max-width:440px;max-height:88dvh;overflow-y:auto;box-shadow:var(--sh-lg)}
+.modal-hd{padding:13px 16px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between}.modal-hd h3{font-size:14px;font-weight:700}.modal-bd{padding:16px}
+.fg{margin-bottom:11px}.fg label{display:block;font-size:11px;font-weight:700;color:var(--g5);margin-bottom:2px}
+.fi{width:100%;padding:8px 10px;border:1.5px solid var(--g2);border-radius:var(--r);font-size:12px;color:var(--g5);background:var(--wht);outline:none;transition:border .15s}.fi:focus{border-color:var(--gld)}
+.fs{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:28px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:8px 16px;border-radius:var(--r);font-size:12px;font-weight:700;transition:all .12s;white-space:nowrap;cursor:pointer}
+.btn-p{background:var(--blk);color:var(--wht)}.btn-p:hover{background:var(--g5)}
+.btn-o{background:var(--wht);color:var(--blk);border:1.5px solid var(--g2)}.btn-o:hover{background:var(--g1)}
+.btn-w{width:100%;justify-content:center}
+.login-tabs{display:flex;background:var(--g1);border-radius:var(--r);padding:2px;margin-bottom:16px}
+.login-tab{flex:1;padding:7px;border-radius:5px;border:none;background:transparent;font-size:12px;font-weight:600;color:var(--g3);cursor:pointer;transition:all .12s}.login-tab.on{background:var(--wht);color:var(--blk);font-weight:700;box-shadow:var(--sh-sm)}
+
+.cart-sb{position:fixed;right:0;top:0;bottom:0;width:360px;max-width:100%;background:var(--wht);z-index:400;box-shadow:-4px 0 28px rgba(0,0,0,.14);transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column}.cart-sb.on{transform:translateX(0)}
+.cart-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:399}.cart-ov.on{display:block}
+.cart-hd{padding:13px 16px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between}.cart-hd h3{font-size:13.5px;font-weight:700}
+.cart-it{flex:1;overflow-y:auto;padding:12px 16px}.cart-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--g2)}.cart-img{width:42px;height:42px;background:var(--g1);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden}.cart-img img{width:100%;height:100%;object-fit:cover}
+.cart-info{flex:1;font-size:11px}.cart-info strong{display:block;font-size:11.5px;font-weight:700;color:var(--blk)}.cart-info span{color:var(--g3)}
+.cart-qt{display:flex;align-items:center;gap:3px;margin-top:4px}.cart-qt button{width:20px;height:20px;border-radius:3px;background:var(--g1);border:1px solid var(--g2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-size:11px}
+.cart-ft{padding:12px 16px;border-top:1px solid var(--g2)}.cart-tot{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px}.cart-tot .vl{font-size:17px;font-weight:800;color:var(--blk)}
+
+.wpp{position:fixed;bottom:18px;right:18px;width:48px;height:48px;background:#25D366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 14px rgba(37,211,102,.3);z-index:50;cursor:pointer;transition:transform .15s;border:none}.wpp:hover{transform:scale(1.05)}
+
+.foot{background:var(--blk);color:var(--wht);padding:40px 0 0}.foot-in{max-width:1240px;margin:0 auto;padding:0 18px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px}
+.foot h4{color:var(--gld);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.foot a{display:block;color:rgba(255,255,255,.4);font-size:11.5px;padding:2.5px 0;transition:color .12s}.foot a:hover{color:var(--gld)}
+.foot-bt{border-top:1px solid rgba(255,255,255,.08);margin-top:28px;padding:12px 18px;text-align:center;color:rgba(255,255,255,.25);font-size:10.5px}
+
+@media(max-width:1100px){.cat-grid{grid-template-columns:repeat(3,1fr)}.pgrid{grid-template-columns:repeat(3,1fr)}.combos-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+.hd-in{grid-template-columns:auto 1fr;gap:8px}.ha{grid-column:1/-1;justify-content:flex-end;gap:3px;flex-wrap:wrap}
+.nav{display:none}.hamb{display:flex}.pgrid{grid-template-columns:repeat(2,1fr);gap:10px}.cat-grid{grid-template-columns:repeat(2,1fr);gap:7px}
+.benefits-in{grid-template-columns:repeat(2,1fr);gap:8px}.foot-in{grid-template-columns:1fr 1fr}.cart-sb{width:100%}.combos-grid{grid-template-columns:1fr}.sec{padding:34px 0}
+.hero-sl img{min-height:200px;object-fit:contain}
+}
+@media(max-width:420px){
+.pgrid{grid-template-columns:1fr 1fr;gap:8px}.pimg{height:115px;font-size:36px}.cat-img{height:62px;font-size:28px}
+.benefits-in{grid-template-columns:1fr}.hd-in{padding:8px 12px;gap:4px}.btn-blk{font-size:10px;padding:5px 10px}
+.hero-sl{padding:34px 12px}.cd-block{padding:10px 14px;min-width:50px}.cd-block strong{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="cart-ov" id="cartOv" onclick="tCart()"></div>
+
+<div class="tb"><div class="tb-in"><div class="tb-it"><span>📧 contato@maxdistrib.com.br</span><span>📱 (81) 99901-2345</span></div><div class="tb-it"><span>✅ Frete grátis +R$2.000</span></div><button class="tb-badge" onclick="opL()">🔐 Entrar</button></div></div>
+
+<header class="hd"><div class="hd-in">
+<a href="#" class="logo"><div class="logo-mk">MD</div><div class="logo-tx"><strong>MaxDistrib</strong><small>Suplementos Premium</small></div></a>
+<div class="srch"><input type="text" id="si" placeholder="Buscar suplementos, marcas..." oninput="ft('')"><button class="srch-b" onclick="ft('')">⌕</button></div>
+<div class="ha"><button class="ha-btn">❤️<span>Salvos</span></button><button class="ha-btn" onclick="tCart()" style="position:relative">🛒<span>Carrinho</span><div class="ha-badge" id="cartBg">0</div></button><button class="btn-blk" onclick="opL()">👤 <span id="ul">Entrar</span></button><button class="hamb" onclick="tMob()">☰</button></div></div>
+<nav class="nav" style="position:relative"><div class="nav-in"><div class="nav-lk"><a href="#" class="ac">🏠 Início</a><a href="#cat">📦 Categorias</a><a href="#mv">🔥 Mais Vendidos</a><a href="#ofertas">⚡ Ofertas</a><a href="#todos">📋 Catálogo</a><a href="#" onclick="opL()">🤝 Revendedor</a></div></div><div class="mob-m" id="mm"><a href="#">🏠 Início</a><a href="#cat">📦 Categorias</a><a href="#mv">🔥 Mais Vendidos</a><a href="#ofertas">⚡ Ofertas</a><a href="#todos">📋 Catálogo</a><a href="#" onclick="opL()">🤝 Revendedor</a></div></nav>
+</header>
+
+<section class="hero">
+<div class="hero-sl on" id="sl0"><img src="public/Banneres/banner%201.png" alt="Banner MaxDistrib 1" style="width:100%;max-width:1240px;display:block;margin:0 auto" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=hero-in style=padding:50px;text-align:center><h1 style=color:#fff;font-size:28px>MaxDistrib</h1><p style=color:rgba(255,255,255,.65)>Suplementos Premium</p></div>')"></div>
+<div class="hero-sl" id="sl1"><img src="public/Banneres/banner%202.png" alt="Banner MaxDistrib 2" style="width:100%;max-width:1240px;display:block;margin:0 auto" onerror="this.style.display='none'"></div>
+<div class="hero-sl" id="sl2"><img src="public/Banneres/banner%203.png" alt="Banner MaxDistrib 3" style="width:100%;max-width:1240px;display:block;margin:0 auto" onerror="this.style.display='none'"></div>
+<div class="hero-sl" id="sl3"><img src="public/Banneres/banner%204.png" alt="Banner MaxDistrib 4" style="width:100%;max-width:1240px;display:block;margin:0 auto" onerror="this.style.display='none'"></div>
+<div class="hdots"><button class="hdot on" onclick="goSl(0)"></button><button class="hdot" onclick="goSl(1)"></button><button class="hdot" onclick="goSl(2)"></button><button class="hdot" onclick="goSl(3)"></button></div>
+</section>
+
+<section class="benefits"><div class="benefits-in">
+<div class="bcard"><div class="bcard-ic">📦</div><div class="bcard-tx"><strong>+1.200 Produtos</strong><span>Catálogo completo</span></div></div>
+<div class="bcard"><div class="bcard-ic">🚚</div><div class="bcard-tx"><strong>Entrega Brasil</strong><span>Frete grátis +R$2.000</span></div></div>
+<div class="bcard"><div class="bcard-ic">💰</div><div class="bcard-tx"><strong>Preço Atacado</strong><span>Margem real</span></div></div>
+<div class="bcard"><div class="bcard-ic">🔐</div><div class="bcard-tx"><strong>Revendedor VIP</strong><span>Preços exclusivos</span></div></div>
+</div></section>
+
+<section class="sec" id="cat" style="background:var(--g1)"><div class="sec-in"><div class="sec-hd"><div><p class="sec-ey">Navegue</p><h2 class="sec-tt">Categorias</h2></div><button class="btn-vt">Ver todas →</button></div><div class="cat-grid" id="cg"></div></div></section>
+
+<section class="sec" id="mv"><div class="sec-in"><div class="sec-hd"><div><p class="sec-ey">Mais pedidos</p><h2 class="sec-tt">Mais Vendidos da Semana</h2></div><button class="btn-vt">Ver catálogo →</button></div><div class="pgrid" id="pgHot"></div></div></section>
+
+<!-- ===== OFERTAS COM CONTAGEM REGRESSIVA ===== -->
+<section class="offers-hero" id="ofertas">
+<div class="offers-ct">
+<div class="anda">ANDA LOGO!</div>
+<p class="sub">A oferta termina em</p>
+<div class="countdown" id="cd"><div class="cd-block"><strong id="cd-d">08</strong><span>Dias</span></div><div class="cd-sep">:</div><div class="cd-block"><strong id="cd-h">14</strong><span>Horas</span></div><div class="cd-sep">:</div><div class="cd-block"><strong id="cd-m">23</strong><span>Min</span></div><div class="cd-sep">:</div><div class="cd-block"><strong id="cd-s">41</strong><span>Seg</span></div></div>
+<div class="offers-perks"><span>Até 35% OFF</span><span>Frete Grátis</span><span>Brinde Exclusivo</span></div>
+</div>
+<div class="offers-title"><span class="badge-red">⚡ OFERTA DO MÊS</span><h2>SELEÇÃO DE OFERTAS</h2><div class="offers-divider"></div></div>
+<div class="combos-grid">
+<div class="combo-card featured">
+<div class="combo-img" style="gap:4px"><img src="public/suplementos/whey/100_WHEY_-_POTE___900G_-_LEITE___MAX_TITANIUM___PROTEINA_1808817_thumb.webp" alt="Whey" style="width:50%;height:100%;object-fit:contain;padding:4px"><img src="public/suplementos/Creatina/CREATINA___300G___MAX_TITANIUM___AMINOACIDO_768adf8_thumb.webp" alt="Creatina" style="width:50%;height:100%;object-fit:contain;padding:4px"></div>
+<div class="combo-tag">🏆 MAIS PEDIDO</div>
+<p class="combo-name">COMBO SELEÇÃO 01</p>
+<p class="combo-desc">Whey 900g + Creatina 300g Max Titanium. Kit completo para revenda.</p>
+<div class="combo-save"><strong>Economize 22%</strong><small>vs. compra individual</small></div>
+<p class="combo-price">R$ 119,90 <small>R$ 154,90</small></p>
+<button class="combo-btn">Comprar Combo →</button>
+</div>
+<div class="combo-card">
+<div class="combo-img"><img src="public/suplementos/pre-treino/EVORA_PW_XT_-_POTE___300G_-_NEON_BERRY___DARKNESS___PRE-TREINO_898fb04_thumb.webp" alt="Évora" style="width:100%;height:100%;object-fit:contain;padding:8px"></div>
+<div class="combo-tag">⚡ REPOSIÇÃO</div>
+<p class="combo-name">COMBO PRÉ-TREINO</p>
+<p class="combo-desc">Pré-Treino Évora PW 300g + Creatina 300g. Energia e performance.</p>
+<div class="combo-save"><strong>Economize 25%</strong><small>desconto progressivo</small></div>
+<p class="combo-price">R$ 94,90 <small>R$ 126,90</small></p>
+<button class="combo-btn">Comprar Combo →</button>
+</div>
+<div class="combo-card">
+<div class="combo-img" style="gap:4px"><img src="public/suplementos/whey/CARNBULL_-_POTE___900G_-_MA___VERDE___TA_SUPLEMENTOS___PROTE_NA_611a214_thumb.webp" alt="Carnbull" style="width:50%;height:100%;object-fit:contain;padding:4px"><img src="public/suplementos/Creatina/CREATINA_CREAPURE_-_POTE___250G___MAX_TITANIUM___CREATINAS_6c27bb8_thumb.webp" alt="Creapure" style="width:50%;height:100%;object-fit:contain;padding:4px"></div>
+<div class="combo-tag">🚀 NOVO</div>
+<p class="combo-name">COMBO PROTEÍNA + CREATINA</p>
+<p class="combo-desc">Carnbull 900g + Creatina Creapure 250g. Giro alto garantido.</p>
+<div class="combo-save"><strong>Economize 18%</strong><small>frete grátis incluso</small></div>
+<p class="combo-price">R$ 132,90 <small>R$ 161,90</small></p>
+<button class="combo-btn">Comprar Combo →</button>
+</div>
+</div>
+</section>
+
+<section class="sec" id="todos" style="background:var(--g1)"><div class="sec-in"><div class="sec-hd"><div><p class="sec-ey">Catálogo completo</p><h2 class="sec-tt">Todos os Produtos</h2></div><span id="cnt" style="font-size:12px;color:var(--g3)"></span></div><div class="pgrid" id="pgAll"></div></div></section>
+
+<footer class="foot"><div class="foot-in">
+<div><div class="logo" style="margin-bottom:10px"><div class="logo-mk" style="background:var(--gld);color:var(--blk)">MD</div><div class="logo-tx"><strong style="color:var(--wht)">MaxDistrib</strong><small>Suplementos Premium</small></div></div><p style="color:rgba(255,255,255,.3);font-size:11px;line-height:1.7">Distribuidora de suplementos para lojistas, academias e revendedores.</p></div>
+<div><h4>Categorias</h4><a href="#">Proteínas</a><a href="#">Creatinas</a><a href="#">Aminoácidos</a><a href="#">Pré-Treinos</a><a href="#">Vitaminas</a></div>
+<div><h4>Links</h4><a href="#">Sobre</a><a href="#" onclick="opL()">Revendedor</a><a href="#">Privacidade</a><a href="#">Contato</a></div>
+<div><h4>Contato</h4><p style="color:rgba(255,255,255,.3);font-size:11px;line-height:1.8">📱 (81) 99901-2345<br>📧 contato@maxdistrib.com.br</p></div>
+</div><div class="foot-bt">© 2026 MaxDistrib · CNPJ 12.345.678/0001-90</div></footer>
+
+<div class="cart-sb" id="cs"><div class="cart-hd"><h3>🛒 Carrinho</h3><button style="background:none;font-size:17px;padding:2px 5px;cursor:pointer" onclick="tCart()">✕</button></div><div class="cart-it" id="ci"><p style="text-align:center;color:var(--g3);padding:36px 0;font-size:12px">Carrinho vazio</p></div><div class="cart-ft"><div class="cart-tot"><strong>Total</strong><span class="vl" id="ctt">R$ 0,00</span></div><button class="btn btn-p btn-w" onclick="chk()">Finalizar</button><button class="btn btn-o btn-w" onclick="tCart()">Continuar Comprando</button></div></div>
+
+<div class="modal-ov" id="lm"><div class="modal" id="lb"></div></div>
+<a href="https://wa.me/5581999012345" class="wpp" target="_blank">💬</a>
+
+<script>
+var IP='public/suplementos/';
+var W='whey/',C='Creatina/',P='pre-treino/';
+var prods=[
+{id:1,n:'100% Whey 900g Leite',cat:'Proteínas',br:'Max Titanium',img:IP+W+'100_WHEY_-_POTE___900G_-_LEITE___MAX_TITANIUM___PROTEINA_1808817_thumb.webp',dp:89,rp:149.90,q:72,mn:20,sld:348,hot:true},
+{id:2,n:'Creatina Monohidratada 300g',cat:'Creatinas',br:'Max Titanium',img:IP+C+'CREATINA___300G___MAX_TITANIUM___AMINOACIDO_768adf8_thumb.webp',dp:45,rp:89.90,q:54,mn:25,sld:215,hot:true},
+{id:3,n:'100% Pure Whey 900g Leite',cat:'Proteínas',br:'Probiotica',img:IP+W+'100_PURE_WHEY_-_POTE___900G_-_LEITE___PROBIOTICA___PROTEINA_4c17aeb_thumb.webp',dp:82,rp:139.90,q:46,mn:18,sld:198,hot:true},
+{id:4,n:'Pré-Treino Évora PW 300g',cat:'Pré-Treinos',br:'Darkness',img:IP+P+'EVORA_PW_XT_-_POTE___300G_-_NEON_BERRY___DARKNESS___PRE-TREINO_898fb04_thumb.webp',dp:58,rp:119.90,q:33,mn:15,sld:167,hot:true},
+{id:5,n:'Creatina Creapure 250g',cat:'Creatinas',br:'Max Titanium',img:IP+C+'CREATINA_CREAPURE_-_POTE___250G___MAX_TITANIUM___CREATINAS_6c27bb8_thumb.webp',dp:52,rp:99.90,q:61,mn:20,sld:142,hot:false},
+{id:6,n:'Whey Zero Leite 900g Coffee Caramel',cat:'Proteínas',br:'TA Suplementos',img:IP+W+'WHEY_ZERO_LEITE_-_POTE___900G_-_COFFEE_CARAMEL___TA_SUPLEMENTOS___PROTEINA_fa975d7_thumb.webp',dp:91,rp:159.90,q:28,mn:12,sld:93,hot:false},
+{id:7,n:'Creatina 300g Pote',cat:'Creatinas',br:'Nutrata',img:IP+C+'CREATINA_-_POTE___300G___NUTRATA___AMINOACIDOS_3f79a90_thumb.webp',dp:48,rp:94.90,q:39,mn:18,sld:176,hot:true},
+{id:8,n:'Pré-Treino Psichotic T 245g',cat:'Pré-Treinos',br:'Demons Lab',img:IP+P+'PSICHOTIC_T_-_POTE___245G_-_FRUIT_ENERGY___DEMONS_LAB___PRE-TREINO_a2bd395_thumb.webp',dp:62,rp:129.90,q:22,mn:10,sld:85,hot:false},
+{id:9,n:'Whey N Pro Refil 900g Choc',cat:'Proteínas',br:'Nutrata',img:IP+W+'100_WHEY_N_PRO_-_REFIL___900G_-_DUPLO_CHOCOLATE___NUTRATA___PROTEINA_6681c8b_thumb.webp',dp:79,rp:135.90,q:51,mn:22,sld:204,hot:true},
+{id:10,n:'Creatina 300g',cat:'Creatinas',br:'Probiotica',img:IP+C+'CREATINA___300G___PROBIOTICA___AMINOACIDOS_77cd4d5_thumb.webp',dp:44,rp:87.90,q:47,mn:20,sld:138,hot:false},
+{id:11,n:'Pré-Treino Tomahawk 380g',cat:'Pré-Treinos',br:'Fullife Nutrition',img:IP+P+'TOMAHAWK___380G_-_RED_ICE___FULLIFE_NUTRITION___PRE-TREINO_46fb285_thumb.webp',dp:68,rp:139.90,q:19,mn:12,sld:74,hot:false},
+{id:12,n:'Creatina CreaFort 300g Creapure',cat:'Creatinas',br:'VitaFor',img:IP+C+'CREATINA_CREAFORT_-_CREAPURE___300G___VITAFOR___AMINOACIDO_b0fd46f_thumb.webp',dp:54,rp:109.90,q:36,mn:16,sld:95,hot:false},
+{id:13,n:'Carnbull 900g Maçã Verde',cat:'Proteínas',br:'TA Suplementos',img:IP+W+'CARNBULL_-_POTE___900G_-_MA___VERDE___TA_SUPLEMENTOS___PROTE_NA_611a214_thumb.webp',dp:95,rp:169.90,q:42,mn:18,sld:156,hot:true},
+{id:14,n:'Muscle Whey 3W 2kg Cookies',cat:'Proteínas',br:'ProForce',img:IP+W+'MUSCLE_WHEY_3W_-_SACO___2KG_-_COOKIES___PROFORCE___PROTEINA_e807755_thumb.webp',dp:135,rp:219.90,q:24,mn:10,sld:89,hot:false},
+{id:15,n:'Pré-Treino Vampire Black 140g',cat:'Pré-Treinos',br:'TA Suplementos',img:IP+P+'VAMPIRE_BLACK_-_POTE___140G_-_MORANGO_COM_MARACUJ____TA_SUPLEMENTOS___PRE-TREINO_e61bdb1_thumb.png',dp:49,rp:99.90,q:27,mn:12,sld:63,hot:false},
+{id:16,n:'Whey Beef Protein 900g',cat:'Proteínas',br:'Nutrata',img:IP+W+'WHEY_BEEF_PROTEIN_-_POTE___900G_-_FRUTAS_CITRICAS___NUTRATA___PROTEINA_9eaa005_thumb.png',dp:88,rp:149.90,q:31,mn:15,sld:118,hot:false},
+{id:17,n:'Pré-Treino NUN 280g Tangerina',cat:'Pré-Treinos',br:'TA Suplementos',img:IP+P+'NUN_-_POTE___280G_-_TANGERINA___TA_SUPLEMENTOS___PRE-TREINO_e915754_thumb.webp',dp:56,rp:114.90,q:18,mn:10,sld:71,hot:false},
+{id:18,n:'Best Whey 450g Morango',cat:'Proteínas',br:'Atlética Nutrition',img:IP+W+'BEST_WHEY_-_POTE___450G_-_MILKSHAKE_MORANGO_BOB_S___ATLHETICA_NUTRITION___PROTEINA_6227a08_thumb.webp',dp:59,rp:99.90,q:48,mn:20,sld:0,hot:false,novo:true},
+{id:19,n:'Évora PW 300g Frutas Amarelas',cat:'Pré-Treinos',br:'Darkness',img:IP+P+'_VORA_PW___300G_-_FRUTAS_AMARELAS___DARKNESS___PR-TREINO_ac8e0e2_thumb.webp',dp:58,rp:119.90,q:38,mn:15,sld:0,hot:false,novo:true}
+];
+var cats=['Proteínas','Creatinas','Aminoácidos','Pré-Treinos','Vitaminas','Termogênicos','Bebidas'];
+const vends=['Lucas Silva','Marina Costa','Pedro Santos','Ana Oliveira','Rafael Lima','Juliana Souza','Carlos Eduardo','Fernanda Torres'];
+let user=null,cart=[],sl=0;
+
+function fR(v){return'R$ '+v.toFixed(2).replace('.',',')}
+function to(m){let t=document.createElement('div');t.style.cssText='position:fixed;top:14px;right:14px;z-index:999;background:#fff;border-radius:6px;padding:8px 13px;box-shadow:0 4px 16px rgba(0,0,0,.14);font-size:11.5px;font-weight:600;animation:ti .25s ease;border-left:3px solid #2E7D32';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},2400)}
+
+function rAll(){rCat();rP('pgHot',prods.filter(p=>p.hot));rP('pgAll',prods);document.getElementById('cnt').textContent=prods.length+' produtos';uCart()}
+function rCat(){document.getElementById('cg').innerHTML=cats.map((c,i)=>{let cl=['#FFF3CD','#E8F5E9','#E3F2FD','#FFEBEE','#F3E5F5','#FFF8E1','#FFF3CD','#F1F8E9','#FCE4EC','#E8EAF6'];let ic=['🥛','⚡','💊','🚀','💚','🔥','🍫','📦','🥤','✨'];let cnt=prods.filter(p=>p.cat===c).length;return`<div class="cat-c" onclick="ft('${c}')"><div class="cat-img" style="background:${cl[i]}">${ic[i]}</div><div class="cat-body"><h4>${c}</h4><span>${cnt} produtos</span></div></div>`}).join('')}
+function rP(gid,arr){var g=document.getElementById(gid);if(!g)return;var isR=user&&user.tp==='rev';g.innerHTML=arr.map(function(p){var prc=isR?p.dp:p.rp;var b='';if(p.novo)b+='<span class="pbadge pbadge-n">✨ Novo</span>';if(p.q===0)b+='<span class="pbadge pbadge-o">Indisp.</span>';else if(p.q<=p.mn)b+='<span class="pbadge pbadge-o">Últimas</span>';if(p.hot)b+='<span class="pbadge pbadge-h">🔥 Top</span>';if(p.sld>200)b+='<span class="pbadge pbadge-n">+'+p.sld+' vend</span>';return'<div class="pcard"><div class="pimg">'+(p.img?'<img src="'+p.img+'" alt="'+p.n+'" onerror="this.style.display=\'none\';this.parentElement.innerHTML+=\'<span style=font-size:40px>📦</span>\'" style="width:100%;height:100%;object-fit:contain;padding:8px">':'<span style="font-size:40px">📦</span>')+'<div class="pbadges">'+b+'</div></div><div class="pbody"><p class="pbrand">'+p.br+'</p><p class="pname">'+p.n+'</p><p class="pcat">'+p.cat+' · '+(p.q>0?p.q+' un.':'Esgotado')+'</p><p class="ppr">'+fR(prc)+'</p><p class="ppr-ref" style="display:'+(isR?'block':'none')+'"><strong>Distribuidor</strong> · Loja: '+fR(p.rp)+' · Margem: '+fR(p.rp-p.dp)+'</p><div class="pfoot">'+(p.q>0?'<button class="btn-buy" onclick="addC('+p.id+')">Comprar</button><button class="btn-cart" onclick="addC('+p.id+')">🛒</button>':'<button class="btn-buy" style="background:#ccc;cursor:default">Indisponível</button>')+'</div></div></div>'}).join('')}
+function ft(c){if(c){document.getElementById('todos').scrollIntoView({behavior:'smooth'});let f=prods.filter(p=>p.cat===c);rP('pgAll',f);document.getElementById('cnt').textContent=f.length+' produtos · '+c}else{let q=document.getElementById('si').value.toLowerCase();let f=q?prods.filter(p=>p.n.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)||p.br.toLowerCase().includes(q)):prods;rP('pgAll',f);document.getElementById('cnt').textContent=f.length+' produtos'+(q?' · "'+q+'"':'');if(q)document.getElementById('todos').scrollIntoView({behavior:'smooth'})}}
+
+function addC(pid){let p=prods.find(x=>x.id===pid);if(!p||p.q<=0){to('Indisponível');return}let ex=cart.find(c=>c.id===pid);if(ex)ex.q++;else cart.push({id:p.id,n:p.n,prc:user&&user.tp==='rev'?p.dp:p.rp,q:1,img:p.img});uCart();rCart();to(p.n+' adicionado')}
+function rmC(pid){cart=cart.filter(c=>c.id!==pid);uCart();rCart()}
+function qC(pid,d){let c=cart.find(x=>x.id===pid);if(!c)return;c.q+=d;if(c.q<=0){rmC(pid);return}uCart();rCart()}
+function uCart(){let b=document.getElementById('cartBg'),t=cart.reduce((s,c)=>s+c.q,0);b.style.display=t>0?'flex':'none';if(t>0)b.textContent=t}
+function rCart(){let el=document.getElementById('ci'),tt=0;if(!cart.length){el.innerHTML='<p style="text-align:center;color:var(--g3);padding:36px 0;font-size:12px">Carrinho vazio</p>';document.getElementById('ctt').textContent='R$ 0,00';return}el.innerHTML=cart.map(function(c){var s=c.prc*c.q;tt+=s;return'<div class="cart-row"><div class="cart-img">'+(c.img?'<img src="'+c.img+'" alt="'+c.n+'" style="width:100%;height:100%;object-fit:contain">':'📦')+'</div><div class="cart-info"><strong>'+c.n+'</strong><span>'+fR(c.prc)+'/un</span><div class="cart-qt"><button onclick="qC('+c.id+',-1)">−</button><span style="font-weight:700;font-size:11px;min-width:16px;text-align:center">'+c.q+'</span><button onclick="qC('+c.id+',1)">+</button></div></div><div><strong style="color:var(--red);font-size:12px">'+fR(s)+'</strong><br><button style="background:none;border:none;color:var(--g3);font-size:14px;cursor:pointer;margin-top:3px" onclick="rmC('+c.id+')">🗑️</button></div></div>'}).join('');document.getElementById('ctt').textContent=fR(tt)}
+function tCart(){document.getElementById('cs').classList.toggle('on');document.getElementById('cartOv').classList.toggle('on');rCart()}
+function chk(){if(!cart.length){to('Carrinho vazio');return}if(!user){to('Faça login');opL();return}let tt=cart.reduce((s,c)=>s+(c.prc*c.q),0);alert('✅ Pedido simulado!\n\n'+cart.map(c=>c.n+' x'+c.q+' = '+fR(c.prc*c.q)).join('\n')+'\n\nTotal: '+fR(tt)+'\n\n(Mock)');cart=[];uCart();rCart();tCart();to('Pedido enviado!')}
+
+function opL(){let isL=!!user;document.getElementById('lm').classList.add('on');document.getElementById('lb').innerHTML=`<div class="modal-hd"><h3>${isL?'Minha Conta':'Entrar'}</h3><button style="background:none;font-size:16px;padding:2px 4px;cursor:pointer" onclick="clL()">✕</button></div><div class="modal-bd">${isL?`<div style="text-align:center;margin-bottom:14px"><div style="font-size:32px;margin-bottom:4px">${user.tp==='rev'?'🤝':'👤'}</div><h4 style="font-size:13.5px;font-weight:700">${user.name}</h4><p style="color:var(--g3);font-size:11.5px">${user.email} · ${user.tp==='rev'?'Revendedor'+(user.vend?' — '+user.vend:''):'Cliente'}</p>${user.tp==='rev'?`<div style="margin-top:8px;padding:10px;background:#E8F5E9;border-radius:var(--r);font-size:11px;color:#2E7D32;font-weight:600">✅ Preços de distribuidora + referência da loja</div>`:''}</div><button class="btn btn-p btn-w" onclick="doLg()">Sair</button>`:`<div class="login-tabs" id="lt"><button class="login-tab on" onclick="swLT('cliente')">Cliente</button><button class="login-tab" onclick="swLT('revendedor')">Revendedor</button></div><form onsubmit="doL(event)"><div class="fg"><label>Nome</label><input class="fi" id="lfN" placeholder="Seu nome" required></div><div class="fg"><label>Email</label><input type="email" class="fi" id="lfE" placeholder="seu@email.com" required></div><div class="fg"><label>WhatsApp</label><input class="fi" id="lfP" placeholder="(81) 99999-9999"></div><div class="fg" id="vg" style="display:none"><label>Escolha seu vendedor</label><select class="fi fs" id="lfV"><option value="">Selecione...</option>${vends.map(v=>`<option>${v}</option>`).join('')}</select><small style="color:var(--g3);font-size:10px;display:block;margin-top:2px">Ele receberá comissão e poderá aplicar descontos</small></div><button type="submit" class="btn btn-gld btn-w" style="margin-top:4px">Entrar</button></form><p style="text-align:center;margin-top:10px;font-size:10px;color:var(--g3)">Mock · Qualquer email</p>`}`}let lt='cliente';
+function swLT(t){lt=t;document.querySelectorAll('#lt .login-tab').forEach(b=>b.classList.remove('on'));event.target.classList.add('on');document.getElementById('vg').style.display=t==='revendedor'?'block':'none'}
+function doL(e){e.preventDefault();let n=document.getElementById('lfN').value.trim(),em=document.getElementById('lfE').value.trim(),v=lt==='revendedor'?document.getElementById('lfV').value:'';if(!n||!em){to('Preencha tudo');return}user={tp:lt,name:n,email:em,vend:v||undefined};clL();rAll();document.getElementById('ul').textContent=n.split(' ')[0];to('Bem-vindo'+ (lt==='revendedor'?' (Revendedor)':'') )}
+function doLg(){user=null;rAll();document.getElementById('ul').textContent='Entrar';clL();to('Saiu')}
+function clL(){document.getElementById('lm').classList.remove('on')}
+document.getElementById('lm').addEventListener('click',function(e){if(e.target===this)clL()});
+
+function goSl(n){document.querySelectorAll('.hero-sl').forEach(function(s,i){s.classList.toggle('on',i===n)});document.querySelectorAll('.hdot').forEach(function(d,i){d.classList.toggle('on',i===n)});sl=n}setInterval(function(){goSl((sl+1)%4)},4500);
+function tMob(){document.getElementById('mm').classList.toggle('on')}
+
+// ===== COUNTDOWN =====
+let cdEnd=new Date();cdEnd.setDate(cdEnd.getDate()+8);cdEnd.setHours(14,23,41);
+function updCd(){let now=new Date(),diff=cdEnd-now;if(diff<=0){diff=0;clearInterval(cdTimer)}let d=Math.floor(diff/(1000*60*60*24)),h=Math.floor((diff%(1000*60*60*24))/(1000*60*60)),m=Math.floor((diff%(1000*60*60))/(1000*60)),s=Math.floor((diff%(1000*60))/1000);let el=(id,v)=>document.getElementById(id)&&(document.getElementById(id).textContent=String(v).padStart(2,'0'));el('cd-d',d);el('cd-h',h);el('cd-m',m);el('cd-s',s)}updCd();var cdTimer=setInterval(updCd,1000);
+
+rAll();
+</script>
+</body>
+</html>

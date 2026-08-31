@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>MaxDistrib · Estoque Inteligente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+:root{
+--pri:#5C4A3A;--pri-light:#7A6552;--pri-bg:#F8F3EE;--pri-border:#E8DDD2;
+--acc:#C2855B;--acc-light:#E8C9B0;--acc-bg:#FDF6F1;
+--green:#6B8E5A;--green-light:#E8F0E2;--green-bg:#F4F8F0;
+--amber:#C7903A;--amber-light:#FDF0DC;--amber-bg:#FEF9F2;
+--red:#B8453A;--red-light:#FBE8E6;--red-bg:#FEF6F5;
+--white:#fff;--bg:#FBF7F4;--text:#3A2E28;--muted:#8B7E74;--border:#E8E0D5;
+--shadow-sm:0 1px 3px rgba(92,74,58,.06);--shadow-md:0 4px 14px rgba(92,74,58,.08);--shadow-lg:0 8px 28px rgba(92,74,58,.1);
+--radius:8px;--radius-lg:12px;--radius-xl:18px;--font:'Inter',-apple-system,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--text);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;min-width:320px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:var(--font)}button{cursor:pointer;border:none}
+
+.sidebar{width:250px;min-height:100dvh;background:var(--pri);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column;transition:transform .25s ease}
+.sidebar-head{padding:18px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sidebar-head .mk{width:36px;height:36px;background:var(--acc);color:#fff;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.sidebar-head span{font-weight:700;font-size:14px}
+.sidebar-nav{flex:1;overflow-y:auto;padding:6px 0;-webkit-overflow-scrolling:touch}
+.sidebar-sec{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);font-weight:700;padding:14px 16px 4px}
+.sidebar-link{display:flex;align-items:center;gap:9px;padding:9px 14px;margin:2px 8px;border-radius:var(--radius);font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s;background:none;width:calc(100% - 16px);text-align:left}
+.sidebar-link:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar-link.active{background:var(--green);color:#fff;font-weight:700}
+.sidebar-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;font-size:11px}
+.sidebar-av{width:32px;height:32px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+
+.main{margin-left:250px;min-height:100dvh}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 22px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar .bc{font-size:12.5px;color:var(--muted)}.topbar .bc span{color:var(--text);font-weight:700}
+.mob-btn{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text);padding:4px;line-height:1}
+#ovl{display:none;position:fixed;inset:0;background:rgba(58,46,40,.5);z-index:95}
+.content{padding:22px;min-height:calc(100dvh - 54px)}
+.panel{display:none}.panel.on{display:block;animation:fi .2s ease}@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px;margin-bottom:22px}
+.scard{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 16px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s}
+.scard:hover{box-shadow:var(--shadow-md)}
+.si{width:42px;height:42px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.si.p{background:var(--pri-bg);color:var(--pri)}.si.g{background:var(--green-light);color:var(--green)}
+.si.a{background:var(--amber-bg);color:var(--amber)}.si.r{background:var(--red-bg);color:var(--red)}
+.si.ac{background:var(--acc-bg);color:var(--acc)}
+.sd h3{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.sd .vl{font-size:20px;font-weight:800;color:var(--pri)}.sd .sub{font-size:10.5px;color:var(--muted)}
+
+.tcard{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:20px}
+.tcard-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.tcard-hd h2{font-size:14.5px;font-weight:700;color:var(--pri)}
+.tcard-acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.twrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:700px}
+table thead th{padding:9px 12px;text-align:left;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;background:var(--bg);border-bottom:1px solid var(--border);white-space:nowrap}
+table tbody td{padding:9px 12px;font-size:12.5px;border-bottom:1px solid var(--border);color:var(--text)}
+table tbody tr:hover{background:var(--acc-bg)}
+table tbody tr:last-child td{border-bottom:none}
+
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.badge-ok{background:var(--green-light);color:var(--green)}.badge-w{background:var(--amber-light);color:var(--amber)}.badge-c{background:var(--red-light);color:var(--red)}.badge-n{background:var(--pri-bg);color:var(--pri)}
+
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--radius);font-size:12.5px;font-weight:700;transition:all .12s;white-space:nowrap;line-height:1.3}
+.btn-p{background:var(--pri);color:#fff}.btn-p:hover{background:var(--pri-light)}
+.btn-g{background:var(--green);color:#fff}.btn-g:hover{background:#5C7A4A}
+.btn-d{background:var(--red);color:#fff}.btn-d:hover{background:#A33A30}
+.btn-o{background:var(--white);color:var(--pri);border:1.5px solid var(--pri)}.btn-o:hover{background:var(--pri-bg)}
+.btn-gh{background:transparent;color:var(--muted);padding:5px 8px}.btn-gh:hover{background:var(--bg);color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:11px}
+
+.form-grp{margin-bottom:13px}.form-grp label{display:block;font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px}
+.form-in{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text);background:var(--white);outline:none;transition:border .15s}
+.form-in:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(194,133,91,.1)}
+.form-sel{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238B7E74' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.fcard{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+.fcard h2{font-size:15px;font-weight:700;color:var(--pri);margin-bottom:16px}
+
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(58,46,40,.55);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.modal-ov.on{display:flex}
+.modal{background:var(--white);border-radius:var(--radius-xl);width:92%;max-width:540px;max-height:88dvh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-hd{padding:15px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-hd h3{font-size:15px;font-weight:700}
+.modal-bd{padding:20px}.modal-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+
+.chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:18px;margin-bottom:22px}
+.ccard{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px}
+.ccard h3{font-size:13.5px;font-weight:700;color:var(--pri);margin-bottom:14px}
+
+.fifo-alert{background:var(--amber-bg);border:1.5px solid var(--amber);border-radius:var(--radius-lg);padding:18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.fifo-alert .fa-icon{font-size:32px;flex-shrink:0}.fifo-alert h3{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:2px}.fifo-alert p{font-size:12px;color:#8B6914}
+
+.alert-row{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:box-shadow .15s}
+.alert-row:hover{box-shadow:var(--shadow-sm)}
+.alert-row.crit{border-left:3px solid var(--red)}.alert-row.warn{border-left:3px solid var(--amber)}.alert-row.info{border-left:3px solid var(--pri)}
+.alert-row .ai{font-size:20px;flex-shrink:0}.alert-row .ac{flex:1}
+.alert-row .ac h4{font-size:13px;font-weight:700;color:var(--pri)}.alert-row .ac p{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+.aichat{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;height:calc(100dvh - 190px);min-height:440px}
+.aimsgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.aim{border-radius:10px;padding:11px 15px;font-size:12.5px;line-height:1.5;max-width:78%}
+.aim.user{align-self:flex-end;background:var(--pri);color:#fff;border-bottom-right-radius:3px}
+.aim.ast{align-self:flex-start;background:var(--bg);color:var(--text);border-bottom-left-radius:3px}
+.aim.cfm{align-self:flex-start;background:var(--green-light);border:1.5px solid var(--green);max-width:100%;font-size:12px}
+.aim.cfm .acts{margin-top:10px;display:flex;gap:8px}
+.ai-inp{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--white)}
+.ai-inp .form-in{flex:1}.ai-sugs{display:flex;gap:5px;flex-wrap:wrap;padding:8px 16px 0}
+.ai-sug{background:var(--pri-bg);color:var(--pri);border:1px solid var(--pri-border);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s}.ai-sug:hover{background:var(--pri);color:#fff}
+
+.empty{padding:36px 16px;text-align:center;color:var(--muted)}.empty .ic{font-size:40px;margin-bottom:8px}.empty h4{color:var(--text);font-size:14px;margin-bottom:4px}.empty p{font-size:12px}
+
+@media(max-width:768px){
+.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}
+.mob-btn{display:block}.content{padding:14px}
+.stats{grid-template-columns:repeat(2,1fr);gap:10px}.chart-row{grid-template-columns:1fr}
+.form-row{grid-template-columns:1fr}
+}
+@media(max-width:420px){
+.stats{grid-template-columns:1fr 1fr;gap:8px}.scard{padding:14px 12px;gap:10px}
+.si{width:36px;height:36px;font-size:16px}.sd .vl{font-size:17px}.sd h3{font-size:9.5px}
+.topbar{padding:0 12px}.content{padding:10px}.aichat{min-height:380px}
+.btn{font-size:11.5px;padding:6px 12px}
+}
+</style>
+</head>
+<body>
+
+<div id="ovl" onclick="tS()"></div>
+<aside class="sidebar" id="sb">
+<div class="sidebar-head"><div class="mk">MD</div><span>Estoque Inteligente</span></div>
+<nav class="sidebar-nav">
+<div class="sidebar-sec">Principal</div>
+<button class="sidebar-link active" data-pg="dash" onclick="go('dash')">📊 Dashboard</button>
+<div class="sidebar-sec">Gestão</div>
+<button class="sidebar-link" data-pg="prod" onclick="go('prod')">📦 Produtos</button>
+<button class="sidebar-link" data-pg="ent" onclick="go('ent')">📥 Entrada</button>
+<button class="sidebar-link" data-pg="sai" onclick="go('sai')">📤 Saída</button>
+<button class="sidebar-link" data-pg="ped" onclick="go('ped')">📋 Pedidos</button>
+<button class="sidebar-link" data-pg="promo" onclick="go('promo')">🏷️ Promoções</button>
+<div class="sidebar-sec">Inteligência</div>
+<button class="sidebar-link" data-pg="alr" onclick="go('alr')">🔔 Alertas</button>
+<button class="sidebar-link" data-pg="ai" onclick="go('ai')">🤖 Assistente IA</button>
+<button class="sidebar-link" data-pg="rel" onclick="go('rel')">📈 Relatórios</button>
+<div class="sidebar-sec">Controle</div>
+<button class="sidebar-link" data-pg="fifo" onclick="go('fifo')">⏳ FIFO & Validade</button>
+<button class="sidebar-link" data-pg="cfg" onclick="go('cfg')">⚙️ Configurações</button>
+</nav>
+<div class="sidebar-foot"><div class="sidebar-av">L</div><div><div style="font-weight:700;font-size:11px">Lucas Muniz</div><div style="color:rgba(255,255,255,.4);font-size:9.5px">Administrador</div></div></div>
+</aside>
+
+<main class="main" id="mn">
+<div class="topbar"><div style="display:flex;align-items:center;gap:10px"><button class="mob-btn" onclick="tS()">☰</button><div class="bc" id="bc">Estoque Inteligente · <span>Dashboard</span></div></div></div>
+<div class="content" id="ct"></div>
+</main>
+<div class="modal-ov" id="mo"><div class="modal" id="mb"></div></div>
+
+<script>
+const K='md_est_v3';
+function ld(){let r=localStorage.getItem(K);if(r)try{return JSON.parse(r)}catch(e){}return gd()}
+function gd(){return{prod:[
+{id:1,n:'Whey Protein Concentrado 900g',cat:'Proteínas',br:'Max Titanium',sku:'WHEY-MAX-900',cost:89,prc:149.90,q:72,mn:20,sup:'Max Titanium',lot:'LT2606-01',exp:'2027-06-15',note:'Baunilha',cr:'2026-06-10'},
+{id:2,n:'Creatina Monohidratada 300g',cat:'Creatinas',br:'Max Titanium',sku:'CRT-MAX-300',cost:45,prc:89.90,q:54,mn:25,sup:'Max Titanium',lot:'LT2607-02',exp:'2027-12-20',note:'',cr:'2026-06-15'},
+{id:3,n:'BCAA 2400 120 Cápsulas',cat:'Aminoácidos',br:'Max Titanium',sku:'BCA-MAX-120',cost:35,prc:69.90,q:0,mn:15,sup:'Max Titanium',lot:'LT2604-03',exp:'2026-12-01',note:'Sem sabor',cr:'2026-05-20'},
+{id:4,n:'Pré-Treino Égide 300g',cat:'Pré-Treinos',br:'Max Titanium',sku:'PRE-MAX-300',cost:55,prc:109.90,q:42,mn:20,sup:'Max Titanium',lot:'LT2607-04',exp:'2027-08-10',note:'Frutas Vermelhas',cr:'2026-06-18'},
+{id:5,n:'Glutamina 300g',cat:'Aminoácidos',br:'Integral Médica',sku:'GLU-INT-300',cost:40,prc:79.90,q:7,mn:12,sup:'Integral Médica',lot:'LT2603-05',exp:'2026-11-15',note:'',cr:'2026-04-22'},
+{id:6,n:'Multivitamínico Daily V 60 caps',cat:'Vitaminas',br:'Max Titanium',sku:'MUL-MAX-60',cost:28,prc:54.90,q:85,mn:30,sup:'Max Titanium',lot:'LT2606-06',exp:'2027-05-30',note:'',cr:'2026-06-12'},
+{id:7,n:'Termogênico Hot Burn 120 caps',cat:'Termogênicos',br:'Integral Médica',sku:'TER-INT-120',cost:42,prc:84.90,q:4,mn:10,sup:'Integral Médica',lot:'LT2602-07',exp:'2026-10-20',note:'',cr:'2026-03-25'},
+{id:8,n:'Barra de Proteína 24g Cx 12un',cat:'Barras',br:'Max Titanium',sku:'BAR-MAX-24',cost:78,prc:154.80,q:130,mn:40,sup:'Max Titanium',lot:'LT2607-08',exp:'2027-02-28',note:'Cookies & Cream',cr:'2026-07-01'},
+{id:9,n:'Hipercalórico Mass 15000 3kg',cat:'Hipercalóricos',br:'Max Titanium',sku:'HIP-MAX-3K',cost:65,prc:119.90,q:38,mn:15,sup:'Max Titanium',lot:'LT2605-09',exp:'2027-04-10',note:'Chocolate',cr:'2026-06-05'},
+{id:10,n:'Ômega 3 1000mg 120 caps',cat:'Vitaminas',br:'VitaFor',sku:'OME-VIT-120',cost:22.90,prc:49.90,q:68,mn:20,sup:'VitaFor',lot:'LT2606-10',exp:'2027-09-30',note:'',cr:'2026-06-22'},
+{id:11,n:'Colágeno Hidrolisado Tipo 2 300g',cat:'Saúde',br:'Sanavita',sku:'COL-SAN-300',cost:34.50,prc:69.90,q:41,mn:15,sup:'Sanavita',lot:'LT2605-11',exp:'2027-03-20',note:'',cr:'2026-06-25'},
+{id:12,n:'Energético Monster 473ml Cx 24',cat:'Bebidas',br:'Monster Energy',sku:'ENE-MON-CX',cost:180,prc:357.60,q:56,mn:20,sup:'Monster Energy',lot:'LT2607-12',exp:'2027-11-15',note:'',cr:'2026-07-02'}],
+mov:[{id:1,pid:1,tp:'in',q:50,val:4450,date:'2026-07-01',sup:'Max Titanium',note:'Compra mensal'},{id:2,pid:2,tp:'in',q:80,val:3600,date:'2026-07-02',sup:'Max Titanium',note:'Reposição'},{id:3,pid:12,tp:'in',q:40,val:7200,date:'2026-07-02',sup:'Monster Energy',note:'Pedido quinzenal'},{id:4,pid:1,tp:'out',q:22,date:'2026-07-03',note:'Venda para cliente',rs:'venda'},{id:5,pid:5,tp:'out',q:3,date:'2026-07-03',note:'Vencido',rs:'perda'},{id:6,pid:4,tp:'in',q:25,val:1375,date:'2026-07-04',sup:'Max Titanium',note:'Compra semanal'},{id:7,pid:2,tp:'out',q:8,date:'2026-07-04',note:'Pedido #3421',rs:'venda'},{id:8,pid:6,tp:'out',q:12,date:'2026-07-05',note:'Pedido #3428',rs:'venda'},{id:9,pid:8,tp:'out',q:20,date:'2026-07-05',note:'Pedido #3430',rs:'venda'},{id:10,pid:12,tp:'out',q:15,date:'2026-07-05',note:'Pedido #3432',rs:'venda'}],
+ord:[{id:1,pn:'Whey Protein Concentrado 900g',q:25,sup:'Max Titanium',st:'pendente',date:'2026-07-04',note:'Reposição urgente'},{id:2,pn:'BCAA 2400 120 Cápsulas',q:30,sup:'Max Titanium',st:'aprovado',date:'2026-07-03',note:'Zerado em estoque'},{id:3,pn:'Termogênico Hot Burn 120 caps',q:20,sup:'Integral Médica',date:'2026-07-04',st:'pendente',note:'Abaixo do mínimo'},{id:4,pn:'Glutamina 300g',q:15,sup:'Integral Médica',st:'aprovado',date:'2026-07-05',note:''},{id:5,pn:'Energético Monster Cx 24',q:30,sup:'Monster Energy',st:'pendente',date:'2026-07-06',note:'Alta demanda'}],
+promo:[{id:1,name:'Semana do Whey',tp:'pct',val:15,start:'2026-07-07',end:'2026-07-14',pids:[1,8],active:true},{id:2,name:'Combo Pré-Treino',tp:'fix',val:20,start:'2026-07-05',end:'2026-07-20',pids:[4,7],active:true}],
+nx:{p:13,m:11,o:6,pr:3}}}function sv(d){localStorage.setItem(K,JSON.stringify(d))}
+let D=ld();if(!localStorage.getItem(K))sv(D);
+
+function fR(v){return'R$ '+v.toFixed(2).replace('.',',')}
+function fD(d){return new Date(d+'T00:00:00').toLocaleDateString('pt-BR')}
+function gP(id){return D.prod.find(p=>p.id===id)}
+function gPN(id){let p=gP(id);return p?p.n:'—'}
+function to(m){let t=document.createElement('div');t.style.cssText='position:fixed;top:16px;right:16px;z-index:999;background:#fff;border-radius:8px;padding:10px 16px;box-shadow:0 4px 16px rgba(0,0,0,.12);font-size:12.5px;font-weight:600;animation:toIn .25s ease;border-left:3px solid var(--green)';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},2800)}
+function tS(f){let s=document.getElementById('sb'),o=document.getElementById('ovl');if(f===true){s.classList.remove('open');o.style.display='none';return}s.classList.toggle('open');o.style.display=s.classList.contains('open')?'block':'none'}
+
+function go(pg){
+D=ld();
+document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+let lnk=document.querySelector(`[data-pg="${pg}"]`);if(lnk)lnk.classList.add('active');
+let m={dash:'Dashboard',prod:'Produtos',ent:'Entrada de Estoque',sai:'Saída de Estoque',ped:'Pedidos',promo:'Promoções',alr:'Alertas',ai:'Assistente IA',rel:'Relatórios',fifo:'FIFO & Validade',cfg:'Configurações'};
+document.getElementById('bc').innerHTML='Estoque Inteligente · <span>'+ (m[pg]||pg)+'</span>';
+let fns={dash:dDash,prod:dProd,ent:dEnt,sai:dSai,ped:dPed,promo:dPromo,alr:dAlr,ai:dAI,rel:dRel,fifo:dFifo,cfg:dCfg};
+let r=document.getElementById('ct');r.innerHTML='';
+(fns[pg]||dDash)(r);
+tS(true);
+}
+
+function dDash(r){
+let tp=D.prod.length,lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn).length,ze=D.prod.filter(p=>p.q===0).length,tv=D.prod.reduce((s,p)=>s+(p.q*p.cost),0),po=D.ord.filter(o=>o.st==='pendente').length;
+let es=D.prod.filter(p=>{if(!p.exp)return false;let d=new Date(p.exp+'T00:00:00'),n=new Date();n.setMonth(n.getMonth()+2);return d<=n}).length;
+r.innerHTML=`
+<div class="stats">
+<div class="scard"><div class="si p">📦</div><div class="sd"><h3>Total de Produtos</h3><div class="vl">${tp}</div><div class="sub">produtos ativos no estoque</div></div></div>
+<div class="scard"><div class="si a">⚠️</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div><div class="sub">abaixo do mínimo configurado</div></div></div>
+<div class="scard"><div class="si r">🚫</div><div class="sd"><h3>Produtos Zerados</h3><div class="vl">${ze}</div><div class="sub">sem nenhuma unidade</div></div></div>
+<div class="scard"><div class="si g">💰</div><div class="sd"><h3>Valor do Estoque</h3><div class="vl">${fR(tv)}</div><div class="sub">valor estimado pelo custo</div></div></div>
+<div class="scard"><div class="si p">📋</div><div class="sd"><h3>Pedidos Pendentes</h3><div class="vl">${po}</div><div class="sub">aguardando fornecedor</div></div></div>
+<div class="scard"><div class="si ac">⏰</div><div class="sd"><h3>Vence em 2 Meses</h3><div class="vl">${es}</div><div class="sub">prioridade de venda (FIFO)</div></div></div>
+</div>
+<div class="chart-row">
+<div class="ccard"><h3>Produtos Críticos</h3>
+${D.prod.filter(p=>p.q<=p.mn).slice(0,8).map(p=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px"><span>${p.n}</span><span class="badge ${p.q===0?'badge-c':'badge-w'}">${p.q} / ${p.mn}</span></div>`).join('')}
+</div>
+<div class="ccard"><h3>Últimas Movimentações</h3>
+${D.mov.slice(-8).reverse().map(m=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px"><span>${m.tp==='in'?'📥':'📤'} ${gPN(m.pid)}</span><span style="font-weight:700;color:${m.tp==='in'?'var(--green)':'var(--red)'}">${m.tp==='in'?'+':'-'}${m.q}</span><span style="color:var(--muted);font-size:11px">${fD(m.date)}</span></div>`).join('')}
+</div></div>`;
+}
+
+function dProd(r){
+r.innerHTML=`<div class="tcard"><div class="tcard-hd"><h2>Produtos (${D.prod.length})</h2><div class="tcard-acts"><input class="form-in" placeholder="Buscar..." style="width:200px" oninput="ftPC(this.value)"><button class="btn btn-p btn-sm" onclick="opP()">+ Novo</button></div></div><div class="twrap"><table><thead><tr><th></th><th>Produto</th><th>Categoria</th><th>Marca</th><th>SKU</th><th>Qtd</th><th>Mín</th><th>Lote</th><th>Validade</th><th>Status</th><th>Preço</th><th></th></tr></thead><tbody id="ptb">${pTR(D.prod)}</tbody></table></div></div>`;
+}
+function pTR(arr){return arr.map(p=>`<tr><td style="font-size:20px;text-align:center">📦</td><td style="font-weight:600">${p.n}</td><td>${p.cat}</td><td>${p.br}</td><td style="font-family:monospace;font-size:11px">${p.sku}</td><td style="font-weight:700">${p.q}</td><td style="color:var(--muted)">${p.mn}</td><td style="font-size:11px">${p.lot}</td><td style="font-size:11px">${fD(p.exp)}</td><td><span class="badge ${p.q===0?'badge-c':p.q<=p.mn?'badge-w':'badge-ok'}">${p.q===0?'Zerado':p.q<=p.mn?'Baixo':'OK'}</span></td><td style="font-weight:700">${fR(p.prc)}</td><td><button class="btn btn-gh btn-sm" onclick="opP(${p.id})">✏️</button><button class="btn btn-gh btn-sm" onclick="opM(${p.id},'in')">📥</button><button class="btn btn-gh btn-sm" onclick="opM(${p.id},'out')">📤</button><button class="btn btn-gh btn-sm" onclick="delP(${p.id})">🗑️</button></td></tr>`).join('')}
+function ftPC(q){let f=D.prod.filter(p=>p.n.toLowerCase().includes(q.toLowerCase())||p.cat.toLowerCase().includes(q.toLowerCase())||p.br.toLowerCase().includes(q.toLowerCase())||p.sku.toLowerCase().includes(q.toLowerCase()));let t=document.getElementById('ptb');if(t)t.innerHTML=pTR(f)}
+function opP(id){D=ld();let p=id?gP(id):null,ed=!!p;document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>${ed?'Editar Produto':'Cadastrar Produto'}</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><div class="form-row"><div class="form-grp" style="grid-column:1/-1"><label>Nome do Produto</label><input class="form-in" id="pf_n" value="${ed?p.n:''}" placeholder="Ex: Whey Protein Concentrado 900g"></div><div class="form-grp"><label>Categoria</label><input class="form-in" id="pf_cat" value="${ed?p.cat:''}" placeholder="Ex: Proteínas"></div><div class="form-grp"><label>Marca</label><input class="form-in" id="pf_br" value="${ed?p.br:''}" placeholder="Ex: Max Titanium"></div><div class="form-grp"><label>Código / SKU</label><input class="form-in" id="pf_sku" value="${ed?p.sku:''}" placeholder="Ex: WHEY-001"></div><div class="form-grp"><label>Preço de Custo (R$)</label><input type="number" class="form-in" id="pf_cost" value="${ed?p.cost:''}" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Preço de Venda (R$)</label><input type="number" class="form-in" id="pf_prc" value="${ed?p.prc:''}" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>${ed?'Quantidade Atual':'Quantidade Inicial'}</label><input type="number" class="form-in" id="pf_q" value="${ed?p.q:'0'}" ${ed?'readonly':''}></div><div class="form-grp"><label>Estoque Mínimo</label><input type="number" class="form-in" id="pf_mn" value="${ed?p.mn:'15'}" min="0"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="pf_sup" value="${ed?p.sup:''}" placeholder="Fornecedor"></div><div class="form-grp"><label>Lote</label><input class="form-in" id="pf_lot" value="${ed?p.lot:''}" placeholder="Ex: LT2607-01"></div><div class="form-grp"><label>Validade</label><input type="date" class="form-in" id="pf_exp" value="${ed&&p.exp?p.exp:''}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="pf_note" value="${ed&&p.note?p.note:''}" placeholder="Sabores, variações..."></div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svP(${ed?id:'null'})">${ed?'Salvar Alterações':'Cadastrar Produto'}</button></div>`}
+function svP(id){let o={n:document.getElementById('pf_n').value.trim(),cat:document.getElementById('pf_cat').value.trim(),br:document.getElementById('pf_br').value.trim(),sku:document.getElementById('pf_sku').value.trim(),cost:parseFloat(document.getElementById('pf_cost').value)||0,prc:parseFloat(document.getElementById('pf_prc').value)||0,q:parseInt(document.getElementById('pf_q').value)||0,mn:parseInt(document.getElementById('pf_mn').value)||0,sup:document.getElementById('pf_sup').value.trim(),lot:document.getElementById('pf_lot').value.trim(),exp:document.getElementById('pf_exp').value,note:document.getElementById('pf_note').value.trim()};if(!o.n){to('Nome do produto é obrigatório');return}if(id){Object.assign(gP(id),o)}else{D.prod.push({id:D.nx.p++,cr:new Date().toISOString().split('T')[0],...o})}sv(D);clM();go('prod');to(id?'Produto atualizado':'Produto cadastrado')}
+function delP(id){if(!confirm('Excluir este produto? Esta ação não pode ser desfeita.'))return;D.prod=D.prod.filter(p=>p.id!==id);D.mov=D.mov.filter(m=>m.pid!==id);sv(D);go('prod');to('Produto excluído')}
+
+function opM(pid,tp){D=ld();let p=gP(pid);document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>${tp==='in'?'📥 Entrada':'📤 Saída'} — ${p.n}</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><p style="margin-bottom:14px;font-size:12.5px;color:var(--muted)">Estoque atual: <strong>${p.q} unidades</strong></p><div class="form-row"><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="mf_q" min="1" max="${tp==='out'?p.q:''}" placeholder="Quantidade"></div>${tp==='in'?`<div class="form-grp"><label>Valor Total (R$)</label><input type="number" class="form-in" id="mf_val" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="mf_sup" value="${p.sup}"></div>`:`<div class="form-grp"><label>Motivo</label><select class="form-in form-sel" id="mf_rs"><option value="venda">Venda</option><option value="perda">Perda / Vencimento</option><option value="uso">Uso Interno</option><option value="ajuste">Ajuste</option></select></div>`}<div class="form-grp"><label>Data</label><input type="date" class="form-in" id="mf_date" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="mf_note" placeholder="Opcional"></div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn ${tp==='in'?'btn-g':'btn-d'}" onclick="svM(${pid},'${tp}')">${tp==='in'?'Registrar Entrada':'Registrar Saída'}</button></div>`}
+function svM(pid,tp){let q=parseInt(document.getElementById('mf_q').value)||0;if(q<=0){to('Quantidade inválida');return}let p=gP(pid);if(tp==='out'&&q>p.q){to('Quantidade maior que o estoque');return}p.q+=tp==='in'?q:-q;D.mov.push({id:D.nx.m++,pid,tp,qty:q,val:tp==='in'?(parseFloat(document.getElementById('mf_val')?.value)||0):0,date:document.getElementById('mf_date').value,sup:tp==='in'?(document.getElementById('mf_sup')?.value?.trim()||''):'',note:document.getElementById('mf_note').value.trim(),rs:tp==='out'?document.getElementById('mf_rs').value:''});sv(D);clM();go(document.querySelector('.sidebar-link.active')?.dataset?.pg||'prod');to(`${tp==='in'?'Entrada':'Saída'} registrada com sucesso`)}
+function clM(){document.getElementById('mo').classList.remove('on');document.getElementById('mb').innerHTML=''}
+document.getElementById('mo').addEventListener('click',function(e){if(e.target===this)clM()});
+
+function dEnt(r){D=ld();r.innerHTML=`<div class="fcard" style="max-width:700px;margin-bottom:20px"><h2>📥 Registrar Entrada de Estoque</h2><div class="form-row"><div class="form-grp" style="grid-column:1/-1"><label>Produto</label><select class="form-in form-sel" id="ei_p">${D.prod.map(p=>`<option value="${p.id}">${p.n} (Estoque: ${p.q})</option>`).join('')}</select></div><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="ei_q" min="1" placeholder="Qtd"></div><div class="form-grp"><label>Valor Total (R$)</label><input type="number" class="form-in" id="ei_val" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="ei_sup" placeholder="Fornecedor"></div><div class="form-grp"><label>Data</label><input type="date" class="form-in" id="ei_date" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="ei_note" placeholder="Opcional"></div></div><button class="btn btn-g" onclick="svE()" style="margin-top:8px">Registrar Entrada</button></div><div class="tcard"><div class="tcard-hd"><h2>Histórico de Entradas</h2></div><div class="twrap"><table><thead><tr><th>Data</th><th>Produto</th><th>Qtd</th><th>Valor</th><th>Fornecedor</th><th>Obs</th></tr></thead><tbody>${D.mov.filter(m=>m.tp==='in').slice(-10).reverse().map(m=>`<tr><td>${fD(m.date)}</td><td>${gPN(m.pid)}</td><td style="color:var(--green);font-weight:700">+${m.q}</td><td>${m.val?fR(m.val):'—'}</td><td>${m.sup||'—'}</td><td>${m.note||'—'}</td></tr>`).join('')}</tbody></table></div></div>`}
+function svE(){let pid=parseInt(document.getElementById('ei_p').value),q=parseInt(document.getElementById('ei_q').value)||0;if(q<=0){to('Quantidade inválida');return}let p=gP(pid);p.q+=q;D.mov.push({id:D.nx.m++,pid,tp:'in',q:q,val:parseFloat(document.getElementById('ei_val').value)||0,date:document.getElementById('ei_date').value,sup:document.getElementById('ei_sup').value.trim(),note:document.getElementById('ei_note').value.trim()});sv(D);go('ent');to(`+${q} unidades de ${p.n}`)}
+
+function dSai(r){D=ld();r.innerHTML=`<div class="fcard" style="max-width:700px;margin-bottom:20px"><h2>📤 Registrar Saída de Estoque</h2><div class="form-row"><div class="form-grp" style="grid-column:1/-1"><label>Produto</label><select class="form-in form-sel" id="es_p" onchange="esMax()">${D.prod.map(p=>`<option value="${p.id}" data-mx="${p.q}">${p.n} (Estoque: ${p.q})</option>`).join('')}</select></div><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="es_q" min="1" placeholder="Qtd"><small id="es_mx" style="color:var(--muted);font-size:10.5px"></small></div><div class="form-grp"><label>Motivo</label><select class="form-in form-sel" id="es_rs"><option value="venda">Venda</option><option value="perda">Perda / Vencimento</option><option value="uso">Uso Interno</option><option value="ajuste">Ajuste</option></select></div><div class="form-grp"><label>Data</label><input type="date" class="form-in" id="es_date" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="es_note" placeholder="Opcional"></div></div><button class="btn btn-d" onclick="svS()" style="margin-top:8px">Registrar Saída</button></div><div class="tcard"><div class="tcard-hd"><h2>Histórico de Saídas</h2></div><div class="twrap"><table><thead><tr><th>Data</th><th>Produto</th><th>Qtd</th><th>Motivo</th><th>Obs</th></tr></thead><tbody>${D.mov.filter(m=>m.tp==='out').slice(-10).reverse().map(m=>`<tr><td>${fD(m.date)}</td><td>${gPN(m.pid)}</td><td style="color:var(--red);font-weight:700">-${m.q}</td><td>${m.rs}</td><td>${m.note||'—'}</td></tr>`).join('')}</tbody></table></div></div>`}
+function esMax(){let s=document.getElementById('es_p'),mx=s.selectedOptions[0]?.dataset.mx;document.getElementById('es_mx').textContent=mx?`Disponível: ${mx} unidades`:'';document.getElementById('es_q').max=mx||''}
+function svS(){let pid=parseInt(document.getElementById('es_p').value),q=parseInt(document.getElementById('es_q').value)||0;if(q<=0){to('Quantidade inválida');return}let p=gP(pid);if(q>p.q){to('Estoque insuficiente');return}p.q-=q;D.mov.push({id:D.nx.m++,pid,tp:'out',q:q,date:document.getElementById('es_date').value,note:document.getElementById('es_note').value.trim(),rs:document.getElementById('es_rs').value});sv(D);go('sai');to(`-${q} unidades de ${p.n}`)}
+
+function dPed(r){D=ld();r.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px"><h2 style="font-size:15px;font-weight:700;color:var(--pri)">Pedidos de Reposição</h2><button class="btn btn-p btn-sm" onclick="opO()">+ Novo Pedido</button></div><div class="tcard"><div class="twrap"><table><thead><tr><th>#</th><th>Produto</th><th>Qtd</th><th>Fornecedor</th><th>Status</th><th>Data</th><th>Obs</th><th></th></tr></thead><tbody>${D.ord.map(o=>`<tr><td style="font-weight:700">#${o.id}</td><td style="font-weight:600">${o.pn}</td><td>${o.q}</td><td>${o.sup}</td><td><span class="badge ${o.st==='aprovado'?'badge-ok':o.st==='cancelado'?'badge-c':'badge-w'}">${o.st}</span></td><td>${fD(o.date)}</td><td>${o.note||'—'}</td><td>${o.st==='pendente'?`<button class="btn btn-gh btn-sm" onclick="upO(${o.id},'aprovado')">✅</button><button class="btn btn-gh btn-sm" onclick="upO(${o.id},'cancelado')">❌</button>`:''}<button class="btn btn-gh btn-sm" onclick="delO(${o.id})">🗑️</button></td></tr>`).join('')}</tbody></table></div></div>`}
+function opO(){document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>Novo Pedido</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><div class="form-grp"><label>Produto</label><select class="form-in form-sel" id="of_p">${D.prod.map(p=>`<option value="${p.n}">${p.n}</option>`).join('')}</select></div><div class="form-row"><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="of_q" min="1"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="of_sup"></div></div><div class="form-grp"><label>Observação</label><input class="form-in" id="of_note"></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svO()">Criar Pedido</button></div>`}
+function svO(){let n=document.getElementById('of_p').value,q=parseInt(document.getElementById('of_q').value)||0;if(!n||q<=0){to('Preencha os campos');return}D.ord.push({id:D.nx.o++,pn:n,q,sup:document.getElementById('of_sup').value.trim()||'—',st:'pendente',date:new Date().toISOString().split('T')[0],note:document.getElementById('of_note').value.trim()});sv(D);clM();go('ped');to('Pedido criado')}
+function upO(id,s){let o=D.ord.find(o=>o.id===id);if(o)o.st=s;sv(D);go('ped');to(s==='aprovado'?'Aprovado':'Cancelado')}
+function delO(id){D.ord=D.ord.filter(o=>o.id!==id);sv(D);go('ped');to('Excluído')}
+
+function dPromo(r){D=ld();r.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px"><h2 style="font-size:15px;font-weight:700;color:var(--pri)">Promoções Ativas</h2><button class="btn btn-p btn-sm" onclick="opPR()">+ Nova Promoção</button></div>${D.promo.map(pr=>`<div class="alert-row info" style="margin-bottom:10px"><div class="ai">🏷️</div><div class="ac"><h4>${pr.name} — ${pr.tp==='pct'?pr.val+'%':fR(pr.val)} OFF</h4><p>${pr.pids.length} produtos · ${fD(pr.start)} até ${fD(pr.end)} · ${pr.active?'✅ Ativa':'⏸️ Pausada'}</p></div><button class="btn btn-gh btn-sm" onclick="delPR(${pr.id})">🗑️</button></div>`).join('')}`}
+function opPR(){D=ld();document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>Nova Promoção</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><div class="form-grp"><label>Nome da Promoção</label><input class="form-in" id="pr_n" placeholder="Ex: Black Friday Whey"></div><div class="form-row"><div class="form-grp"><label>Tipo de Desconto</label><select class="form-in form-sel" id="pr_tp"><option value="pct">Porcentagem (%)</option><option value="fix">Valor Fixo (R$)</option></select></div><div class="form-grp"><label>Valor</label><input type="number" class="form-in" id="pr_v" min="1" placeholder="Ex: 15"></div></div><div class="form-row"><div class="form-grp"><label>Data Início</label><input type="date" class="form-in" id="pr_s" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp"><label>Data Fim</label><input type="date" class="form-in" id="pr_e"></div></div><div class="form-grp"><label>Produtos na Promoção</label><div style="max-height:180px;overflow-y:auto;border:1.5px solid var(--border);border-radius:var(--radius);padding:10px">${D.prod.map(p=>`<label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;cursor:pointer"><input type="checkbox" value="${p.id}" class="pr_ch">${p.n} (${p.cat})</label>`).join('')}</div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svPR()">Criar Promoção</button></div>`}
+function svPR(){let n=document.getElementById('pr_n').value.trim(),tp=document.getElementById('pr_tp').value,v=parseFloat(document.getElementById('pr_v').value)||0,s=document.getElementById('pr_s').value,e=document.getElementById('pr_e').value;if(!n||v<=0||!e){to('Preencha todos os campos');return}let ids=Array.from(document.querySelectorAll('.pr_ch:checked')).map(c=>parseInt(c.value));if(ids.length===0){to('Selecione ao menos 1 produto');return}D.promo.push({id:D.nx.pr++,name:n,tp,val:v,start:s,end:e,pids:ids,active:true});sv(D);clM();go('promo');to('Promoção criada')}
+function delPR(id){D.promo=D.promo.filter(p=>p.id!==id);sv(D);go('promo');to('Removida')}
+
+function dAlr(r){D=ld();let al=[];
+D.prod.forEach(p=>{if(p.q===0)al.push({t:'crit',icon:'🚫',t4:p.n+' — Zerado',tx:'Reposição urgente. Fornecedor: '+p.sup});else if(p.q<=p.mn)al.push({t:'warn',icon:'⚠️',t4:p.n+' — Estoque Baixo',tx:`Apenas ${p.q} un. Mínimo: ${p.mn}. Sugestão: pedir ${p.mn*2-p.q} un.`})});
+D.prod.forEach(p=>{if(p.exp){let d=new Date(p.exp+'T00:00:00'),n=new Date();n.setMonth(n.getMonth()+2);if(d<=n&&p.q>0)al.push({t:'warn',icon:'⏰',t4:p.n+' — Vence em breve',tx:'Validade: '+fD(p.exp)+'. Priorize a venda (FIFO). Ainda em estoque: '+p.q+' un.'})}});
+let lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn);if(lo.length>0)al.push({t:'info',icon:'💡',t4:'Sugestão de Reposição',tx:lo.map(p=>p.n+' ('+p.q+'/'+p.mn+') — '+p.sup).join(' · ')});
+r.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2 style="font-size:15px;font-weight:700;color:var(--pri)">Alertas Inteligentes</h2><span class="badge badge-w">${al.length} alertas</span></div>${al.map(a=>`<div class="alert-row ${a.t}"><div class="ai">${a.icon}</div><div class="ac"><h4>${a.t4}</h4><p>${a.tx}</p></div></div>`).join('')}`}
+
+let pending=null;
+function dAI(r){r.innerHTML=`<div class="aichat"><div class="ai-sugs" id="sgs"><button class="ai-sug" onclick="aiS('Chegaram 10 creatinas Max Titanium')">+10 Creatinas Max</button><button class="ai-sug" onclick="aiS('Saiu 2 whey Integral por venda')">-2 Whey Integral</button><button class="ai-sug" onclick="aiS('Quais produtos estão acabando?')">Acabando?</button><button class="ai-sug" onclick="aiS('O que preciso repor essa semana?')">O que repor?</button><button class="ai-sug" onclick="aiS('Resumo do estoque')">Resumo</button></div><div class="aimsgs" id="msgs"><div class="aim ast">👋 Olá! Sou o assistente de estoque da MaxDistrib.<br><br>Você pode digitar comandos como:<br>• "Chegaram 10 creatinas Max Titanium"<br>• "Saiu 2 whey Integral por venda"<br>• "Quais produtos estão acabando?"<br>• "O que preciso repor essa semana?"<br>• "Resumo do estoque"<br><br>Eu entendo português natural e confirmo antes de salvar.</div></div><div class="ai-inp"><input class="form-in" id="aiIn" placeholder="Digite seu comando..." onkeydown="if(event.key==='Enter')aiS()"><button class="btn btn-p" onclick="aiS()">Enviar</button></div></div>`}
+function aiS(t){let inp=t||document.getElementById('aiIn')?.value?.trim();if(!inp)return;let ms=document.getElementById('msgs');if(!ms){go('ai');setTimeout(()=>aiS(inp),80);return}ms.innerHTML+=`<div class="aim user">${inp}</div>`;let r=aiP(inp);if(r.cfm){pending=r.ac;ms.innerHTML+=`<div class="aim cfm">${r.msg}<div class="acts"><button class="btn btn-g btn-sm" onclick="aiC()">✅ Confirmar</button><button class="btn btn-o btn-sm" onclick="aiX()">❌ Cancelar</button></div></div>`}else{ms.innerHTML+=`<div class="aim ast">${r.msg}</div>`}ms.scrollTop=ms.scrollHeight;let i=document.getElementById('aiIn');if(i)i.value=''}
+function aiP(inp){D=ld();let l=inp.toLowerCase();let m=l.match(/(chegaram|chegou|adicionar|entrada)\s*(\d+)\s*(?:unidades?|un\.?)?\s*(?:de\s+)?(.+)/i);if(m){let q=parseInt(m[2]),nm=m[3].trim().replace(/\.$/,''),p=fP(nm);if(p)return{cfm:true,msg:`Entendi: <strong>adicionar ${q} unidades</strong> de <strong>${p.n}</strong>.<br>Estoque atual: ${p.q} → ${p.q+q}. Confirmar?`,ac:{tp:'in',pid:p.id,q,nm:p.n}};return{cfm:false,msg:`Não encontrei "${nm}" no estoque. Verifique o nome e tente novamente.`}}m=l.match(/(saiu|saíram|saída|vendeu)\s*(\d+)\s*(?:unidades?|un\.?)?\s*(?:de\s+)?(.+?)(?:\s*por\s+(venda|perda|uso|ajuste))?$/i);if(m){let q=parseInt(m[2]),nm=m[3].trim().replace(/\.$/,''),rs=m[4]||'venda',p=fP(nm);if(p){if(q>p.q)return{cfm:false,msg:`⚠️ ${p.n} tem apenas ${p.q} unidades. Não é possível retirar ${q}.`};return{cfm:true,msg:`Entendi: <strong>saída de ${q} unidades</strong> de <strong>${p.n}</strong> por <strong>${rs}</strong>.<br>Estoque atual: ${p.q} → ${p.q-q}. Confirmar?`,ac:{tp:'out',pid:p.id,q,rs,nm:p.n}}}}if(l.match(/acabando|estoque baixo/)){let lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn),ze=D.prod.filter(p=>p.q===0);return{cfm:false,msg:(ze.length?`🚫 <strong>Zerados (${ze.length}):</strong><br>${ze.map(p=>'• '+p.n).join('<br>')}<br><br>`:'')+(lo.length?`⚠️ <strong>Baixos (${lo.length}):</strong><br>${lo.map(p=>`• ${p.n} — ${p.q}/${p.mn} un.`).join('<br>')}`:'✅ Nenhum produto com estoque baixo no momento.')}}if(l.match(/repor|reposição/)){let nd=D.prod.filter(p=>p.q<=p.mn);return{cfm:false,msg:nd.length===0?'✅ Nenhum produto precisa de reposição agora.':`🛒 <strong>Sugestão de Reposição:</strong><br><br>${nd.map(p=>`• <strong>${p.n}</strong> — sugerido ${Math.max(p.mn*2-p.q,10)} un. (${p.sup})`).join('<br>')}`}}if(l.match(/resumo|status/)){return{cfm:false,msg:`📊 <strong>Resumo do Estoque:</strong><br><br>📦 ${D.prod.length} produtos cadastrados<br>💰 ${fR(D.prod.reduce((s,p)=>s+(p.q*p.cost),0))} em valor de estoque<br>⚠️ ${D.prod.filter(p=>p.q>0&&p.q<=p.mn).length} produtos com estoque baixo<br>🚫 ${D.prod.filter(p=>p.q===0).length} produtos zerados<br>📋 ${D.ord.filter(o=>o.st==='pendente').length} pedidos pendentes`}}return{cfm:false,msg:'Não entendi. Tente frases como:<br>• "Chegaram 10 creatinas Max Titanium"<br>• "Saiu 2 whey Integral por venda"<br>• "Quais produtos estão acabando?"<br>• "O que preciso repor essa semana?"<br>• "Resumo do estoque"'}}
+function fP(q){let l=q.toLowerCase(),m=D.prod.find(p=>p.n.toLowerCase()===l);if(m)return m;m=D.prod.find(p=>p.n.toLowerCase().includes(l));if(m)return m;for(let w of l.split(/\s+/)){if(w.length<3)continue;m=D.prod.find(p=>p.n.toLowerCase().includes(w));if(m)return m}return null}
+function aiC(){if(!pending)return;let a=pending;D=ld();let p=gP(a.pid);if(a.tp==='in'){p.q+=a.q;D.mov.push({id:D.nx.m++,pid:a.pid,tp:'in',q:a.q,val:0,date:new Date().toISOString().split('T')[0],sup:p.sup,note:'Assistente IA'})}else{p.q-=a.q;D.mov.push({id:D.nx.m++,pid:a.pid,tp:'out',q:a.q,date:new Date().toISOString().split('T')[0],note:'Assistente IA',rs:a.rs})}sv(D);pending=null;let ms=document.getElementById('msgs');ms.innerHTML+=`<div class="aim ast">✅ ${a.tp==='in'?'+'+a.q:'-'+a.q} un. de <strong>${p.n}</strong>. Estoque atual: <strong>${p.q}</strong> un.</div>`;ms.scrollTop=ms.scrollHeight;to('Registrado via IA')}
+function aiX(){pending=null;let ms=document.getElementById('msgs');ms.innerHTML+=`<div class="aim ast">Cancelado. Nenhuma alteração foi feita.</div>`;ms.scrollTop=ms.scrollHeight}
+
+function dRel(r){D=ld();let tv=D.prod.reduce((s,p)=>s+(p.q*p.cost),0),lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn).length,ze=D.prod.filter(p=>p.q===0).length;let oc={};D.mov.filter(m=>m.tp==='out').forEach(m=>{oc[m.pid]=(oc[m.pid]||0)+m.q});let top=Object.entries(oc).sort((a,b)=>b[1]-a[1]).slice(0,6);let im={};D.mov.filter(m=>m.tp==='in').forEach(m=>{let mo=m.date.substring(0,7);im[mo]=(im[mo]||0)+m.q});let om={};D.mov.filter(m=>m.tp==='out').forEach(m=>{let mo=m.date.substring(0,7);om[mo]=(om[mo]||0)+m.q});let months=[...new Set([...Object.keys(im),...Object.keys(om)])].sort();r.innerHTML=`<div class="stats"><div class="scard"><div class="si g">💰</div><div class="sd"><h3>Valor Total</h3><div class="vl">${fR(tv)}</div></div></div><div class="scard"><div class="si a">⚠️</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div></div></div><div class="scard"><div class="si r">🚫</div><div class="sd"><h3>Zerados</h3><div class="vl">${ze}</div></div></div><div class="scard"><div class="si p">📦</div><div class="sd"><h3>Cadastrados</h3><div class="vl">${D.prod.length}</div></div></div></div><div class="chart-row"><div class="ccard"><h3>Produtos com Mais Saída</h3><div style="height:240px"><canvas id="ch1"></canvas></div></div><div class="ccard"><h3>Entradas vs Saídas por Mês</h3><div style="height:240px"><canvas id="ch2"></canvas></div></div></div><div class="ccard" style="margin-bottom:22px"><h3>Estoque por Produto</h3>${D.prod.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="flex:1;min-width:120px">${p.n}</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;max-width:140px"><div style="height:100%;background:${p.q===0?'var(--red)':p.q<=p.mn?'var(--amber)':'var(--green)'};width:${Math.min(100,(p.q/Math.max(p.mn,1))*100)}%"></div></div><span style="color:var(--muted);min-width:70px;text-align:right;font-weight:600">${p.q}/${p.mn}</span></div>`).join('')}</div>`;setTimeout(()=>{let c1=document.getElementById('ch1');if(c1)new Chart(c1,{type:'bar',data:{labels:top.map(d=>gPN(parseInt(d[0]))),datasets:[{label:'Unidades',data:top.map(d=>d[1]),backgroundColor:'#5C4A3A',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});let c2=document.getElementById('ch2');if(c2)new Chart(c2,{type:'line',data:{labels:months,datasets:[{label:'Entradas',data:months.map(m=>im[m]||0),borderColor:'#6B8E5A',backgroundColor:'rgba(107,142,90,.1)',fill:true,tension:.3},{label:'Saídas',data:months.map(m=>om[m]||0),borderColor:'#B8453A',backgroundColor:'rgba(184,69,58,.1)',fill:true,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}})},200)}
+
+function dFifo(r){D=ld();let srt=[...D.prod].sort((a,b)=>{if(!a.exp)return 1;if(!b.exp)return -1;return new Date(a.exp+'T00:00:00')-new Date(b.exp+'T00:00:00')});let nr=srt.filter(p=>{if(!p.exp)return false;let d=new Date(p.exp+'T00:00:00'),n=new Date();n.setMonth(n.getMonth()+2);return d<=n&&p.q>0});r.innerHTML=`<div class="fifo-alert"><div class="fa-icon">⏳</div><div><h3>FIFO — Primeiro que Vence, Primeiro que Sai</h3><p>O sistema organiza automaticamente os produtos por data de validade. ${nr.length} produtos vencem em até 2 meses — priorize a venda para evitar prejuízo com descontos forçados.</p></div></div><div class="tcard"><div class="tcard-hd"><h2>Produtos Ordenados por Validade</h2></div><div class="twrap"><table><thead><tr><th>#</th><th>Produto</th><th>Lote</th><th>Validade</th><th>Estoque</th><th>Dias</th><th>Status</th></tr></thead><tbody>${srt.map((p,i)=>{let dias=p.exp?Math.ceil((new Date(p.exp+'T00:00:00')-new Date())/(1000*60*60*24)):null;return`<tr><td style="font-weight:800;color:${i<3?'var(--red)':i<6?'var(--amber)':'var(--muted)'}">#${i+1}</td><td style="font-weight:600">${p.n}</td><td>${p.lot}</td><td>${p.exp?fD(p.exp):'—'}</td><td>${p.q}</td><td>${dias!==null?dias+' dias':'—'}</td><td><span class="badge ${p.q===0?'badge-c':i<3?'badge-c':i<6?'badge-w':'badge-ok'}">${p.q===0?'Zerado':i<3?'Urgente':i<6?'Atenção':'OK'}</span></td></tr>`}).join('')}</tbody></table></div></div>`}
+
+function dCfg(r){r.innerHTML=`<div class="fcard" style="max-width:600px;margin-bottom:18px"><h2>⚙️ Dados da Distribuidora</h2><div class="form-row"><div class="form-grp"><label>Nome</label><input class="form-in" value="MaxDistrib"></div><div class="form-grp"><label>Email</label><input type="email" class="form-in" value="contato@maxdistrib.com.br"></div><div class="form-grp"><label>WhatsApp</label><input class="form-in" value="(81) 99901-2345"></div><div class="form-grp"><label>CNPJ</label><input class="form-in" value="12.345.678/0001-90"></div></div><button class="btn btn-p" onclick="to('Configurações salvas')" style="margin-top:6px">Salvar</button></div><div class="fcard" style="max-width:600px"><h2>🔌 Próximas Integrações</h2><div style="display:flex;flex-direction:column;gap:10px;font-size:12.5px">${['Banco de Dados (PostgreSQL)','Autenticação (Login real)','Upload de PDF/Excel/Foto com IA','Notificações WhatsApp automáticas','API OpenAI (Assistente IA avançado)'].map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--bg);border-radius:var(--radius)"><span>${s}</span><span class="badge badge-w">Em breve</span></div>`).join('')}</div></div>`}
+
+go('dash');
+</script>
+</body>
+</html>
