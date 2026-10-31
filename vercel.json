@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/estoque", "destination": "/estoque-inteligente-v3.html" },
+    { "source": "/vendedor", "destination": "/painel-vendedores.html" }
+  ],
+  "redirects": [
+    { "source": "/distribuidora.html", "destination": "/", "permanent": false },
+    { "source": "/loja-revendedores.html", "destination": "/", "permanent": false }
+  ]
+}

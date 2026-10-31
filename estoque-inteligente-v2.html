@@ -2,38 +2,39 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MaxDistrib · Estoque Inteligente</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
 :root{
---pri:#5C4A3A;--pri-light:#7A6552;--pri-bg:#F8F3EE;--pri-border:#E8DDD2;
---acc:#C2855B;--acc-light:#E8C9B0;--acc-bg:#FDF6F1;
---green:#6B8E5A;--green-light:#E8F0E2;--green-bg:#F4F8F0;
---amber:#C7903A;--amber-light:#FDF0DC;--amber-bg:#FEF9F2;
---red:#B8453A;--red-light:#FBE8E6;--red-bg:#FEF6F5;
---white:#fff;--bg:#FBF7F4;--text:#3A2E28;--muted:#8B7E74;--border:#E8E0D5;
---shadow-sm:0 1px 3px rgba(92,74,58,.06);--shadow-md:0 4px 14px rgba(92,74,58,.08);--shadow-lg:0 8px 28px rgba(92,74,58,.1);
+--pri:#141414;--pri-light:#3A3A3A;--pri-bg:#F6F5F2;--pri-border:#E6E4DF;
+--acc:#F4C430;--acc-light:#F9E4A0;--acc-bg:#FDF6DD;--gold-text:#7D6000;
+--green:#1C7345;--green-light:#E8F4ED;--green-bg:#F2F9F5;
+--amber:#8F5B00;--amber-light:#FCF1D9;--amber-bg:#FDF8EC;
+--red:#BE2323;--red-light:#FBEAE9;--red-bg:#FEF6F5;
+--white:#fff;--bg:#F6F5F2;--text:#1F1F1F;--muted:#62605A;--border:#E6E4DF;
+--shadow-sm:0 1px 3px rgba(20,20,20,.06);--shadow-md:0 4px 14px rgba(20,20,20,.08);--shadow-lg:0 8px 28px rgba(20,20,20,.1);
 --radius:8px;--radius-lg:12px;--radius-xl:18px;--font:'Inter',-apple-system,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+h1,h2,h3,.sidebar-head span{font-family:'Montserrat',var(--font)}
 body{font-family:var(--font);color:var(--text);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;min-width:320px;overflow-x:hidden}
 a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:var(--font)}button{cursor:pointer;border:none}
 
 .sidebar{width:250px;min-height:100dvh;background:var(--pri);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column;transition:transform .25s ease}
 .sidebar-head{padding:18px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
-.sidebar-head .mk{width:36px;height:36px;background:var(--acc);color:#fff;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.sidebar-head .mk{width:36px;height:36px;background:var(--acc);color:#141414;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
 .sidebar-head span{font-weight:700;font-size:14px}
 .sidebar-nav{flex:1;overflow-y:auto;padding:6px 0;-webkit-overflow-scrolling:touch}
 .sidebar-sec{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);font-weight:700;padding:14px 16px 4px}
 .sidebar-link{display:flex;align-items:center;gap:9px;padding:9px 14px;margin:2px 8px;border-radius:var(--radius);font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s;background:none;width:calc(100% - 16px);text-align:left}
 .sidebar-link:hover{background:rgba(255,255,255,.08);color:#fff}
-.sidebar-link.active{background:var(--green);color:#fff;font-weight:700}
+.sidebar-link.active{background:var(--acc);color:#141414;font-weight:700}
 .sidebar-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;font-size:11px}
-.sidebar-av{width:32px;height:32px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.sidebar-av{width:32px;height:32px;border-radius:50%;background:var(--acc);color:#141414;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
 
 .main{margin-left:250px;min-height:100dvh}
 .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 22px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
@@ -49,7 +50,7 @@ a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:va
 .si{width:42px;height:42px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .si.p{background:var(--pri-bg);color:var(--pri)}.si.g{background:var(--green-light);color:var(--green)}
 .si.a{background:var(--amber-bg);color:var(--amber)}.si.r{background:var(--red-bg);color:var(--red)}
-.si.ac{background:var(--acc-bg);color:var(--acc)}
+.si.ac{background:var(--acc-bg);color:var(--gold-text)}
 .sd h3{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
 .sd .vl{font-size:20px;font-weight:800;color:var(--pri)}.sd .sub{font-size:10.5px;color:var(--muted)}
 
@@ -69,15 +70,15 @@ table tbody tr:last-child td{border-bottom:none}
 
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--radius);font-size:12.5px;font-weight:700;transition:all .12s;white-space:nowrap;line-height:1.3}
 .btn-p{background:var(--pri);color:#fff}.btn-p:hover{background:var(--pri-light)}
-.btn-g{background:var(--green);color:#fff}.btn-g:hover{background:#5C7A4A}
-.btn-d{background:var(--red);color:#fff}.btn-d:hover{background:#A33A30}
+.btn-g{background:var(--acc);color:#141414}.btn-g:hover{background:#E2B31F}
+.btn-d{background:var(--red);color:#fff}.btn-d:hover{background:#9E1B1B}
 .btn-o{background:var(--white);color:var(--pri);border:1.5px solid var(--pri)}.btn-o:hover{background:var(--pri-bg)}
 .btn-gh{background:transparent;color:var(--muted);padding:5px 8px}.btn-gh:hover{background:var(--bg);color:var(--text)}
 .btn-sm{padding:5px 10px;font-size:11px}
 
 .form-grp{margin-bottom:13px}.form-grp label{display:block;font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px}
 .form-in{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--text);background:var(--white);outline:none;transition:border .15s}
-.form-in:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(194,133,91,.1)}
+.form-in:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(244,196,48,.4)}
 .form-sel{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238B7E74' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
 .form-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .fcard{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
@@ -95,7 +96,7 @@ table tbody tr:last-child td{border-bottom:none}
 .ccard h3{font-size:13.5px;font-weight:700;color:var(--pri);margin-bottom:14px}
 
 .fifo-alert{background:var(--amber-bg);border:1.5px solid var(--amber);border-radius:var(--radius-lg);padding:18px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
-.fifo-alert .fa-icon{font-size:32px;flex-shrink:0}.fifo-alert h3{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:2px}.fifo-alert p{font-size:12px;color:#8B6914}
+.fifo-alert .fa-icon{font-size:32px;flex-shrink:0}.fifo-alert h3{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:2px}.fifo-alert p{font-size:12px;color:#7D6000}
 
 .alert-row{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:box-shadow .15s}
 .alert-row:hover{box-shadow:var(--shadow-sm)}
@@ -269,7 +270,7 @@ function fP(q){let l=q.toLowerCase(),m=D.prod.find(p=>p.n.toLowerCase()===l);if(
 function aiC(){if(!pending)return;let a=pending;D=ld();let p=gP(a.pid);if(a.tp==='in'){p.q+=a.q;D.mov.push({id:D.nx.m++,pid:a.pid,tp:'in',q:a.q,val:0,date:new Date().toISOString().split('T')[0],sup:p.sup,note:'Assistente IA'})}else{p.q-=a.q;D.mov.push({id:D.nx.m++,pid:a.pid,tp:'out',q:a.q,date:new Date().toISOString().split('T')[0],note:'Assistente IA',rs:a.rs})}sv(D);pending=null;let ms=document.getElementById('msgs');ms.innerHTML+=`<div class="aim ast">✅ ${a.tp==='in'?'+'+a.q:'-'+a.q} un. de <strong>${p.n}</strong>. Estoque atual: <strong>${p.q}</strong> un.</div>`;ms.scrollTop=ms.scrollHeight;to('Registrado via IA')}
 function aiX(){pending=null;let ms=document.getElementById('msgs');ms.innerHTML+=`<div class="aim ast">Cancelado. Nenhuma alteração foi feita.</div>`;ms.scrollTop=ms.scrollHeight}
 
-function dRel(r){D=ld();let tv=D.prod.reduce((s,p)=>s+(p.q*p.cost),0),lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn).length,ze=D.prod.filter(p=>p.q===0).length;let oc={};D.mov.filter(m=>m.tp==='out').forEach(m=>{oc[m.pid]=(oc[m.pid]||0)+m.q});let top=Object.entries(oc).sort((a,b)=>b[1]-a[1]).slice(0,6);let im={};D.mov.filter(m=>m.tp==='in').forEach(m=>{let mo=m.date.substring(0,7);im[mo]=(im[mo]||0)+m.q});let om={};D.mov.filter(m=>m.tp==='out').forEach(m=>{let mo=m.date.substring(0,7);om[mo]=(om[mo]||0)+m.q});let months=[...new Set([...Object.keys(im),...Object.keys(om)])].sort();r.innerHTML=`<div class="stats"><div class="scard"><div class="si g">💰</div><div class="sd"><h3>Valor Total</h3><div class="vl">${fR(tv)}</div></div></div><div class="scard"><div class="si a">⚠️</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div></div></div><div class="scard"><div class="si r">🚫</div><div class="sd"><h3>Zerados</h3><div class="vl">${ze}</div></div></div><div class="scard"><div class="si p">📦</div><div class="sd"><h3>Cadastrados</h3><div class="vl">${D.prod.length}</div></div></div></div><div class="chart-row"><div class="ccard"><h3>Produtos com Mais Saída</h3><div style="height:240px"><canvas id="ch1"></canvas></div></div><div class="ccard"><h3>Entradas vs Saídas por Mês</h3><div style="height:240px"><canvas id="ch2"></canvas></div></div></div><div class="ccard" style="margin-bottom:22px"><h3>Estoque por Produto</h3>${D.prod.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="flex:1;min-width:120px">${p.n}</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;max-width:140px"><div style="height:100%;background:${p.q===0?'var(--red)':p.q<=p.mn?'var(--amber)':'var(--green)'};width:${Math.min(100,(p.q/Math.max(p.mn,1))*100)}%"></div></div><span style="color:var(--muted);min-width:70px;text-align:right;font-weight:600">${p.q}/${p.mn}</span></div>`).join('')}</div>`;setTimeout(()=>{let c1=document.getElementById('ch1');if(c1)new Chart(c1,{type:'bar',data:{labels:top.map(d=>gPN(parseInt(d[0]))),datasets:[{label:'Unidades',data:top.map(d=>d[1]),backgroundColor:'#5C4A3A',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});let c2=document.getElementById('ch2');if(c2)new Chart(c2,{type:'line',data:{labels:months,datasets:[{label:'Entradas',data:months.map(m=>im[m]||0),borderColor:'#6B8E5A',backgroundColor:'rgba(107,142,90,.1)',fill:true,tension:.3},{label:'Saídas',data:months.map(m=>om[m]||0),borderColor:'#B8453A',backgroundColor:'rgba(184,69,58,.1)',fill:true,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}})},200)}
+function dRel(r){D=ld();let tv=D.prod.reduce((s,p)=>s+(p.q*p.cost),0),lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn).length,ze=D.prod.filter(p=>p.q===0).length;let oc={};D.mov.filter(m=>m.tp==='out').forEach(m=>{oc[m.pid]=(oc[m.pid]||0)+m.q});let top=Object.entries(oc).sort((a,b)=>b[1]-a[1]).slice(0,6);let im={};D.mov.filter(m=>m.tp==='in').forEach(m=>{let mo=m.date.substring(0,7);im[mo]=(im[mo]||0)+m.q});let om={};D.mov.filter(m=>m.tp==='out').forEach(m=>{let mo=m.date.substring(0,7);om[mo]=(om[mo]||0)+m.q});let months=[...new Set([...Object.keys(im),...Object.keys(om)])].sort();r.innerHTML=`<div class="stats"><div class="scard"><div class="si g">💰</div><div class="sd"><h3>Valor Total</h3><div class="vl">${fR(tv)}</div></div></div><div class="scard"><div class="si a">⚠️</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div></div></div><div class="scard"><div class="si r">🚫</div><div class="sd"><h3>Zerados</h3><div class="vl">${ze}</div></div></div><div class="scard"><div class="si p">📦</div><div class="sd"><h3>Cadastrados</h3><div class="vl">${D.prod.length}</div></div></div></div><div class="chart-row"><div class="ccard"><h3>Produtos com Mais Saída</h3><div style="height:240px"><canvas id="ch1"></canvas></div></div><div class="ccard"><h3>Entradas vs Saídas por Mês</h3><div style="height:240px"><canvas id="ch2"></canvas></div></div></div><div class="ccard" style="margin-bottom:22px"><h3>Estoque por Produto</h3>${D.prod.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="flex:1;min-width:120px">${p.n}</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;max-width:140px"><div style="height:100%;background:${p.q===0?'var(--red)':p.q<=p.mn?'var(--amber)':'var(--green)'};width:${Math.min(100,(p.q/Math.max(p.mn,1))*100)}%"></div></div><span style="color:var(--muted);min-width:70px;text-align:right;font-weight:600">${p.q}/${p.mn}</span></div>`).join('')}</div>`;setTimeout(()=>{let c1=document.getElementById('ch1');if(c1)new Chart(c1,{type:'bar',data:{labels:top.map(d=>gPN(parseInt(d[0]))),datasets:[{label:'Unidades',data:top.map(d=>d[1]),backgroundColor:'#141414',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});let c2=document.getElementById('ch2');if(c2)new Chart(c2,{type:'line',data:{labels:months,datasets:[{label:'Entradas',data:months.map(m=>im[m]||0),borderColor:'#F4C430',backgroundColor:'rgba(107,142,90,.1)',fill:true,tension:.3},{label:'Saídas',data:months.map(m=>om[m]||0),borderColor:'#BE2323',backgroundColor:'rgba(184,69,58,.1)',fill:true,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}})},200)}
 
 function dFifo(r){D=ld();let srt=[...D.prod].sort((a,b)=>{if(!a.exp)return 1;if(!b.exp)return -1;return new Date(a.exp+'T00:00:00')-new Date(b.exp+'T00:00:00')});let nr=srt.filter(p=>{if(!p.exp)return false;let d=new Date(p.exp+'T00:00:00'),n=new Date();n.setMonth(n.getMonth()+2);return d<=n&&p.q>0});r.innerHTML=`<div class="fifo-alert"><div class="fa-icon">⏳</div><div><h3>FIFO — Primeiro que Vence, Primeiro que Sai</h3><p>O sistema organiza automaticamente os produtos por data de validade. ${nr.length} produtos vencem em até 2 meses — priorize a venda para evitar prejuízo com descontos forçados.</p></div></div><div class="tcard"><div class="tcard-hd"><h2>Produtos Ordenados por Validade</h2></div><div class="twrap"><table><thead><tr><th>#</th><th>Produto</th><th>Lote</th><th>Validade</th><th>Estoque</th><th>Dias</th><th>Status</th></tr></thead><tbody>${srt.map((p,i)=>{let dias=p.exp?Math.ceil((new Date(p.exp+'T00:00:00')-new Date())/(1000*60*60*24)):null;return`<tr><td style="font-weight:800;color:${i<3?'var(--red)':i<6?'var(--amber)':'var(--muted)'}">#${i+1}</td><td style="font-weight:600">${p.n}</td><td>${p.lot}</td><td>${p.exp?fD(p.exp):'—'}</td><td>${p.q}</td><td>${dias!==null?dias+' dias':'—'}</td><td><span class="badge ${p.q===0?'badge-c':i<3?'badge-c':i<6?'badge-w':'badge-ok'}">${p.q===0?'Zerado':i<3?'Urgente':i<6?'Atenção':'OK'}</span></td></tr>`}).join('')}</tbody></table></div></div>`}
 

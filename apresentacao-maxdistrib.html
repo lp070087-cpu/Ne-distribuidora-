@@ -4,16 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaxDistrib — Proposta de Projeto</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height:1.7;overflow-x:hidden;min-width:320px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.section-title{font-family:'Montserrat','Inter',sans-serif}
+body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height:1.7;overflow-x:hidden;min-width:320px;-webkit-font-smoothing:antialiased}
 :root{
-  --blue:#1A3A6B;--blue-mid:#1E4A8C;--blue-light:#E8EEF7;--blue-dark:#0C1E38;
-  --orange:#F5820D;--orange-dark:#D97000;--orange-light:#FEF3E2;
-  --teal:#16a34a;--teal-light:#DCFCE7;
-  --gray-bg:#F5F7FA;--gray-border:#E2E8F0;--gray-text:#3D4A5C;--gray-muted:#8492A6;
+  --blue:#141414;--blue-mid:#2a2a2a;--blue-light:#EFEDE8;--blue-dark:#0c0c0c;
+  --orange:#F4C430;--orange-dark:#E2B31F;--orange-light:#FDF6DD;--gold-text:#7D6000;
+  --teal:#1C7345;--teal-light:#E8F4ED;
+  --gray-bg:#F6F5F2;--gray-border:#E6E4DF;--gray-text:#3a3a3a;--gray-muted:#6f6d66;
   --white:#fff;
   --shadow-sm:0 1px 3px rgba(0,0,0,.06);
   --shadow-md:0 4px 14px rgba(0,0,0,.08);
@@ -26,11 +27,11 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
 .topbar span{color:var(--orange)}
 
 /* Hero */
-.hero{background:linear-gradient(135deg,var(--blue) 0%,#0F2347 100%);color:#fff;padding:80px 20px 60px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(245,130,13,.25) 0%,transparent 70%);pointer-events:none}
+.hero{background:linear-gradient(135deg,var(--blue) 0%,#2a2a2a 100%);color:#fff;padding:80px 20px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(244,196,48,.25) 0%,transparent 70%);pointer-events:none}
 .hero::after{content:'';position:absolute;bottom:-80px;left:-80px;width:350px;height:350px;background:radial-gradient(circle,rgba(30,74,140,.3) 0%,transparent 70%);pointer-events:none}
 .hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(245,130,13,.2);border:1px solid rgba(245,130,13,.4);color:var(--orange);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(244,196,48,.2);border:1px solid rgba(244,196,48,.4);color:var(--orange);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px}
 .hero-badge span{width:7px;height:7px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
 .hero h1{font-size:clamp(30px,4.5vw,50px);font-weight:900;line-height:1.15;letter-spacing:-1px;margin-bottom:16px}
@@ -44,7 +45,7 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
 /* Sections */
 .section{padding:80px 20px}
 .section-inner{max-width:1100px;margin:0 auto}
-.section-label{font-size:12px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.section-label{font-size:12px;font-weight:700;color:var(--gold-text);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .section-title{font-size:clamp(22px,3vw,34px);font-weight:900;color:var(--blue);letter-spacing:-.5px;line-height:1.2;margin-bottom:12px}
 .section-desc{font-size:15px;color:var(--gray-muted);max-width:650px;line-height:1.7;margin-bottom:40px}
 
@@ -55,7 +56,7 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
 .arch-card-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
 .arch-card-icon{width:52px;height:52px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
 .arch-card-icon.blue{background:var(--blue-light);color:var(--blue)}
-.arch-card-icon.orange{background:var(--orange-light);color:var(--orange)}
+.arch-card-icon.orange{background:var(--orange-light);color:var(--gold-text)}
 .arch-card-icon.teal{background:var(--teal-light);color:var(--teal)}
 .arch-card h3{font-size:16px;font-weight:800;color:var(--blue)}
 .arch-card p{font-size:13.5px;color:var(--gray-muted);line-height:1.65}
@@ -90,7 +91,7 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
 .flow-step-num{width:34px;height:34px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;margin:0 auto 12px}
 .flow-step strong{display:block;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px}
 .flow-step span{font-size:11px;color:var(--gray-muted);line-height:1.4}
-.flow-arrow{display:flex;align-items:center;color:var(--orange);font-size:20px;font-weight:800}
+.flow-arrow{display:flex;align-items:center;color:var(--gold-text);font-size:20px;font-weight:800}
 
 /* Cards para funcionalidades */
 .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
@@ -112,7 +113,7 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
 .phase-card{background:var(--white);border:1.5px solid var(--gray-border);border-radius:var(--radius-lg);padding:28px;margin-bottom:18px;display:flex;gap:24px;align-items:flex-start;transition:all .2s}
 .phase-card:hover{box-shadow:var(--shadow-md)}
 .phase-num{width:54px;height:54px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex-shrink:0;color:#fff}
-.phase-num.fase1{background:var(--orange)}
+.phase-num.fase1{background:var(--orange);color:#141414}
 .phase-num.fase2{background:var(--blue)}
 .phase-num.fase3{background:var(--teal)}
 .phase-body h4{font-size:16px;font-weight:800;color:var(--blue);margin-bottom:6px}
@@ -127,14 +128,14 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
 .screen-group .telas-list{display:flex;flex-wrap:wrap;gap:5px}
 
 /* CTA */
-.cta{background:linear-gradient(135deg,var(--blue) 0%,#0F2347 100%);color:#fff;padding:70px 20px;text-align:center;position:relative;overflow:hidden}
-.cta::before{content:'';position:absolute;top:-50px;right:-50px;width:250px;height:250px;background:radial-gradient(circle,rgba(245,130,13,.2) 0%,transparent 70%);pointer-events:none}
+.cta{background:linear-gradient(135deg,var(--blue) 0%,#2a2a2a 100%);color:#fff;padding:70px 20px;text-align:center;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:-50px;right:-50px;width:250px;height:250px;background:radial-gradient(circle,rgba(244,196,48,.2) 0%,transparent 70%);pointer-events:none}
 .cta-inner{max-width:700px;margin:0 auto;position:relative;z-index:1}
 .cta h2{font-size:clamp(24px,3vw,38px);font-weight:900;margin-bottom:14px;letter-spacing:-.5px}
 .cta h2 span{color:var(--orange)}
 .cta p{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:30px}
 .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn-primary{background:var(--orange);color:#fff;padding:14px 30px;border-radius:10px;font-size:15px;font-weight:800;border:none;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(245,130,13,.35)}
+.btn-primary{background:var(--orange);color:#141414;padding:14px 30px;border-radius:10px;font-size:15px;font-weight:800;border:none;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(244,196,48,.35)}
 .btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px)}
 .btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:2px solid rgba(255,255,255,.3);padding:12px 26px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .btn-ghost:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5)}
@@ -258,31 +259,31 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
         <div class="arch-card-icon blue" style="margin:0 auto 12px">🏪</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px">Site Público</h4>
         <p style="font-size:12px">Cliente navega, adiciona ao carrinho e finaliza pedido</p>
-        <span style="display:block;margin-top:10px;font-size:10px;color:var(--orange);font-weight:700">E-COMMERCE</span>
+        <span style="display:block;margin-top:10px;font-size:10px;color:var(--gold-text);font-weight:700">E-COMMERCE</span>
       </div>
       <div class="arch-card" style="text-align:center;padding:24px 18px">
         <div class="arch-card-icon orange" style="margin:0 auto 12px">👤</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px">Painel do Vendedor</h4>
         <p style="font-size:12px">Recebe pedidos dos seus clientes, aplica desconto, acompanha metas</p>
-        <span style="display:block;margin-top:10px;font-size:10px;color:var(--orange);font-weight:700">VENDAS</span>
+        <span style="display:block;margin-top:10px;font-size:10px;color:var(--gold-text);font-weight:700">VENDAS</span>
       </div>
       <div class="arch-card" style="text-align:center;padding:24px 18px">
         <div class="arch-card-icon teal" style="margin:0 auto 12px">🏭</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px">Painel da Distribuidora</h4>
         <p style="font-size:12px">Aprova pedidos, separa produtos e controla a operação</p>
-        <span style="display:block;margin-top:10px;font-size:10px;color:var(--orange);font-weight:700">OPERAÇÃO</span>
+        <span style="display:block;margin-top:10px;font-size:10px;color:var(--gold-text);font-weight:700">OPERAÇÃO</span>
       </div>
       <div class="arch-card" style="text-align:center;padding:24px 18px">
         <div class="arch-card-icon blue" style="margin:0 auto 12px">📦</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px">Estoque Inteligente</h4>
         <p style="font-size:12px">Baixa automática, alertas, relatórios e upload por PDF/Excel/Foto</p>
-        <span style="display:block;margin-top:10px;font-size:10px;color:var(--orange);font-weight:700">INTELIGÊNCIA</span>
+        <span style="display:block;margin-top:10px;font-size:10px;color:var(--gold-text);font-weight:700">INTELIGÊNCIA</span>
       </div>
       <div class="arch-card" style="text-align:center;padding:24px 18px;border:2px solid var(--orange);background:var(--orange-light)">
         <div class="arch-card-icon orange" style="margin:0 auto 12px;background:#fff">☁️</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue);margin-bottom:6px">Banco + IA</h4>
         <p style="font-size:12px">Banco de dados PostgreSQL com tempo real + <strong>OpenAI</strong> (IA para chat, leitura de notas e sugestões inteligentes)</p>
-        <span style="display:block;margin-top:10px;font-size:10px;color:var(--orange);font-weight:700">BACKEND</span>
+        <span style="display:block;margin-top:10px;font-size:10px;color:var(--gold-text);font-weight:700">BACKEND</span>
       </div>
     </div>
   </div>
@@ -440,12 +441,12 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
       <div class="arch-card" style="text-align:center">
         <div style="font-size:36px;margin-bottom:10px">🔑</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue)">Acesso próprio</h4>
-        <p style="font-size:12.5px">Cada vendedor tem seu <strong style="color:var(--orange)">login e senha</strong> exclusivos. Acesso restrito ao seu painel, seus clientes e suas vendas.</p>
+        <p style="font-size:12.5px">Cada vendedor tem seu <strong style="color:var(--gold-text)">login e senha</strong> exclusivos. Acesso restrito ao seu painel, seus clientes e suas vendas.</p>
       </div>
       <div class="arch-card" style="text-align:center">
         <div style="font-size:36px;margin-bottom:10px">🔗</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue)">Link com rastreio</h4>
-        <p style="font-size:12.5px">Dentro do painel, o vendedor copia seu <strong style="color:var(--orange)">link único</strong>. Todo cliente que comprar por ele fica automaticamente vinculado ao vendedor.</p>
+        <p style="font-size:12.5px">Dentro do painel, o vendedor copia seu <strong style="color:var(--gold-text)">link único</strong>. Todo cliente que comprar por ele fica automaticamente vinculado ao vendedor.</p>
       </div>
       <div class="arch-card" style="text-align:center">
         <div style="font-size:36px;margin-bottom:10px">📱</div>
@@ -459,7 +460,7 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
       <div class="arch-card" style="text-align:center">
         <div style="font-size:36px;margin-bottom:10px">🔗</div>
         <h4 style="font-size:14px;font-weight:700;color:var(--blue)">Link único</h4>
-        <p style="font-size:12.5px">maxdistrib.com.br/<strong style="color:var(--orange)">lucas</strong> — cada vendedor recebe o seu</p>
+        <p style="font-size:12.5px">maxdistrib.com.br/<strong style="color:var(--gold-text)">lucas</strong> — cada vendedor recebe o seu</p>
       </div>
       <div class="arch-card" style="text-align:center">
         <div style="font-size:36px;margin-bottom:10px">📱</div>
@@ -771,7 +772,7 @@ body{font-family:'Inter',sans-serif;color:#3D4A5C;background:#F5F7FA;line-height
       </div>
       <div class="arch-card" style="text-align:center;color:var(--gray-text);border:2px solid var(--orange)">
         <div style="font-size:42px;margin-bottom:8px">🤖</div>
-        <div style="font-size:32px;font-weight:900;color:var(--orange);letter-spacing:-1px">100%</div>
+        <div style="font-size:32px;font-weight:900;color:var(--gold-text);letter-spacing:-1px">100%</div>
         <p style="font-size:13px;color:var(--gray-muted);margin-top:4px">Automatizados<br>com inteligência artificial</p>
       </div>
     </div>
