@@ -10,8 +10,8 @@
 .hero-title { margin: 10px 0; max-width: 15ch; font-size: clamp(2.15rem, 5.2vw, 4.75rem); line-height: .98; letter-spacing: -.065em; font-weight: 800; }
 .hero-copy p:not(.hero-kicker) { max-width: 42ch; font-size: 1rem; color: #4b473e; line-height: 1.5; }
 .hero-copy .btn { margin-top: 20px; }
-.hero-art { display: grid; place-items: center; width: 100%; height: clamp(250px, 29vw, 365px); overflow: hidden; background: #e8bb35; border: 1px solid #d8aa22; border-radius: 20px; }
-.hero-art img { width: 90%; height: 88%; object-fit: contain; }
+.hero-art { position: relative; width: 100%; height: clamp(250px, 29vw, 365px); overflow: hidden; background: #e8bb35; border: 1px solid #d8aa22; border-radius: 20px; }
+.hero-art img { position: absolute; inset: 6% 5%; width: 90%; height: 88%; object-fit: contain; }
 .hero-sl[data-tone="light"] .hero-art { background: #211d13; border-color: #3e3423; }
 .hero-sl[data-tone="warm"] .hero-art { background: #eddcaa; border-color: #dfca8e; }
 .hero-actions { position: absolute; z-index: 5; bottom: 17px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 5px; }
