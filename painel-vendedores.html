@@ -43,6 +43,26 @@ tr.me{background:var(--gold-soft)}tr.me:hover{background:var(--gold-soft)}
 .chart-box{height:220px}
 .chart-box.sm{height:180px}
 @media(max-width:640px){.meta-ctl{flex-wrap:wrap}.meta-ctl input[type=number]{width:100%}.client-card .cl-note{white-space:normal}}
+.topbar-l{gap:var(--s3)}
+.page-title{font-family:var(--ff-d);letter-spacing:-.025em}
+.demo-context{display:inline-flex;align-items:center;flex:none;border:1px solid var(--line);border-radius:var(--r-full);padding:4px 9px;background:var(--canvas);color:var(--muted);font-size:var(--fs-xs);font-weight:600}
+.chart-row>*{min-width:0}
+.chart-unavailable{display:grid;place-items:center;height:100%;padding:var(--s3);text-align:center;color:var(--muted);font-size:var(--fs-sm)}
+.client-card .cl-name,.link-box span,.detail-hd h2{overflow-wrap:anywhere}
+.sidebar-link,.client-card,.mob-btn{min-height:44px}
+.sidebar-link:focus-visible,.client-card:focus-visible,.mob-btn:focus-visible{outline:2px solid var(--gold-text);outline-offset:2px}
+@media(max-width:900px){
+  .topbar{padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))}
+  .topbar-l{flex:1}
+  .mob-btn{width:44px}
+  .sidebar{inset-inline:auto 0;width:min(300px,calc(100vw - 52px));transform:translateX(100%);visibility:hidden}
+  .sidebar.open{transform:none;visibility:visible}
+}
+@media(max-width:640px){
+  .chart-card,.fcard{padding:var(--s3)}
+  .chart-box{height:190px}
+  .modal-ft .btn,.link-acts .btn{min-height:44px}
+}
 </style>
 </head>
 <body class="app">
@@ -65,9 +85,10 @@ tr.me{background:var(--gold-soft)}tr.me:hover{background:var(--gold-soft)}
 <main class="main">
   <div class="topbar">
     <div class="topbar-l">
-      <button class="btn btn-gh btn-ic mob-btn" aria-label="Abrir menu" data-ic="menu" onclick="toggleSidebar()"></button>
       <h1 class="page-title" id="breadcrumb">Visão geral</h1>
     </div>
+    <span class="demo-context">Demonstração</span>
+    <button class="btn btn-gh btn-ic mob-btn" id="vendorMenuButton" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false" data-ic="menu" onclick="toggleSidebar()"></button>
   </div>
   <div class="content" id="pageRoot"></div>
 </main>
@@ -123,16 +144,31 @@ function statCard(title, icon, val, sub, cls) {
 }
 function drawBar(id, labels, values, label, colors) {
   var c = document.getElementById(id); if (!c) return;
+  if (typeof Chart === 'undefined') {
+    var fallback = document.createElement('p');
+    fallback.className = 'chart-unavailable';
+    fallback.textContent = 'Não foi possível carregar o gráfico.';
+    c.replaceWith(fallback);
+    return;
+  }
+  c.setAttribute('role', 'img');
+  c.setAttribute('aria-label', label + '. ' + labels.map(function(value, index) { return value + ': ' + values[index]; }).join('; '));
   var prev = Chart.getChart(c); if (prev) prev.destroy();
   Chart.defaults.font.family = "'Inter',sans-serif";
   Chart.defaults.color = '#62605A';
-  new Chart(c, {type:'bar',data:{labels:labels,datasets:[{label:label,data:values,backgroundColor:colors || '#F4C430',hoverBackgroundColor:'#141414',borderRadius:6,maxBarThickness:44}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{beginAtZero:true,grid:{color:'#EFEDE8'},border:{display:false}}}}});
+  new Chart(c, {type:'bar',data:{labels:labels,datasets:[{label:label,data:values,backgroundColor:colors || '#F4C430',hoverBackgroundColor:'#141414',borderRadius:6,maxBarThickness:44}]},options:{responsive:true,maintainAspectRatio:false,animation:matchMedia('(prefers-reduced-motion: reduce)').matches ? false : {duration:250},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{beginAtZero:true,grid:{color:'#EFEDE8'},border:{display:false}}}}});
 }
 
 function toggleSidebar(force) {
   var s = document.getElementById('sidebar'), o = document.getElementById('overlay');
-  if (force === true) { s.classList.remove('open'); o.style.display = 'none'; return; }
-  s.classList.toggle('open'); o.style.display = s.classList.contains('open') ? 'block' : 'none';
+  var button = document.getElementById('vendorMenuButton');
+  var open = force !== true && !s.classList.contains('open');
+  s.classList.toggle('open', open);
+  o.style.display = open ? 'block' : 'none';
+  button.setAttribute('aria-expanded', String(open));
+  button.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  if (open) s.querySelector('.sidebar-link.on')?.focus();
+  if (!open && s.contains(document.activeElement) && button.offsetWidth) button.focus();
 }
 
 function getClients() {

@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MaxDistrib · Suplementos no atacado</title>
-<meta name="description" content="Distribuidora de suplementos para lojistas, academias e revendedores. Proteínas, creatinas e pré-treinos das principais marcas.">
+<meta name="description" content="Veja as ofertas da Black Friday NE, as condições por quantidade e o catálogo demonstrativo de suplementos no atacado.">
 <meta name="theme-color" content="#141414">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23141414'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='800' font-size='15' text-anchor='middle' fill='%23F4C430'%3EMD%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="Public/Banneres/banner%201.png">
 <link rel="stylesheet" href="assets/ds.css">
 <script src="assets/ds.js"></script>
 <style>
@@ -212,22 +211,20 @@
 }
 @media(max-width:350px){.logo small{display:none}.ha-btn{padding:0 6px}.ppr{font-size:15px}}
 </style>
+<link rel="stylesheet" href="assets/campanha.css">
 </head>
 <body>
 <a class="skip" href="#todos">Ir para o catálogo</a>
 
-<div class="tb on-dark"><div class="wrap tb-in">
-  <div class="tb-it c"><a href="mailto:contato@maxdistrib.com.br" data-ic="mail" data-ic-cls="ic-sm">contato@maxdistrib.com.br</a><a href="https://wa.me/5581999012345" target="_blank" rel="noopener" data-ic="phone" data-ic-cls="ic-sm">(81) 99901-2345</a></div>
-  <div class="tb-it"><span data-ic="truck" data-ic-cls="ic-sm">Frete grátis em pedidos acima de R$ 2.000</span></div>
-</div></div>
+<div class="tb on-dark"><div class="wrap tb-in"><span>Suplementos para lojistas, academias e revendedores</span></div></div>
 
 <header class="hd">
   <div class="wrap hd-in">
     <a href="#inicio" class="logo" aria-label="MaxDistrib, página inicial"><div class="mk">MD</div><div><strong>MaxDistrib</strong><small>Suplementos no atacado</small></div></a>
-    <form class="srch" role="search" onsubmit="event.preventDefault();ft('')">
+    <form class="srch" role="search" onsubmit="event.preventDefault();ft('',true);goCat()">
       <span data-ic="search"></span>
       <label class="sr" for="si">Buscar produtos</label>
-      <input type="search" id="si" placeholder="Buscar por produto, marca ou categoria" autocomplete="off" oninput="ft('')">
+      <input type="search" id="si" placeholder="Buscar por produto, marca ou categoria" autocomplete="off" oninput="ft('',true)">
     </form>
     <div class="ha">
       <button class="ha-btn" onclick="showFavs()" aria-label="Produtos salvos"><span data-ic="heart" data-ic-cls="ic-lg" style="display:contents"></span><span class="lb">Salvos</span><span class="ha-badge" id="favBg">0</span></button>
@@ -237,58 +234,49 @@
     </div>
   </div>
   <nav class="nav on-dark" aria-label="Principal">
-    <div class="wrap nav-lk" id="navl"><a href="#inicio" class="ac">Início</a><a href="#cat">Categorias</a><a href="#mv">Mais vendidos</a><a href="#ofertas">Ofertas</a><a href="#todos">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a></div>
-    <div class="mob-m" id="mm"><a href="#inicio">Início</a><a href="#cat">Categorias</a><a href="#mv">Mais vendidos</a><a href="#ofertas">Ofertas</a><a href="#todos">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a><a href="#" onclick="event.preventDefault();opL()">Entrar</a></div>
+    <div class="wrap nav-lk" id="navl"><a href="#inicio" class="ac">Início</a><a href="#cat">Categorias</a><a href="#mv">Destaques</a><a href="#ofertas">Ofertas</a><a href="#todos">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a></div>
+    <div class="mob-m" id="mm"><a href="#inicio">Início</a><a href="#cat">Categorias</a><a href="#mv">Destaques</a><a href="#ofertas">Ofertas</a><a href="#todos">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a><a href="#" onclick="event.preventDefault();opL()">Entrar</a></div>
   </nav>
 </header>
 
 <main>
-<section class="hero" id="inicio" aria-roledescription="carrossel" aria-label="Destaques" onmouseenter="hold(true)" onmouseleave="hold(false)">
-  <div class="hero-tr">
-    <div class="hero-sl on"><img src="Public/Banneres/banner%201.png" width="1774" height="887" alt="Psichotic, pré-treino sabor goiaba de 300 g"></div>
-    <div class="hero-sl"><img src="Public/Banneres/banner%202.png" width="1774" height="887" loading="lazy" alt="NUN, pré-treino sabor fruit punch de 200 g"></div>
-    <div class="hero-sl"><img src="Public/Banneres/banner%203.png" width="1774" height="887" loading="lazy" alt="Whey Zero Leite sabor coffee caramel, TA Suplementos"></div>
-    <div class="hero-sl"><img src="Public/Banneres/banner%204.png" width="1774" height="887" loading="lazy" alt="Carnbull, proteína isolada sabor chocolate, TA Suplementos"></div>
-    <button class="harr p" onclick="goSl(sl-1)" aria-label="Destaque anterior"><span data-ic="left" style="display:contents"></span></button>
-    <button class="harr n" onclick="goSl(sl+1)" aria-label="Próximo destaque"><span data-ic="right" style="display:contents"></span></button>
-    <div class="hdots"><button class="hdot on" onclick="goSl(0)" aria-label="Destaque 1"></button><button class="hdot" onclick="goSl(1)" aria-label="Destaque 2"></button><button class="hdot" onclick="goSl(2)" aria-label="Destaque 3"></button><button class="hdot" onclick="goSl(3)" aria-label="Destaque 4"></button></div>
-  </div>
+<section class="hero" id="inicio" aria-roledescription="carrossel" aria-label="Destaques">
+  <div class="hero-tr"></div>
+  <noscript><p class="wrap">Ative o JavaScript para navegar pelas ofertas e pelo catálogo.</p></noscript>
 </section>
 
 <section class="intro on-dark"><div class="wrap intro-in">
-  <div><h1>Suplementos para quem revende</h1><p>Distribuidora para lojistas, academias e revendedores.</p></div>
-  <div class="intro-act"><a class="btn btn-g" href="#todos">Ver catálogo</a><button class="btn btn-o" onclick="opL('revendedor')">Sou revendedor</button></div>
-</div></section>
-
-<section class="benefits" aria-label="Condições"><div class="wrap benefits-in">
-  <div class="bcard"><span data-ic="tag" style="display:contents"></span><div><strong>Preço de atacado</strong><span>Tabela para revenda</span></div></div>
-  <div class="bcard"><span data-ic="truck" style="display:contents"></span><div><strong>Entrega para o Brasil</strong><span>Frete grátis acima de R$ 2.000</span></div></div>
-  <div class="bcard"><span data-ic="users" style="display:contents"></span><div><strong>Vendedor dedicado</strong><span>Escolha quem atende você</span></div></div>
-  <div class="bcard"><span data-ic="chat" style="display:contents"></span><div><strong>Atendimento no WhatsApp</strong><span>(81) 99901-2345</span></div></div>
+  <div><h1>Suplementos no atacado</h1><p>Confira a campanha da NE e experimente a vitrine de produtos.</p></div>
+  <div class="intro-act"><a class="btn btn-g" href="#ofertas">Conferir ofertas</a><button class="btn btn-o" onclick="opL('revendedor')">Testar área do revendedor</button></div>
 </div></section>
 
 <section class="sec reveal" id="cat"><div class="wrap">
-  <div class="sec-hd"><div><p class="sec-ey">Categorias</p><h2 class="sec-tt">Compre por objetivo</h2></div></div>
+  <div class="sec-hd"><div><p class="sec-ey">Categorias</p><h2 class="sec-tt">Explore por categoria</h2></div></div>
   <div class="cat-grid" id="cg"></div>
 </div></section>
 
 <section class="sec alt reveal" id="mv"><div class="wrap">
-  <div class="sec-hd"><div><p class="sec-ey">Mais pedidos</p><h2 class="sec-tt">Mais vendidos</h2></div><a class="btn btn-o btn-sm" href="#todos">Ver catálogo</a></div>
+  <div class="sec-hd"><div><p class="sec-ey">Vitrine demonstrativa</p><h2 class="sec-tt">Destaques</h2></div><a class="btn btn-o btn-sm" href="#todos">Ver catálogo</a></div>
   <div class="pgrid" id="pgHot"></div>
 </div></section>
 
-<section class="offers on-dark" id="ofertas"><div class="wrap">
-  <div class="offers-hd reveal">
-    <div><p class="sec-ey">Ofertas do mês</p><h2 class="sec-tt">Combos com preço fechado</h2><p class="sub">Produtos que giram juntos, com desconto sobre a compra avulsa.</p></div>
-    <div class="cd-w"><small id="cdl">Termina em</small><div class="countdown"><div class="cd-block"><strong id="cd-d">00</strong><span>dias</span></div><div class="cd-block"><strong id="cd-h">00</strong><span>horas</span></div><div class="cd-block"><strong id="cd-m">00</strong><span>min</span></div><div class="cd-block"><strong id="cd-s">00</strong><span>seg</span></div></div></div>
+<section class="offers on-dark campaign-section" id="ofertas" aria-labelledby="campaign-title"><div class="wrap">
+  <div class="offers-hd">
+    <div><p class="sec-ey">Black Friday NE 2026</p><h2 class="sec-tt" id="campaign-title">Ofertas dos encartes</h2><p class="sub">Pedido mínimo de R$ 500 e cartão em até 6×. Os preços e as quantidades variam por oferta. Condições sujeitas à vigência da campanha e ao estoque. Confirme com a NE.</p></div>
+    <a id="campaign-store" class="btn btn-g" href="https://www.nedistribuidora.com.br/" target="_blank" rel="noopener">Consultar loja oficial</a>
   </div>
-  <div class="combos-grid reveal" id="combos"></div>
+  <div class="campaign-search"><label for="campaign-search">Buscar nas ofertas</label><input id="campaign-search" class="fi" type="search" placeholder="Produto, marca ou categoria" autocomplete="off"></div>
+  <div class="campaign-controls" id="campaign-filters" aria-label="Filtrar ofertas"><button type="button" class="chip" data-kind="all">Todas</button><button type="button" class="chip" data-kind="product">Produtos</button><button type="button" class="chip" data-kind="combo">Combos</button><span class="campaign-count" id="campaign-count" role="status"></span></div>
+  <div class="campaign-grid" id="campaign-grid"></div>
+  <button type="button" class="btn btn-g campaign-more" id="campaign-more" hidden>Mostrar mais ofertas</button>
 </div></section>
 
 <section class="sec alt" id="todos"><div class="wrap">
-  <div class="sec-hd" style="margin-bottom:var(--s4)"><div><p class="sec-ey">Catálogo</p><h2 class="sec-tt">Todos os produtos</h2></div></div>
+  <div class="sec-hd" style="margin-bottom:var(--s4)"><div><p class="sec-ey">Catálogo</p><h2 class="sec-tt">Catálogo demonstrativo</h2></div></div>
+  <p class="demo-note">Preços, estoque, cadastro e pedidos simulados. Para compras, consulte a loja oficial.</p>
   <div class="cat-bar"><div class="chips" id="chips"></div><span class="cnt" id="cnt" aria-live="polite"></span></div>
   <div class="pgrid" id="pgAll"></div>
+  <details class="demo-combos"><summary>Combos de demonstração</summary><div class="combos-grid on-dark" id="combos"></div></details>
 </div></section>
 </main>
 
@@ -296,22 +284,21 @@
   <div class="foot-in">
     <div><div class="logo"><div class="mk">MD</div><div><strong>MaxDistrib</strong><small>Suplementos no atacado</small></div></div><p class="d">Distribuidora de suplementos para lojistas, academias e revendedores.</p></div>
     <div><h4>Categorias</h4><ul id="fcats"></ul></div>
-    <div><h4>Loja</h4><ul><li><a href="#mv">Mais vendidos</a></li><li><a href="#ofertas">Ofertas</a></li><li><a href="#todos">Catálogo</a></li><li><button class="lk" onclick="opL('revendedor')">Área do revendedor</button></li></ul></div>
-    <div><h4>Contato</h4><ul><li><a href="https://wa.me/5581999012345" target="_blank" rel="noopener" data-ic="phone" data-ic-cls="ic-sm">(81) 99901-2345</a></li><li><a href="mailto:contato@maxdistrib.com.br" data-ic="mail" data-ic-cls="ic-sm">contato@maxdistrib.com.br</a></li></ul>
+    <div><h4>Loja</h4><ul><li><a href="#mv">Destaques</a></li><li><a href="#ofertas">Ofertas</a></li><li><a href="#todos">Catálogo</a></li><li><button class="lk" onclick="opL('revendedor')">Área do revendedor</button></li></ul></div>
+    <div><h4>Atendimento</h4><ul><li><a href="https://www.nedistribuidora.com.br/" target="_blank" rel="noopener">Loja oficial da NE</a></li></ul>
     <h4 style="margin-top:var(--s4)">Acesso interno</h4><ul><li><a href="estoque-inteligente-v3.html">Estoque Inteligente</a></li><li><a href="painel-vendedores.html">Painel do vendedor</a></li></ul></div>
   </div>
   <div class="foot-bt">© <span id="yr">2026</span> MaxDistrib</div>
 </div></footer>
 
 <div class="cart-ov" id="cartOv" onclick="tCart()"></div>
-<aside class="cart-sb" id="cs" role="dialog" aria-label="Carrinho" aria-modal="true">
+<aside class="cart-sb" id="cs" inert role="dialog" aria-label="Carrinho" aria-modal="true">
   <div class="cart-hd"><h3>Carrinho</h3><button class="btn btn-gh btn-ic" onclick="tCart()" aria-label="Fechar carrinho"><span data-ic="x" style="display:contents"></span></button></div>
   <div class="cart-it" id="ci"></div>
   <div class="cart-ft"><div class="cart-tot"><strong>Total</strong><span class="vl num" id="ctt">R$ 0,00</span></div><button class="btn btn-g btn-w" onclick="chk()">Finalizar pedido</button><button class="btn btn-o btn-w" onclick="tCart()">Continuar comprando</button></div>
 </aside>
 
 <div class="modal-ov" id="lm" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="modal" id="lb" style="max-width:440px"></div></div>
-<a href="https://wa.me/5581999012345" class="wpp" target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><span data-ic="wa" style="display:contents"></span></a>
 
 <script>
 var IP='Public/suplementos/';
@@ -344,7 +331,9 @@ var combos=[
 ];
 var cats=['Proteínas','Creatinas','Pré-Treinos'];
 var vends=['Lucas Silva','Marina Costa','Pedro Santos','Ana Oliveira','Rafael Lima','Juliana Souza','Carlos Eduardo','Fernanda Torres'];
-var user=null,cart=[],sl=0,lt='cliente',curCat='',favOnly=false,favs=[];
+var verifiedOffers={2:'catalogo-3',9:'catalogo-13',13:'queima-08',17:'queima-01'};
+var cartTrigger;
+var user=null,cart=[],lt='cliente',curCat='',favOnly=false,favs=[];
 var $=function(i){return document.getElementById(i)},fR=NE.money,to=NE.toast,ic=NE.ic,esc=NE.esc;
 try{favs=JSON.parse(localStorage.getItem('md_favs'))||[]}catch(e){}
 
@@ -365,18 +354,19 @@ function badge(p){
   if(p.q===0)return'<span class="badge badge-c">Esgotado</span>';
   if(p.q<=p.mn)return'<span class="badge badge-w">Últimas unidades</span>';
   if(p.novo)return'<span class="badge badge-k">Novo</span>';
-  if(p.hot)return'<span class="badge badge-g">Mais vendido</span>';
+  if(p.hot)return'<span class="badge badge-g">Destaque</span>';
   return'';
 }
 function card(p){
   var isR=user&&user.tp==='rev',prc=isR?p.dp:p.rp,on=favs.indexOf(p.id)>=0;
-  return'<article class="pcard"><div class="pimg"><img src="'+p.img+'" alt="'+esc(p.n)+'" loading="lazy" onerror="this.replaceWith(document.createRange().createContextualFragment(NE.ic(\'box\',\'ic-lg\')))"><div class="pbadges">'+badge(p)+'</div><button class="fav'+(on?' on':'')+'" onclick="tFav('+p.id+')" aria-pressed="'+on+'" aria-label="Salvar '+esc(p.n)+'">'+ic('heart','ic-sm')+'</button></div><div class="pbody"><p class="pbrand">'+esc(p.br)+'</p><h3 class="pname" style="font-family:var(--ff);letter-spacing:0">'+esc(p.n)+'</h3><p class="ppr">'+fR(prc)+'</p>'+(isR?'<p class="ppr-ref num">Loja '+fR(p.rp)+' · <b>margem '+fR(p.rp-p.dp)+'</b></p>':'')+(p.q>0?'<button class="btn btn-p btn-sm btn-w" style="margin-top:auto" data-add="'+p.id+'" onclick="addC('+p.id+',this)">'+ic('cart','ic-sm')+'Adicionar</button>':'<button class="btn btn-o btn-sm btn-w" disabled>Indisponível</button>')+'</div></article>';
+  return'<article class="pcard"><div class="pimg"><img src="'+p.img+'" alt="'+esc(p.n)+'" loading="lazy" onerror="this.replaceWith(document.createRange().createContextualFragment(NE.ic(\'box\',\'ic-lg\')))"><div class="pbadges">'+badge(p)+'</div><button class="fav'+(on?' on':'')+'" onclick="tFav('+p.id+')" aria-pressed="'+on+'" aria-label="Salvar '+esc(p.n)+'">'+ic('heart','ic-sm')+'</button></div><div class="pbody"><p class="pbrand">'+esc(p.br)+'</p><h3 class="pname" style="font-family:var(--ff);letter-spacing:0">'+esc(p.n)+'</h3><p class="ppr">'+fR(prc)+'</p>'+(isR?'<p class="ppr-ref num">Loja '+fR(p.rp)+' · <b>margem '+fR(p.rp-p.dp)+'</b></p>':'')+(p.q>0?'<button class="btn btn-p btn-sm btn-w" style="margin-top:auto" data-add="'+p.id+'" onclick="addC('+p.id+',this)">'+ic('cart','ic-sm')+'Adicionar</button>':'<button class="btn btn-o btn-sm btn-w" disabled>Indisponível</button>')+(verifiedOffers[p.id]?'<a class="verified-offer" href="#oferta-'+verifiedOffers[p.id]+'">Ver oferta do encarte</a>':'')+'</div></article>';
 }
 function rP(gid,arr){var g=$(gid);if(g)g.innerHTML=arr.map(card).join('')}
 function rHot(){rP('pgHot',prods.filter(function(p){return p.hot}).sort(function(a,b){return b.sld-a.sld}).slice(0,5))}
 function rFiltered(){
-  var q=$('si').value.trim().toLowerCase();
-  var f=prods.filter(function(p){return(!curCat||p.cat===curCat)&&(!favOnly||favs.indexOf(p.id)>=0)&&(!q||p.n.toLowerCase().indexOf(q)>=0||p.cat.toLowerCase().indexOf(q)>=0||p.br.toLowerCase().indexOf(q)>=0)});
+  var normalize=function(text){return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')};
+  var q=normalize($('si').value.trim());
+  var f=prods.filter(function(p){return(!curCat||p.cat===curCat)&&(!favOnly||favs.indexOf(p.id)>=0)&&(!q||normalize(p.n+' '+p.cat+' '+p.br).includes(q))});
   if(f.length)rP('pgAll',f);
   else $('pgAll').innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="ic-wrap">'+ic(favOnly?'heart':'search')+'</div><h4>'+(favOnly?'Nenhum produto salvo':'Nenhum produto encontrado')+'</h4><p>'+(favOnly?'Toque no coração de um produto para guardar aqui.':'Tente outro termo ou veja o catálogo completo.')+'</p><button class="btn btn-o btn-sm" onclick="clearF()">Ver todos os produtos</button></div>';
   $('cnt').textContent=f.length+(f.length===1?' produto':' produtos')+(q?' para "'+$('si').value.trim()+'"':'');
@@ -398,7 +388,15 @@ function rmC(pid){cart=cart.filter(function(c){return c.id!==pid});uCart();rCart
 function qC(pid,d){var c=cart.find(function(x){return x.id===pid});if(!c)return;c.q+=d;if(c.q<=0){rmC(pid);return}uCart();rCart()}
 function uCart(bump){var b=$('cartBg'),t=cart.reduce(function(s,c){return s+c.q},0);b.style.display=t>0?'flex':'none';b.textContent=t;if(bump){b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}}
 function rCart(){var el=$('ci'),tt=0;if(!cart.length){el.innerHTML='<div class="empty-state"><div class="ic-wrap">'+ic('cart')+'</div><h4>Seu carrinho está vazio</h4><p>Adicione produtos do catálogo para montar o pedido.</p></div>';$('ctt').textContent=fR(0);return}el.innerHTML=cart.map(function(c){var s=c.prc*c.q;tt+=s;return'<div class="cart-row"><div class="cart-img"><img src="'+c.img+'" alt=""></div><div class="cart-info"><strong>'+esc(c.n)+'</strong><span class="num">'+fR(c.prc)+' cada</span><br><div class="cart-qt"><button onclick="qC('+c.id+',-1)" aria-label="Diminuir quantidade">'+ic('minus','ic-sm')+'</button><span class="num">'+c.q+'</span><button onclick="qC('+c.id+',1)" aria-label="Aumentar quantidade">'+ic('plus','ic-sm')+'</button></div></div><div class="cart-sum"><span class="num">'+fR(s)+'</span><button class="btn btn-gh btn-ic is-danger" onclick="rmC('+c.id+')" aria-label="Remover '+esc(c.n)+'">'+ic('trash','ic-sm')+'</button></div></div>'}).join('');$('ctt').textContent=fR(tt)}
-function tCart(){var on=$('cs').classList.toggle('on');$('cartOv').classList.toggle('on',on);document.body.style.overflow=on?'hidden':'';rCart()}
+function tCart(){
+  var drawer=$('cs'),on=drawer.classList.toggle('on');
+  drawer.inert=!on;
+  $('cartOv').classList.toggle('on',on);
+  document.body.style.overflow=on?'hidden':'';
+  rCart();
+  if(on){cartTrigger=document.activeElement;drawer.querySelector('button').focus()}
+  else if(cartTrigger){cartTrigger.focus()}
+}
 function chk(){
   if(!cart.length){to('Seu carrinho está vazio','err');return}
   if(!user){tCart();to('Entre para finalizar o pedido');opL();return}
@@ -406,10 +404,10 @@ function chk(){
   $('lm').classList.add('on');
   $('lb').innerHTML='<div class="modal-hd"><h3 id="mt">Confirmar pedido</h3><button class="btn btn-gh btn-ic" onclick="clL()" aria-label="Fechar">'+ic('x')+'</button></div><div class="modal-bd"><ul class="sum-l">'+cart.map(function(c){return'<li><span>'+esc(c.n)+' × '+c.q+'</span><strong class="num">'+fR(c.prc*c.q)+'</strong></li>'}).join('')+'</ul><div class="cart-tot" style="margin-top:var(--s3)"><strong>Total</strong><span class="vl num">'+fR(tt)+'</span></div><p class="note">Ambiente de demonstração: nenhum pagamento é processado.</p></div><div class="modal-ft"><button class="btn btn-o" onclick="clL()">Voltar</button><button class="btn btn-g" onclick="doChk()">Confirmar pedido</button></div>';
 }
-function doChk(){cart=[];uCart();rCart();clL();if($('cs').classList.contains('on'))tCart();to('Pedido enviado')}
+function doChk(){cart=[];uCart();rCart();clL();if($('cs').classList.contains('on'))tCart();to('Simulação de pedido concluída')}
 
 function opL(tab){
-  var isL=!!user;$('mm').classList.remove('on');$('lm').classList.add('on');
+  var isL=!!user;closeMenu();$('lm').classList.add('on');
   if(isL){
     $('lb').innerHTML='<div class="modal-hd"><h3 id="mt">Minha conta</h3><button class="btn btn-gh btn-ic" onclick="clL()" aria-label="Fechar">'+ic('x')+'</button></div><div class="modal-bd user-c"><div class="av">'+ic('user','ic-lg')+'</div><h4>'+esc(user.name)+'</h4><p>'+esc(user.email)+' · '+(user.tp==='rev'?'Revendedor'+(user.vend?' · '+esc(user.vend):''):'Cliente')+'</p>'+(user.tp==='rev'?'<div class="tip">Você vê os preços de distribuidora e a referência da loja.</div>':'')+'<button class="btn btn-p btn-w" onclick="doLg()">Sair</button></div>';
     return;
@@ -423,21 +421,11 @@ function doL(e){e.preventDefault();var n=$('lfN').value.trim(),em=$('lfE').value
 function doLg(){user=null;rAll();$('ul').textContent='Entrar';clL();to('Você saiu da conta')}
 function clL(){$('lm').classList.remove('on')}
 $('lm').addEventListener('click',function(e){if(e.target===this)clL()});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){clL();if($('cs').classList.contains('on'))tCart();$('mm').classList.remove('on')}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){clL();if($('cs').classList.contains('on'))tCart();closeMenu()}});
 
-var held=false,calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-function goSl(n){n=(n+4)%4;document.querySelectorAll('.hero-sl').forEach(function(s,i){s.classList.toggle('on',i===n)});document.querySelectorAll('.hdot').forEach(function(d,i){d.classList.toggle('on',i===n)});sl=n}
-function hold(v){held=v}
-if(!calm)setInterval(function(){if(!held&&!document.hidden)goSl(sl+1)},5500);
+function closeMenu(){$('mm').classList.remove('on');$('hb').setAttribute('aria-expanded','false')}
 function tMob(){var on=$('mm').classList.toggle('on');$('hb').setAttribute('aria-expanded',on)}
-$('mm').addEventListener('click',function(e){if(e.target.tagName==='A'){$('mm').classList.remove('on');$('hb').setAttribute('aria-expanded','false')}});
-
-// Contagem até o fim do mês, igual para todos os visitantes
-var cdEnd=(function(){var n=new Date();return new Date(n.getFullYear(),n.getMonth()+1,0,23,59,59)})();
-$('cdl').textContent='Termina em '+cdEnd.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
-function pad(v){return String(v).padStart(2,'0')}
-function updCd(){var diff=Math.max(0,cdEnd-new Date());$('cd-d').textContent=pad(Math.floor(diff/864e5));$('cd-h').textContent=pad(Math.floor(diff%864e5/36e5));$('cd-m').textContent=pad(Math.floor(diff%36e5/6e4));$('cd-s').textContent=pad(Math.floor(diff%6e4/1e3))}
-updCd();setInterval(updCd,1000);
+$('mm').addEventListener('click',function(e){if(e.target.closest('a'))closeMenu()});
 
 $('yr').textContent=new Date().getFullYear();
 rAll();rCart();
@@ -451,5 +439,7 @@ if('IntersectionObserver'in window){
   ['inicio','cat','mv','ofertas','todos'].forEach(function(i){so.observe($(i))});
 }else{document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in')})}
 </script>
+<script src="assets/encartes.js"></script>
+<script src="assets/campanha.js"></script>
 </body>
 </html>

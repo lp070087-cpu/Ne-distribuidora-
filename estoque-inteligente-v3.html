@@ -27,12 +27,47 @@
 .chk-l label{display:flex;align-items:center;gap:var(--s2);padding:6px 0;font-size:var(--fs-sm);font-weight:400;margin:0;cursor:pointer}
 .chk-l input{accent-color:var(--ink);width:16px;height:16px}
 .intg{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);padding:10px 0;border-bottom:1px solid var(--line);font-size:var(--fs-sm)}.intg:last-child{border-bottom:none}
-@media(max-width:1000px){.split{grid-template-columns:1fr}}
-@media(max-width:640px){.stock-cell{width:130px}.toolbar .btn{flex:1}}
+.topbar{min-height:70px;height:auto;padding-block:10px}
+.topbar-title,.topbar-actions{min-width:0}
+.topbar-title .page-title{letter-spacing:-.025em}
+.demo-note{color:var(--muted);font-size:var(--fs-xs);line-height:1.4;margin-top:2px}
+.topbar-actions{display:flex;align-items:center;gap:var(--s2)}
+.sidebar-head{height:70px}
+.sidebar-sec{color:rgba(255,255,255,.58)}
+.sidebar-link{min-height:42px}
+.stat-card.link:active,.btn:active{filter:brightness(.96)}
+.table-head{min-height:58px}
+.table-wrap{overscroll-behavior-x:contain}
+.chart-card,.fcard,.table-card{min-width:0}
+.chart-box{height:clamp(200px,34vw,260px)}
+.ai-chat{height:calc(100dvh - 118px)}
+.overlay{background:rgba(20,20,20,.58)}
+.skip-link{position:fixed;top:8px;left:8px;z-index:400;transform:translateY(-150%)}
+.skip-link:focus{transform:none}
+@media(max-width:1000px){.split{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:900px){
+  .sidebar{inset:0 0 0 auto;max-width:calc(100vw - 44px);transform:translateX(100%);visibility:hidden}
+  .sidebar.open{transform:none;visibility:visible}
+  .topbar-actions .mob-btn{min-width:44px;min-height:44px}
+  .topbar-title .page-title{white-space:normal;overflow-wrap:anywhere}
+}
+@media(max-width:640px){
+  .topbar{gap:var(--s2)}
+  .topbar-title .page-title{font-size:var(--fs-md)}
+  .topbar-actions .btn{min-height:44px;padding-inline:8px}
+  .stock-cell{width:min(130px,48%)}
+  .toolbar .btn{flex:1}
+  .btn,.fi{min-height:44px}
+  .fi{font-size:16px}
+  .notice{flex-wrap:wrap}
+  .notice .nb{flex-basis:calc(100% - 52px)}
+  .ai-chat{min-height:min(420px,calc(100dvh - 102px))}
+}
 </style>
 </head>
 <body class="app">
-<div class="overlay" id="overlay" onclick="toggleSidebar(true)"></div>
+<a class="btn btn-p skip-link" href="#pageContent">Ir para o conteúdo</a>
+<div class="overlay" id="overlay" aria-hidden="true" onclick="toggleSidebar(true)"></div>
 
 <aside class="sidebar" id="sidebar" aria-label="Menu do sistema">
   <div class="sidebar-head"><div class="mk">MD</div><div><strong>Estoque Inteligente</strong><small>MaxDistrib</small></div></div>
@@ -42,16 +77,19 @@
 
 <main class="main" id="mainContent">
   <div class="topbar">
-    <div class="topbar-l">
-      <button class="btn btn-gh btn-ic mob-btn" onclick="toggleSidebar()" aria-label="Abrir menu"><span data-ic="menu" style="display:contents"></span></button>
+    <div class="topbar-title">
       <h1 class="page-title" id="breadcrumb">Dashboard</h1>
+      <p class="demo-note">Demonstração · dados neste navegador</p>
     </div>
-    <a class="btn btn-o btn-sm" href="index.html">Ver loja</a>
+    <div class="topbar-actions">
+      <a class="btn btn-o btn-sm" href="index.html">Ver loja</a>
+      <button class="btn btn-gh btn-ic mob-btn" id="menuButton" onclick="toggleSidebar()" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false"><span data-ic="menu" style="display:contents"></span></button>
+    </div>
   </div>
-  <div class="content" id="pageContent"></div>
+  <div class="content" id="pageContent" tabindex="-1"></div>
 </main>
 
-<div class="modal-ov" id="modalOverlay" role="dialog" aria-modal="true"><div class="modal" id="modalBody"></div></div>
+<div class="modal-ov" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><div class="modal" id="modalBody"></div></div>
 
 <script>
 // ============= DATA STORE =============
@@ -134,16 +172,32 @@ function statusOf(p) { return p.qty === 0 ? ['badge-c', 'Zerado'] : p.qty <= p.m
 function expSoon(p) { if (!p.expiry) return false; var d = new Date(p.expiry + 'T00:00:00'), n = new Date(); n.setMonth(n.getMonth() + 2); return d <= n; }
 function emptyBox(icon, title, text) { return '<div class="empty-state"><div class="ic-wrap">' + ic(icon) + '</div><h4>' + title + '</h4><p>' + (text || '') + '</p></div>'; }
 function statCard(o) { return '<button class="stat-card link' + (o.cls ? ' ' + o.cls : '') + '" onclick="openTab(\'' + o.tab + '\')"><h3>' + o.t + ic(o.i, 'ic-sm') + '</h3><div class="val">' + o.v + '</div>' + (o.s ? '<div class="sub">' + o.s + '</div>' : '') + '</button>'; }
-function modalHead(t) { return '<div class="modal-hd"><h3>' + t + '</h3><button class="btn btn-gh btn-ic" onclick="closeModal()" aria-label="Fechar">' + ic('x') + '</button></div>'; }
-function openModal(html) { document.getElementById('modalOverlay').classList.add('on'); document.getElementById('modalBody').innerHTML = html; }
+var modalTrigger = null;
+function modalHead(t) { return '<div class="modal-hd"><h3 id="dialogTitle">' + t + '</h3><button class="btn btn-gh btn-ic" onclick="closeModal()" aria-label="Fechar">' + ic('x') + '</button></div>'; }
+function openModal(html) {
+  var modalBody = document.getElementById('modalBody');
+  modalTrigger = document.activeElement;
+  modalBody.innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('on');
+  document.getElementById('mainContent').inert = true;
+  document.getElementById('sidebar').inert = true;
+  modalBody.querySelector('.modal-hd button').focus();
+}
 
 function toggleSidebar(force) {
   var s = document.getElementById('sidebar');
   var o = document.getElementById('overlay');
-  if (force === true) { s.classList.remove('open'); o.style.display = 'none'; return; }
-  s.classList.toggle('open');
-  o.style.display = s.classList.contains('open') ? 'block' : 'none';
+  var button = document.getElementById('menuButton');
+  var wasOpen = s.classList.contains('open');
+  var open = force !== true && !wasOpen;
+  s.classList.toggle('open', open);
+  o.style.display = open ? 'block' : 'none';
+  button.setAttribute('aria-expanded', String(open));
+  button.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  if (open) s.querySelector('.sidebar-link.on').focus();
+  if (wasOpen && !open) button.focus();
 }
+matchMedia('(max-width:900px)').addEventListener('change', function() { toggleSidebar(true); });
 
 function drawChart(id, cfg) {
   if (typeof Chart === 'undefined') {
@@ -388,8 +442,14 @@ function saveMovement(pid, type) {
 }
 
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('on');
+  var overlay = document.getElementById('modalOverlay');
+  if (!overlay.classList.contains('on')) return;
+  overlay.classList.remove('on');
   document.getElementById('modalBody').innerHTML = '';
+  document.getElementById('mainContent').inert = false;
+  document.getElementById('sidebar').inert = false;
+  if (modalTrigger && modalTrigger.isConnected) modalTrigger.focus();
+  modalTrigger = null;
 }
 document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeModal(); toggleSidebar(true); } });

@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MaxDistrib · Estoque Inteligente</title>
+<meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="assets/ds.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <style>
 :root{
@@ -129,38 +131,94 @@ table tbody tr:last-child td{border-bottom:none}
 .topbar{padding:0 12px}.content{padding:10px}.aichat{min-height:380px}
 .btn{font-size:11.5px;padding:6px 12px}
 }
+
+.topbar{min-height:70px;height:auto;padding-block:10px;gap:10px}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.topbar .bc{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.2}
+.demo-note{font-size:11px;color:var(--muted);margin-top:3px}
+.sidebar-head{min-height:70px}
+.sidebar-sec{color:rgba(255,255,255,.6)}
+.sidebar-link{min-height:42px}
+.sidebar-link .ic,.mob-btn .ic,.si .ic{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.content{max-width:1440px;margin-inline:auto}
+.chart-row{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.stats,.chart-row,.tcard,.fcard{min-width:0}
+.scard,.ccard,.sd{min-width:0}
+.sd .vl{font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.2}
+.sd .sub{margin-top:4px}
+.twrap{overscroll-behavior-x:contain}
+.tcard-hd{min-height:58px}
+.btn:active{filter:brightness(.96)}
+.aim{overflow-wrap:anywhere}
+.ai-inp .form-in{min-width:0}
+.modal-ft{flex-wrap:wrap}
+.skip-link{position:fixed;top:8px;left:8px;z-index:400;transform:translateY(-150%)}
+.skip-link:focus{transform:none}
+:focus-visible{outline:2px solid #8f6900;outline-offset:3px}
+.sidebar :focus-visible{outline-color:var(--acc)}
+.twrap:focus-visible{outline-offset:-3px}
+@media(max-width:768px){
+  .sidebar{left:auto;right:0;max-width:calc(100vw - 44px);transform:translateX(100%);visibility:hidden}
+  .sidebar.open{transform:none;visibility:visible}
+  .mob-btn{display:grid;place-items:center;min-width:44px;min-height:44px;border:1px solid var(--border);border-radius:var(--radius)}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbar .bc{font-size:14px;overflow-wrap:anywhere}
+  .topbar-actions .btn{min-height:44px}
+  .btn,.form-in{min-height:44px}
+  .form-in{font-size:16px}
+  .scard{flex-direction:column;align-items:flex-start;gap:8px}
+  .tcard-acts{width:100%}
+  .tcard-acts > *{flex:1;min-width:0}
+  .tcard-acts .btn{justify-content:center}
+  .alert-row{flex-wrap:wrap}
+  .alert-row .ac{flex-basis:calc(100% - 36px);min-width:0}
+  .aim{max-width:92%}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
 </style>
 </head>
 <body>
 
-<div id="ovl" onclick="tS()"></div>
-<aside class="sidebar" id="sb">
+<a class="btn btn-p skip-link" href="#ct">Ir para o conteúdo</a>
+<div id="ovl" aria-hidden="true" onclick="tS(true)"></div>
+<aside class="sidebar" id="sb" aria-label="Menu do sistema">
 <div class="sidebar-head"><div class="mk">MD</div><span>Estoque Inteligente</span></div>
 <nav class="sidebar-nav">
 <div class="sidebar-sec">Principal</div>
-<button class="sidebar-link active" data-pg="dash" onclick="go('dash')">📊 Dashboard</button>
+<button class="sidebar-link active" data-pg="dash" data-ic="dash" onclick="go('dash')">Dashboard</button>
 <div class="sidebar-sec">Gestão</div>
-<button class="sidebar-link" data-pg="prod" onclick="go('prod')">📦 Produtos</button>
-<button class="sidebar-link" data-pg="ent" onclick="go('ent')">📥 Entrada</button>
-<button class="sidebar-link" data-pg="sai" onclick="go('sai')">📤 Saída</button>
-<button class="sidebar-link" data-pg="ped" onclick="go('ped')">📋 Pedidos</button>
-<button class="sidebar-link" data-pg="promo" onclick="go('promo')">🏷️ Promoções</button>
+<button class="sidebar-link" data-pg="prod" data-ic="box" onclick="go('prod')">Produtos</button>
+<button class="sidebar-link" data-pg="ent" data-ic="in" onclick="go('ent')">Entrada</button>
+<button class="sidebar-link" data-pg="sai" data-ic="out" onclick="go('sai')">Saída</button>
+<button class="sidebar-link" data-pg="ped" data-ic="list" onclick="go('ped')">Pedidos</button>
+<button class="sidebar-link" data-pg="promo" data-ic="tag" onclick="go('promo')">Promoções</button>
 <div class="sidebar-sec">Inteligência</div>
-<button class="sidebar-link" data-pg="alr" onclick="go('alr')">🔔 Alertas</button>
-<button class="sidebar-link" data-pg="ai" onclick="go('ai')">🤖 Assistente IA</button>
-<button class="sidebar-link" data-pg="rel" onclick="go('rel')">📈 Relatórios</button>
+<button class="sidebar-link" data-pg="alr" data-ic="bell" onclick="go('alr')">Alertas</button>
+<button class="sidebar-link" data-pg="ai" data-ic="chat" onclick="go('ai')">Assistente IA</button>
+<button class="sidebar-link" data-pg="rel" data-ic="chart" onclick="go('rel')">Relatórios</button>
 <div class="sidebar-sec">Controle</div>
-<button class="sidebar-link" data-pg="fifo" onclick="go('fifo')">⏳ FIFO & Validade</button>
-<button class="sidebar-link" data-pg="cfg" onclick="go('cfg')">⚙️ Configurações</button>
+<button class="sidebar-link" data-pg="fifo" data-ic="clock" onclick="go('fifo')">FIFO & Validade</button>
+<button class="sidebar-link" data-pg="cfg" data-ic="cog" onclick="go('cfg')">Configurações</button>
 </nav>
 <div class="sidebar-foot"><div class="sidebar-av">L</div><div><div style="font-weight:700;font-size:11px">Lucas Muniz</div><div style="color:rgba(255,255,255,.4);font-size:9.5px">Administrador</div></div></div>
 </aside>
 
 <main class="main" id="mn">
-<div class="topbar"><div style="display:flex;align-items:center;gap:10px"><button class="mob-btn" onclick="tS()">☰</button><div class="bc" id="bc">Estoque Inteligente · <span>Dashboard</span></div></div></div>
-<div class="content" id="ct"></div>
+<div class="topbar">
+  <div>
+    <h1 class="bc" id="bc">Dashboard</h1>
+    <p class="demo-note">Demonstração · dados neste navegador</p>
+  </div>
+  <div class="topbar-actions">
+    <a class="btn btn-o btn-sm" href="index.html">Ver loja</a>
+    <button class="mob-btn" id="menuButton" onclick="tS()" aria-label="Abrir menu" aria-controls="sb" aria-expanded="false" data-ic="menu"></button>
+  </div>
+</div>
+<div class="content" id="ct" tabindex="-1"></div>
 </main>
-<div class="modal-ov" id="mo"><div class="modal" id="mb"></div></div>
+<div class="modal-ov" id="mo" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><div class="modal" id="mb"></div></div>
 
 <script>
 const K='md_est_v3';
@@ -189,17 +247,39 @@ function fD(d){return new Date(d+'T00:00:00').toLocaleDateString('pt-BR')}
 function gP(id){return D.prod.find(p=>p.id===id)}
 function gPN(id){let p=gP(id);return p?p.n:'—'}
 function to(m){let t=document.createElement('div');t.style.cssText='position:fixed;top:16px;right:16px;z-index:999;background:#fff;border-radius:8px;padding:10px 16px;box-shadow:0 4px 16px rgba(0,0,0,.12);font-size:12.5px;font-weight:600;animation:toIn .25s ease;border-left:3px solid var(--green)';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},2800)}
-function tS(f){let s=document.getElementById('sb'),o=document.getElementById('ovl');if(f===true){s.classList.remove('open');o.style.display='none';return}s.classList.toggle('open');o.style.display=s.classList.contains('open')?'block':'none'}
+function tS(force) {
+  const sidebar = document.getElementById('sb');
+  const overlay = document.getElementById('ovl');
+  const button = document.getElementById('menuButton');
+  const wasOpen = sidebar.classList.contains('open');
+  const open = force !== true && !wasOpen;
+  sidebar.classList.toggle('open', open);
+  overlay.style.display = open ? 'block' : 'none';
+  button.setAttribute('aria-expanded', String(open));
+  button.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  if (open) sidebar.querySelector('.sidebar-link.active').focus();
+  if (wasOpen && !open) button.focus();
+}
+matchMedia('(max-width:768px)').addEventListener('change', () => tS(true));
 
 function go(pg){
 D=ld();
-document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
-let lnk=document.querySelector(`[data-pg="${pg}"]`);if(lnk)lnk.classList.add('active');
+document.querySelectorAll('.sidebar-link').forEach(link => {
+  const active = link.dataset.pg === pg;
+  link.classList.toggle('active', active);
+  if (active) link.setAttribute('aria-current', 'page');
+  else link.removeAttribute('aria-current');
+});
 let m={dash:'Dashboard',prod:'Produtos',ent:'Entrada de Estoque',sai:'Saída de Estoque',ped:'Pedidos',promo:'Promoções',alr:'Alertas',ai:'Assistente IA',rel:'Relatórios',fifo:'FIFO & Validade',cfg:'Configurações'};
-document.getElementById('bc').innerHTML='Estoque Inteligente · <span>'+ (m[pg]||pg)+'</span>';
+document.getElementById('bc').textContent = m[pg] || pg;
 let fns={dash:dDash,prod:dProd,ent:dEnt,sai:dSai,ped:dPed,promo:dPromo,alr:dAlr,ai:dAI,rel:dRel,fifo:dFifo,cfg:dCfg};
 let r=document.getElementById('ct');r.innerHTML='';
 (fns[pg]||dDash)(r);
+for (const wrap of r.querySelectorAll('.twrap')) {
+  wrap.tabIndex = 0;
+  wrap.setAttribute('role', 'region');
+  wrap.setAttribute('aria-label', wrap.closest('.tcard')?.querySelector('h2')?.textContent || 'Tabela de estoque');
+}
 tS(true);
 }
 
@@ -208,12 +288,12 @@ let tp=D.prod.length,lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn).length,ze=D.prod.filt
 let es=D.prod.filter(p=>{if(!p.exp)return false;let d=new Date(p.exp+'T00:00:00'),n=new Date();n.setMonth(n.getMonth()+2);return d<=n}).length;
 r.innerHTML=`
 <div class="stats">
-<div class="scard"><div class="si p">📦</div><div class="sd"><h3>Total de Produtos</h3><div class="vl">${tp}</div><div class="sub">produtos ativos no estoque</div></div></div>
-<div class="scard"><div class="si a">⚠️</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div><div class="sub">abaixo do mínimo configurado</div></div></div>
-<div class="scard"><div class="si r">🚫</div><div class="sd"><h3>Produtos Zerados</h3><div class="vl">${ze}</div><div class="sub">sem nenhuma unidade</div></div></div>
-<div class="scard"><div class="si g">💰</div><div class="sd"><h3>Valor do Estoque</h3><div class="vl">${fR(tv)}</div><div class="sub">valor estimado pelo custo</div></div></div>
-<div class="scard"><div class="si p">📋</div><div class="sd"><h3>Pedidos Pendentes</h3><div class="vl">${po}</div><div class="sub">aguardando fornecedor</div></div></div>
-<div class="scard"><div class="si ac">⏰</div><div class="sd"><h3>Vence em 2 Meses</h3><div class="vl">${es}</div><div class="sub">prioridade de venda (FIFO)</div></div></div>
+<div class="scard"><div class="si p">${NE.ic('box')}</div><div class="sd"><h3>Total de Produtos</h3><div class="vl">${tp}</div><div class="sub">produtos ativos no estoque</div></div></div>
+<div class="scard"><div class="si a">${NE.ic('alert')}</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div><div class="sub">abaixo do mínimo configurado</div></div></div>
+<div class="scard"><div class="si r">${NE.ic('ban')}</div><div class="sd"><h3>Produtos Zerados</h3><div class="vl">${ze}</div><div class="sub">sem nenhuma unidade</div></div></div>
+<div class="scard"><div class="si g">${NE.ic('money')}</div><div class="sd"><h3>Valor do Estoque</h3><div class="vl">${fR(tv)}</div><div class="sub">valor estimado pelo custo</div></div></div>
+<div class="scard"><div class="si p">${NE.ic('list')}</div><div class="sd"><h3>Pedidos Pendentes</h3><div class="vl">${po}</div><div class="sub">aguardando fornecedor</div></div></div>
+<div class="scard"><div class="si ac">${NE.ic('clock')}</div><div class="sd"><h3>Vence em 2 Meses</h3><div class="vl">${es}</div><div class="sub">prioridade de venda (FIFO)</div></div></div>
 </div>
 <div class="chart-row">
 <div class="ccard"><h3>Produtos Críticos</h3>
@@ -229,13 +309,42 @@ r.innerHTML=`<div class="tcard"><div class="tcard-hd"><h2>Produtos (${D.prod.len
 }
 function pTR(arr){return arr.map(p=>`<tr><td style="font-size:20px;text-align:center">📦</td><td style="font-weight:600">${p.n}</td><td>${p.cat}</td><td>${p.br}</td><td style="font-family:monospace;font-size:11px">${p.sku}</td><td style="font-weight:700">${p.q}</td><td style="color:var(--muted)">${p.mn}</td><td style="font-size:11px">${p.lot}</td><td style="font-size:11px">${fD(p.exp)}</td><td><span class="badge ${p.q===0?'badge-c':p.q<=p.mn?'badge-w':'badge-ok'}">${p.q===0?'Zerado':p.q<=p.mn?'Baixo':'OK'}</span></td><td style="font-weight:700">${fR(p.prc)}</td><td><button class="btn btn-gh btn-sm" onclick="opP(${p.id})">✏️</button><button class="btn btn-gh btn-sm" onclick="opM(${p.id},'in')">📥</button><button class="btn btn-gh btn-sm" onclick="opM(${p.id},'out')">📤</button><button class="btn btn-gh btn-sm" onclick="delP(${p.id})">🗑️</button></td></tr>`).join('')}
 function ftPC(q){let f=D.prod.filter(p=>p.n.toLowerCase().includes(q.toLowerCase())||p.cat.toLowerCase().includes(q.toLowerCase())||p.br.toLowerCase().includes(q.toLowerCase())||p.sku.toLowerCase().includes(q.toLowerCase()));let t=document.getElementById('ptb');if(t)t.innerHTML=pTR(f)}
-function opP(id){D=ld();let p=id?gP(id):null,ed=!!p;document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>${ed?'Editar Produto':'Cadastrar Produto'}</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><div class="form-row"><div class="form-grp" style="grid-column:1/-1"><label>Nome do Produto</label><input class="form-in" id="pf_n" value="${ed?p.n:''}" placeholder="Ex: Whey Protein Concentrado 900g"></div><div class="form-grp"><label>Categoria</label><input class="form-in" id="pf_cat" value="${ed?p.cat:''}" placeholder="Ex: Proteínas"></div><div class="form-grp"><label>Marca</label><input class="form-in" id="pf_br" value="${ed?p.br:''}" placeholder="Ex: Max Titanium"></div><div class="form-grp"><label>Código / SKU</label><input class="form-in" id="pf_sku" value="${ed?p.sku:''}" placeholder="Ex: WHEY-001"></div><div class="form-grp"><label>Preço de Custo (R$)</label><input type="number" class="form-in" id="pf_cost" value="${ed?p.cost:''}" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Preço de Venda (R$)</label><input type="number" class="form-in" id="pf_prc" value="${ed?p.prc:''}" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>${ed?'Quantidade Atual':'Quantidade Inicial'}</label><input type="number" class="form-in" id="pf_q" value="${ed?p.q:'0'}" ${ed?'readonly':''}></div><div class="form-grp"><label>Estoque Mínimo</label><input type="number" class="form-in" id="pf_mn" value="${ed?p.mn:'15'}" min="0"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="pf_sup" value="${ed?p.sup:''}" placeholder="Fornecedor"></div><div class="form-grp"><label>Lote</label><input class="form-in" id="pf_lot" value="${ed?p.lot:''}" placeholder="Ex: LT2607-01"></div><div class="form-grp"><label>Validade</label><input type="date" class="form-in" id="pf_exp" value="${ed&&p.exp?p.exp:''}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="pf_note" value="${ed&&p.note?p.note:''}" placeholder="Sabores, variações..."></div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svP(${ed?id:'null'})">${ed?'Salvar Alterações':'Cadastrar Produto'}</button></div>`}
+function opP(id){D=ld();let p=id?gP(id):null,ed=!!p;openDialog(`<div class="modal-hd"><h3 id="dialogTitle">${ed?'Editar Produto':'Cadastrar Produto'}</h3><button class="btn btn-gh btn-sm" onclick="clM()" aria-label="Fechar">✕</button></div><div class="modal-bd"><div class="form-row"><div class="form-grp" style="grid-column:1/-1"><label>Nome do Produto</label><input class="form-in" id="pf_n" value="${ed?p.n:''}" placeholder="Ex: Whey Protein Concentrado 900g"></div><div class="form-grp"><label>Categoria</label><input class="form-in" id="pf_cat" value="${ed?p.cat:''}" placeholder="Ex: Proteínas"></div><div class="form-grp"><label>Marca</label><input class="form-in" id="pf_br" value="${ed?p.br:''}" placeholder="Ex: Max Titanium"></div><div class="form-grp"><label>Código / SKU</label><input class="form-in" id="pf_sku" value="${ed?p.sku:''}" placeholder="Ex: WHEY-001"></div><div class="form-grp"><label>Preço de Custo (R$)</label><input type="number" class="form-in" id="pf_cost" value="${ed?p.cost:''}" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Preço de Venda (R$)</label><input type="number" class="form-in" id="pf_prc" value="${ed?p.prc:''}" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>${ed?'Quantidade Atual':'Quantidade Inicial'}</label><input type="number" class="form-in" id="pf_q" value="${ed?p.q:'0'}" ${ed?'readonly':''}></div><div class="form-grp"><label>Estoque Mínimo</label><input type="number" class="form-in" id="pf_mn" value="${ed?p.mn:'15'}" min="0"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="pf_sup" value="${ed?p.sup:''}" placeholder="Fornecedor"></div><div class="form-grp"><label>Lote</label><input class="form-in" id="pf_lot" value="${ed?p.lot:''}" placeholder="Ex: LT2607-01"></div><div class="form-grp"><label>Validade</label><input type="date" class="form-in" id="pf_exp" value="${ed&&p.exp?p.exp:''}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="pf_note" value="${ed&&p.note?p.note:''}" placeholder="Sabores, variações..."></div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svP(${ed?id:'null'})">${ed?'Salvar Alterações':'Cadastrar Produto'}</button></div>`)}
 function svP(id){let o={n:document.getElementById('pf_n').value.trim(),cat:document.getElementById('pf_cat').value.trim(),br:document.getElementById('pf_br').value.trim(),sku:document.getElementById('pf_sku').value.trim(),cost:parseFloat(document.getElementById('pf_cost').value)||0,prc:parseFloat(document.getElementById('pf_prc').value)||0,q:parseInt(document.getElementById('pf_q').value)||0,mn:parseInt(document.getElementById('pf_mn').value)||0,sup:document.getElementById('pf_sup').value.trim(),lot:document.getElementById('pf_lot').value.trim(),exp:document.getElementById('pf_exp').value,note:document.getElementById('pf_note').value.trim()};if(!o.n){to('Nome do produto é obrigatório');return}if(id){Object.assign(gP(id),o)}else{D.prod.push({id:D.nx.p++,cr:new Date().toISOString().split('T')[0],...o})}sv(D);clM();go('prod');to(id?'Produto atualizado':'Produto cadastrado')}
 function delP(id){if(!confirm('Excluir este produto? Esta ação não pode ser desfeita.'))return;D.prod=D.prod.filter(p=>p.id!==id);D.mov=D.mov.filter(m=>m.pid!==id);sv(D);go('prod');to('Produto excluído')}
 
-function opM(pid,tp){D=ld();let p=gP(pid);document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>${tp==='in'?'📥 Entrada':'📤 Saída'} — ${p.n}</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><p style="margin-bottom:14px;font-size:12.5px;color:var(--muted)">Estoque atual: <strong>${p.q} unidades</strong></p><div class="form-row"><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="mf_q" min="1" max="${tp==='out'?p.q:''}" placeholder="Quantidade"></div>${tp==='in'?`<div class="form-grp"><label>Valor Total (R$)</label><input type="number" class="form-in" id="mf_val" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="mf_sup" value="${p.sup}"></div>`:`<div class="form-grp"><label>Motivo</label><select class="form-in form-sel" id="mf_rs"><option value="venda">Venda</option><option value="perda">Perda / Vencimento</option><option value="uso">Uso Interno</option><option value="ajuste">Ajuste</option></select></div>`}<div class="form-grp"><label>Data</label><input type="date" class="form-in" id="mf_date" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="mf_note" placeholder="Opcional"></div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn ${tp==='in'?'btn-g':'btn-d'}" onclick="svM(${pid},'${tp}')">${tp==='in'?'Registrar Entrada':'Registrar Saída'}</button></div>`}
+function opM(pid,tp){D=ld();let p=gP(pid);openDialog(`<div class="modal-hd"><h3 id="dialogTitle">${tp==='in'?'📥 Entrada':'📤 Saída'} — ${p.n}</h3><button class="btn btn-gh btn-sm" onclick="clM()" aria-label="Fechar">✕</button></div><div class="modal-bd"><p style="margin-bottom:14px;font-size:12.5px;color:var(--muted)">Estoque atual: <strong>${p.q} unidades</strong></p><div class="form-row"><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="mf_q" min="1" max="${tp==='out'?p.q:''}" placeholder="Quantidade"></div>${tp==='in'?`<div class="form-grp"><label>Valor Total (R$)</label><input type="number" class="form-in" id="mf_val" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="mf_sup" value="${p.sup}"></div>`:`<div class="form-grp"><label>Motivo</label><select class="form-in form-sel" id="mf_rs"><option value="venda">Venda</option><option value="perda">Perda / Vencimento</option><option value="uso">Uso Interno</option><option value="ajuste">Ajuste</option></select></div>`}<div class="form-grp"><label>Data</label><input type="date" class="form-in" id="mf_date" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="mf_note" placeholder="Opcional"></div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn ${tp==='in'?'btn-g':'btn-d'}" onclick="svM(${pid},'${tp}')">${tp==='in'?'Registrar Entrada':'Registrar Saída'}</button></div>`)}
 function svM(pid,tp){let q=parseInt(document.getElementById('mf_q').value)||0;if(q<=0){to('Quantidade inválida');return}let p=gP(pid);if(tp==='out'&&q>p.q){to('Quantidade maior que o estoque');return}p.q+=tp==='in'?q:-q;D.mov.push({id:D.nx.m++,pid,tp,qty:q,val:tp==='in'?(parseFloat(document.getElementById('mf_val')?.value)||0):0,date:document.getElementById('mf_date').value,sup:tp==='in'?(document.getElementById('mf_sup')?.value?.trim()||''):'',note:document.getElementById('mf_note').value.trim(),rs:tp==='out'?document.getElementById('mf_rs').value:''});sv(D);clM();go(document.querySelector('.sidebar-link.active')?.dataset?.pg||'prod');to(`${tp==='in'?'Entrada':'Saída'} registrada com sucesso`)}
-function clM(){document.getElementById('mo').classList.remove('on');document.getElementById('mb').innerHTML=''}
+let modalTrigger = null;
+function openDialog(html) {
+  const overlay = document.getElementById('mo');
+  const body = document.getElementById('mb');
+  modalTrigger = document.activeElement;
+  body.innerHTML = html;
+  overlay.classList.add('on');
+  document.getElementById('mn').inert = true;
+  document.getElementById('sb').inert = true;
+  body.querySelector('.modal-hd button').focus();
+}
+function clM() {
+  const overlay = document.getElementById('mo');
+  if (!overlay.classList.contains('on')) return;
+  overlay.classList.remove('on');
+  document.getElementById('mb').innerHTML = '';
+  document.getElementById('mn').inert = false;
+  document.getElementById('sb').inert = false;
+  if (modalTrigger && modalTrigger.isConnected) modalTrigger.focus();
+  modalTrigger = null;
+}
+document.getElementById('mo').addEventListener('click', event => {
+  if (event.target === event.currentTarget) clM();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    clM();
+    tS(true);
+  }
+});
 document.getElementById('mo').addEventListener('click',function(e){if(e.target===this)clM()});
 
 function dEnt(r){D=ld();r.innerHTML=`<div class="fcard" style="max-width:700px;margin-bottom:20px"><h2>📥 Registrar Entrada de Estoque</h2><div class="form-row"><div class="form-grp" style="grid-column:1/-1"><label>Produto</label><select class="form-in form-sel" id="ei_p">${D.prod.map(p=>`<option value="${p.id}">${p.n} (Estoque: ${p.q})</option>`).join('')}</select></div><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="ei_q" min="1" placeholder="Qtd"></div><div class="form-grp"><label>Valor Total (R$)</label><input type="number" class="form-in" id="ei_val" step="0.01" placeholder="0,00"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="ei_sup" placeholder="Fornecedor"></div><div class="form-grp"><label>Data</label><input type="date" class="form-in" id="ei_date" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp" style="grid-column:1/-1"><label>Observação</label><input class="form-in" id="ei_note" placeholder="Opcional"></div></div><button class="btn btn-g" onclick="svE()" style="margin-top:8px">Registrar Entrada</button></div><div class="tcard"><div class="tcard-hd"><h2>Histórico de Entradas</h2></div><div class="twrap"><table><thead><tr><th>Data</th><th>Produto</th><th>Qtd</th><th>Valor</th><th>Fornecedor</th><th>Obs</th></tr></thead><tbody>${D.mov.filter(m=>m.tp==='in').slice(-10).reverse().map(m=>`<tr><td>${fD(m.date)}</td><td>${gPN(m.pid)}</td><td style="color:var(--green);font-weight:700">+${m.q}</td><td>${m.val?fR(m.val):'—'}</td><td>${m.sup||'—'}</td><td>${m.note||'—'}</td></tr>`).join('')}</tbody></table></div></div>`}
@@ -246,13 +355,13 @@ function esMax(){let s=document.getElementById('es_p'),mx=s.selectedOptions[0]?.
 function svS(){let pid=parseInt(document.getElementById('es_p').value),q=parseInt(document.getElementById('es_q').value)||0;if(q<=0){to('Quantidade inválida');return}let p=gP(pid);if(q>p.q){to('Estoque insuficiente');return}p.q-=q;D.mov.push({id:D.nx.m++,pid,tp:'out',q:q,date:document.getElementById('es_date').value,note:document.getElementById('es_note').value.trim(),rs:document.getElementById('es_rs').value});sv(D);go('sai');to(`-${q} unidades de ${p.n}`)}
 
 function dPed(r){D=ld();r.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px"><h2 style="font-size:15px;font-weight:700;color:var(--pri)">Pedidos de Reposição</h2><button class="btn btn-p btn-sm" onclick="opO()">+ Novo Pedido</button></div><div class="tcard"><div class="twrap"><table><thead><tr><th>#</th><th>Produto</th><th>Qtd</th><th>Fornecedor</th><th>Status</th><th>Data</th><th>Obs</th><th></th></tr></thead><tbody>${D.ord.map(o=>`<tr><td style="font-weight:700">#${o.id}</td><td style="font-weight:600">${o.pn}</td><td>${o.q}</td><td>${o.sup}</td><td><span class="badge ${o.st==='aprovado'?'badge-ok':o.st==='cancelado'?'badge-c':'badge-w'}">${o.st}</span></td><td>${fD(o.date)}</td><td>${o.note||'—'}</td><td>${o.st==='pendente'?`<button class="btn btn-gh btn-sm" onclick="upO(${o.id},'aprovado')">✅</button><button class="btn btn-gh btn-sm" onclick="upO(${o.id},'cancelado')">❌</button>`:''}<button class="btn btn-gh btn-sm" onclick="delO(${o.id})">🗑️</button></td></tr>`).join('')}</tbody></table></div></div>`}
-function opO(){document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>Novo Pedido</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><div class="form-grp"><label>Produto</label><select class="form-in form-sel" id="of_p">${D.prod.map(p=>`<option value="${p.n}">${p.n}</option>`).join('')}</select></div><div class="form-row"><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="of_q" min="1"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="of_sup"></div></div><div class="form-grp"><label>Observação</label><input class="form-in" id="of_note"></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svO()">Criar Pedido</button></div>`}
+function opO(){openDialog(`<div class="modal-hd"><h3 id="dialogTitle">Novo Pedido</h3><button class="btn btn-gh btn-sm" onclick="clM()" aria-label="Fechar">✕</button></div><div class="modal-bd"><div class="form-grp"><label>Produto</label><select class="form-in form-sel" id="of_p">${D.prod.map(p=>`<option value="${p.n}">${p.n}</option>`).join('')}</select></div><div class="form-row"><div class="form-grp"><label>Quantidade</label><input type="number" class="form-in" id="of_q" min="1"></div><div class="form-grp"><label>Fornecedor</label><input class="form-in" id="of_sup"></div></div><div class="form-grp"><label>Observação</label><input class="form-in" id="of_note"></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svO()">Criar Pedido</button></div>`)}
 function svO(){let n=document.getElementById('of_p').value,q=parseInt(document.getElementById('of_q').value)||0;if(!n||q<=0){to('Preencha os campos');return}D.ord.push({id:D.nx.o++,pn:n,q,sup:document.getElementById('of_sup').value.trim()||'—',st:'pendente',date:new Date().toISOString().split('T')[0],note:document.getElementById('of_note').value.trim()});sv(D);clM();go('ped');to('Pedido criado')}
 function upO(id,s){let o=D.ord.find(o=>o.id===id);if(o)o.st=s;sv(D);go('ped');to(s==='aprovado'?'Aprovado':'Cancelado')}
 function delO(id){D.ord=D.ord.filter(o=>o.id!==id);sv(D);go('ped');to('Excluído')}
 
 function dPromo(r){D=ld();r.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px"><h2 style="font-size:15px;font-weight:700;color:var(--pri)">Promoções Ativas</h2><button class="btn btn-p btn-sm" onclick="opPR()">+ Nova Promoção</button></div>${D.promo.map(pr=>`<div class="alert-row info" style="margin-bottom:10px"><div class="ai">🏷️</div><div class="ac"><h4>${pr.name} — ${pr.tp==='pct'?pr.val+'%':fR(pr.val)} OFF</h4><p>${pr.pids.length} produtos · ${fD(pr.start)} até ${fD(pr.end)} · ${pr.active?'✅ Ativa':'⏸️ Pausada'}</p></div><button class="btn btn-gh btn-sm" onclick="delPR(${pr.id})">🗑️</button></div>`).join('')}`}
-function opPR(){D=ld();document.getElementById('mo').classList.add('on');document.getElementById('mb').innerHTML=`<div class="modal-hd"><h3>Nova Promoção</h3><button class="btn btn-gh btn-sm" onclick="clM()">✕</button></div><div class="modal-bd"><div class="form-grp"><label>Nome da Promoção</label><input class="form-in" id="pr_n" placeholder="Ex: Black Friday Whey"></div><div class="form-row"><div class="form-grp"><label>Tipo de Desconto</label><select class="form-in form-sel" id="pr_tp"><option value="pct">Porcentagem (%)</option><option value="fix">Valor Fixo (R$)</option></select></div><div class="form-grp"><label>Valor</label><input type="number" class="form-in" id="pr_v" min="1" placeholder="Ex: 15"></div></div><div class="form-row"><div class="form-grp"><label>Data Início</label><input type="date" class="form-in" id="pr_s" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp"><label>Data Fim</label><input type="date" class="form-in" id="pr_e"></div></div><div class="form-grp"><label>Produtos na Promoção</label><div style="max-height:180px;overflow-y:auto;border:1.5px solid var(--border);border-radius:var(--radius);padding:10px">${D.prod.map(p=>`<label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;cursor:pointer"><input type="checkbox" value="${p.id}" class="pr_ch">${p.n} (${p.cat})</label>`).join('')}</div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svPR()">Criar Promoção</button></div>`}
+function opPR(){D=ld();openDialog(`<div class="modal-hd"><h3 id="dialogTitle">Nova Promoção</h3><button class="btn btn-gh btn-sm" onclick="clM()" aria-label="Fechar">✕</button></div><div class="modal-bd"><div class="form-grp"><label>Nome da Promoção</label><input class="form-in" id="pr_n" placeholder="Ex: Black Friday Whey"></div><div class="form-row"><div class="form-grp"><label>Tipo de Desconto</label><select class="form-in form-sel" id="pr_tp"><option value="pct">Porcentagem (%)</option><option value="fix">Valor Fixo (R$)</option></select></div><div class="form-grp"><label>Valor</label><input type="number" class="form-in" id="pr_v" min="1" placeholder="Ex: 15"></div></div><div class="form-row"><div class="form-grp"><label>Data Início</label><input type="date" class="form-in" id="pr_s" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-grp"><label>Data Fim</label><input type="date" class="form-in" id="pr_e"></div></div><div class="form-grp"><label>Produtos na Promoção</label><div style="max-height:180px;overflow-y:auto;border:1.5px solid var(--border);border-radius:var(--radius);padding:10px">${D.prod.map(p=>`<label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;cursor:pointer"><input type="checkbox" value="${p.id}" class="pr_ch">${p.n} (${p.cat})</label>`).join('')}</div></div></div><div class="modal-ft"><button class="btn btn-o" onclick="clM()">Cancelar</button><button class="btn btn-p" onclick="svPR()">Criar Promoção</button></div>`)}
 function svPR(){let n=document.getElementById('pr_n').value.trim(),tp=document.getElementById('pr_tp').value,v=parseFloat(document.getElementById('pr_v').value)||0,s=document.getElementById('pr_s').value,e=document.getElementById('pr_e').value;if(!n||v<=0||!e){to('Preencha todos os campos');return}let ids=Array.from(document.querySelectorAll('.pr_ch:checked')).map(c=>parseInt(c.value));if(ids.length===0){to('Selecione ao menos 1 produto');return}D.promo.push({id:D.nx.pr++,name:n,tp,val:v,start:s,end:e,pids:ids,active:true});sv(D);clM();go('promo');to('Promoção criada')}
 function delPR(id){D.promo=D.promo.filter(p=>p.id!==id);sv(D);go('promo');to('Removida')}
 
@@ -270,7 +379,7 @@ function fP(q){let l=q.toLowerCase(),m=D.prod.find(p=>p.n.toLowerCase()===l);if(
 function aiC(){if(!pending)return;let a=pending;D=ld();let p=gP(a.pid);if(a.tp==='in'){p.q+=a.q;D.mov.push({id:D.nx.m++,pid:a.pid,tp:'in',q:a.q,val:0,date:new Date().toISOString().split('T')[0],sup:p.sup,note:'Assistente IA'})}else{p.q-=a.q;D.mov.push({id:D.nx.m++,pid:a.pid,tp:'out',q:a.q,date:new Date().toISOString().split('T')[0],note:'Assistente IA',rs:a.rs})}sv(D);pending=null;let ms=document.getElementById('msgs');ms.innerHTML+=`<div class="aim ast">✅ ${a.tp==='in'?'+'+a.q:'-'+a.q} un. de <strong>${p.n}</strong>. Estoque atual: <strong>${p.q}</strong> un.</div>`;ms.scrollTop=ms.scrollHeight;to('Registrado via IA')}
 function aiX(){pending=null;let ms=document.getElementById('msgs');ms.innerHTML+=`<div class="aim ast">Cancelado. Nenhuma alteração foi feita.</div>`;ms.scrollTop=ms.scrollHeight}
 
-function dRel(r){D=ld();let tv=D.prod.reduce((s,p)=>s+(p.q*p.cost),0),lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn).length,ze=D.prod.filter(p=>p.q===0).length;let oc={};D.mov.filter(m=>m.tp==='out').forEach(m=>{oc[m.pid]=(oc[m.pid]||0)+m.q});let top=Object.entries(oc).sort((a,b)=>b[1]-a[1]).slice(0,6);let im={};D.mov.filter(m=>m.tp==='in').forEach(m=>{let mo=m.date.substring(0,7);im[mo]=(im[mo]||0)+m.q});let om={};D.mov.filter(m=>m.tp==='out').forEach(m=>{let mo=m.date.substring(0,7);om[mo]=(om[mo]||0)+m.q});let months=[...new Set([...Object.keys(im),...Object.keys(om)])].sort();r.innerHTML=`<div class="stats"><div class="scard"><div class="si g">💰</div><div class="sd"><h3>Valor Total</h3><div class="vl">${fR(tv)}</div></div></div><div class="scard"><div class="si a">⚠️</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div></div></div><div class="scard"><div class="si r">🚫</div><div class="sd"><h3>Zerados</h3><div class="vl">${ze}</div></div></div><div class="scard"><div class="si p">📦</div><div class="sd"><h3>Cadastrados</h3><div class="vl">${D.prod.length}</div></div></div></div><div class="chart-row"><div class="ccard"><h3>Produtos com Mais Saída</h3><div style="height:240px"><canvas id="ch1"></canvas></div></div><div class="ccard"><h3>Entradas vs Saídas por Mês</h3><div style="height:240px"><canvas id="ch2"></canvas></div></div></div><div class="ccard" style="margin-bottom:22px"><h3>Estoque por Produto</h3>${D.prod.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="flex:1;min-width:120px">${p.n}</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;max-width:140px"><div style="height:100%;background:${p.q===0?'var(--red)':p.q<=p.mn?'var(--amber)':'var(--green)'};width:${Math.min(100,(p.q/Math.max(p.mn,1))*100)}%"></div></div><span style="color:var(--muted);min-width:70px;text-align:right;font-weight:600">${p.q}/${p.mn}</span></div>`).join('')}</div>`;setTimeout(()=>{let c1=document.getElementById('ch1');if(c1)new Chart(c1,{type:'bar',data:{labels:top.map(d=>gPN(parseInt(d[0]))),datasets:[{label:'Unidades',data:top.map(d=>d[1]),backgroundColor:'#141414',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});let c2=document.getElementById('ch2');if(c2)new Chart(c2,{type:'line',data:{labels:months,datasets:[{label:'Entradas',data:months.map(m=>im[m]||0),borderColor:'#F4C430',backgroundColor:'rgba(107,142,90,.1)',fill:true,tension:.3},{label:'Saídas',data:months.map(m=>om[m]||0),borderColor:'#BE2323',backgroundColor:'rgba(184,69,58,.1)',fill:true,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}})},200)}
+function dRel(r){D=ld();let tv=D.prod.reduce((s,p)=>s+(p.q*p.cost),0),lo=D.prod.filter(p=>p.q>0&&p.q<=p.mn).length,ze=D.prod.filter(p=>p.q===0).length;let oc={};D.mov.filter(m=>m.tp==='out').forEach(m=>{oc[m.pid]=(oc[m.pid]||0)+m.q});let top=Object.entries(oc).sort((a,b)=>b[1]-a[1]).slice(0,6);let im={};D.mov.filter(m=>m.tp==='in').forEach(m=>{let mo=m.date.substring(0,7);im[mo]=(im[mo]||0)+m.q});let om={};D.mov.filter(m=>m.tp==='out').forEach(m=>{let mo=m.date.substring(0,7);om[mo]=(om[mo]||0)+m.q});let months=[...new Set([...Object.keys(im),...Object.keys(om)])].sort();r.innerHTML=`<div class="stats"><div class="scard"><div class="si g">${NE.ic('money')}</div><div class="sd"><h3>Valor Total</h3><div class="vl">${fR(tv)}</div></div></div><div class="scard"><div class="si a">${NE.ic('alert')}</div><div class="sd"><h3>Estoque Baixo</h3><div class="vl">${lo}</div></div></div><div class="scard"><div class="si r">${NE.ic('ban')}</div><div class="sd"><h3>Zerados</h3><div class="vl">${ze}</div></div></div><div class="scard"><div class="si p">${NE.ic('box')}</div><div class="sd"><h3>Cadastrados</h3><div class="vl">${D.prod.length}</div></div></div></div><div class="chart-row"><div class="ccard"><h3>Produtos com Mais Saída</h3><div style="height:240px"><canvas id="ch1"></canvas></div></div><div class="ccard"><h3>Entradas vs Saídas por Mês</h3><div style="height:240px"><canvas id="ch2"></canvas></div></div></div><div class="ccard" style="margin-bottom:22px"><h3>Estoque por Produto</h3>${D.prod.map(p=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="flex:1;min-width:120px">${p.n}</span><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;max-width:140px"><div style="height:100%;background:${p.q===0?'var(--red)':p.q<=p.mn?'var(--amber)':'var(--green)'};width:${Math.min(100,(p.q/Math.max(p.mn,1))*100)}%"></div></div><span style="color:var(--muted);min-width:70px;text-align:right;font-weight:600">${p.q}/${p.mn}</span></div>`).join('')}</div>`;setTimeout(()=>{if(typeof Chart==='undefined'){for(const id of ['ch1','ch2']){const canvas=document.getElementById(id);if(canvas){canvas.parentElement.className='empty';canvas.parentElement.textContent='Gráfico indisponível. Verifique a conexão.'}}return}if(matchMedia('(prefers-reduced-motion:reduce)').matches)Chart.defaults.animation=false;let c1=document.getElementById('ch1');if(c1)new Chart(c1,{type:'bar',data:{labels:top.map(d=>gPN(parseInt(d[0]))),datasets:[{label:'Unidades',data:top.map(d=>d[1]),backgroundColor:'#141414',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});let c2=document.getElementById('ch2');if(c2)new Chart(c2,{type:'line',data:{labels:months,datasets:[{label:'Entradas',data:months.map(m=>im[m]||0),borderColor:'#F4C430',backgroundColor:'rgba(107,142,90,.1)',fill:true,tension:.3},{label:'Saídas',data:months.map(m=>om[m]||0),borderColor:'#BE2323',backgroundColor:'rgba(184,69,58,.1)',fill:true,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}})},200)}
 
 function dFifo(r){D=ld();let srt=[...D.prod].sort((a,b)=>{if(!a.exp)return 1;if(!b.exp)return -1;return new Date(a.exp+'T00:00:00')-new Date(b.exp+'T00:00:00')});let nr=srt.filter(p=>{if(!p.exp)return false;let d=new Date(p.exp+'T00:00:00'),n=new Date();n.setMonth(n.getMonth()+2);return d<=n&&p.q>0});r.innerHTML=`<div class="fifo-alert"><div class="fa-icon">⏳</div><div><h3>FIFO — Primeiro que Vence, Primeiro que Sai</h3><p>O sistema organiza automaticamente os produtos por data de validade. ${nr.length} produtos vencem em até 2 meses — priorize a venda para evitar prejuízo com descontos forçados.</p></div></div><div class="tcard"><div class="tcard-hd"><h2>Produtos Ordenados por Validade</h2></div><div class="twrap"><table><thead><tr><th>#</th><th>Produto</th><th>Lote</th><th>Validade</th><th>Estoque</th><th>Dias</th><th>Status</th></tr></thead><tbody>${srt.map((p,i)=>{let dias=p.exp?Math.ceil((new Date(p.exp+'T00:00:00')-new Date())/(1000*60*60*24)):null;return`<tr><td style="font-weight:800;color:${i<3?'var(--red)':i<6?'var(--amber)':'var(--muted)'}">#${i+1}</td><td style="font-weight:600">${p.n}</td><td>${p.lot}</td><td>${p.exp?fD(p.exp):'—'}</td><td>${p.q}</td><td>${dias!==null?dias+' dias':'—'}</td><td><span class="badge ${p.q===0?'badge-c':i<3?'badge-c':i<6?'badge-w':'badge-ok'}">${p.q===0?'Zerado':i<3?'Urgente':i<6?'Atenção':'OK'}</span></td></tr>`}).join('')}</tbody></table></div></div>`}
 

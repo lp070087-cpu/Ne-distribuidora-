@@ -79,6 +79,27 @@ footer{background:var(--blk);color:rgba(255,255,255,.35);text-align:center;paddi
 
 @media(max-width:768px){.hero{padding:46px 14px 36px}.section{padding:40px 14px}.flow-steps{gap:8px}.flow-step{min-width:110px;padding:14px 10px}}
 @media(max-width:420px){.flow-step{min-width:80px;padding:10px 8px}.flow-arrow{font-size:14px}}
+.hero,.company-section{padding-block:clamp(44px,7vw,84px)}
+.hero::before{content:none}
+.hero h1,.section-title,.cta-section h2{text-wrap:balance}
+.hero .hero-sub,.section-desc{text-wrap:pretty}
+.hero .hero-sub,.hero-stat span,.company-stat .lab,.company-info{color:#c4c4c4}
+.section{padding-block:clamp(40px,6vw,68px)}
+.feature-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.tech-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.feature-card,.tech-card,.flow-step{border-width:1px}
+.feature-card p,.tech-card p{font-size:13px;line-height:1.6}
+.btn-gld,.btn-blk{min-height:44px;justify-content:center;text-align:center}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold-text);outline-offset:4px}
+@media(max-width:580px){
+  .flow-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .flow-step{min-width:0;max-width:none;padding:14px 10px}
+  .flow-arrow{display:none}
+  .hero-stats,.company-stats{gap:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
 </style>
 </head>
 <body>
@@ -189,23 +210,20 @@ footer{background:var(--blk);color:rgba(255,255,255,.35);text-align:center;paddi
 <footer>UNITRIX · CNPJ 66.438.449/0001-44 · CEO Lucas Pereira Muniz · MaxDistrib Projeto · Julho 2026</footer>
 
 <script>
-// Reveal animation
-var cards = document.querySelectorAll('.feature-card, .tech-card, .flow-step');
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-}, { threshold: 0.1 });
-
-cards.forEach(function(card) {
-  card.style.opacity = '0';
-  card.style.transform = 'translateY(18px)';
-  card.style.transition = 'opacity .5s ease, transform .5s ease';
-  observer.observe(card);
-});
+const motion = matchMedia('(prefers-reduced-motion: no-preference)');
+if ('IntersectionObserver' in window && 'animate' in Element.prototype && motion.matches) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(({isIntersecting, target}) => {
+      if (!isIntersecting) return;
+      observer.unobserve(target);
+      if (motion.matches) {
+        target.animate([{opacity:.65,translate:'0 8px'},{opacity:1,translate:'0 0'}],
+          {duration:280,easing:'ease-out'});
+      }
+    });
+  }, {threshold:.12});
+  document.querySelectorAll('.feature-card, .tech-card').forEach(card => observer.observe(card));
+}
 </script>
 </body>
 </html>

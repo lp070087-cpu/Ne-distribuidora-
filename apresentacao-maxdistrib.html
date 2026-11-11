@@ -183,6 +183,35 @@ body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height
   .hero-meta{gap:16px}
   .hero-meta-item strong{font-size:18px}
 }
+.hero{padding-block:clamp(48px,8vw,104px);background:var(--blue)}
+.hero::before,.hero::after,.cta::before{content:none}
+.hero h1,.section-title,.cta h2{text-wrap:balance}
+.hero .hero-sub,.section-desc{line-height:1.7;text-wrap:pretty}
+.hero-meta{gap:clamp(16px,4vw,40px)}
+.hero-meta-item span,.module-visual-inner.dark .module-screen-title,.module-visual-inner.dark .screen-info span{color:#c4c4c4}
+.section,.module-section{padding-block:clamp(42px,7vw,82px)}
+.arch-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.feat-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.screen-map{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.module-grid>*{min-width:0}
+.module-visual-inner,.arch-card,.feat-card,.screen-group{border-width:1px;box-shadow:none}
+.arch-card:hover,.feat-card:hover,.flow-step:hover{box-shadow:0 4px 14px rgb(0 0 0 / .07)}
+.btn-primary,.btn-ghost{min-height:44px;justify-content:center;text-align:center}
+.btn-primary:focus-visible,.btn-ghost:focus-visible,a:focus-visible{outline:3px solid var(--gold-text);outline-offset:4px}
+.cta{background:var(--blue)}
+@media(max-width:580px){
+  .flow-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .flow-step{min-width:0;max-width:none}
+  .flow-arrow{display:none}
+  .tech-table th,.tech-table td{overflow-wrap:anywhere}
+  .tech-table thead th,.tech-table tbody td{padding:8px;font-size:11px}
+  .chart-mock{padding:12px}
+  .chart-bar{gap:6px}
+  .chart-bar-label,.chart-bar-val{min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
 </style>
 </head>
 <body>
@@ -818,23 +847,20 @@ body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height
 </footer>
 
 <script>
-// Scroll reveal animation
-const cards = document.querySelectorAll('.arch-card, .phase-card, .feat-card, .flow-step, .screen-group');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
-  });
-}, { threshold: 0.1 });
-
-cards.forEach(card => {
-  card.style.opacity = '0';
-  card.style.transform = 'translateY(20px)';
-  card.style.transition = 'opacity .5s ease, transform .5s ease';
-  observer.observe(card);
-});
+const motion = matchMedia('(prefers-reduced-motion: no-preference)');
+if ('IntersectionObserver' in window && 'animate' in Element.prototype && motion.matches) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(({isIntersecting, target}) => {
+      if (!isIntersecting) return;
+      observer.unobserve(target);
+      if (motion.matches) {
+        target.animate([{opacity:.65,translate:'0 8px'},{opacity:1,translate:'0 0'}],
+          {duration:280,easing:'ease-out'});
+      }
+    });
+  }, {threshold:.12});
+  document.querySelectorAll('.arch-card, .feat-card, .screen-group').forEach(card => observer.observe(card));
+}
 </script>
 </body>
 </html>
