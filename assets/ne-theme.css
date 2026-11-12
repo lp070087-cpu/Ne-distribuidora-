@@ -3,10 +3,10 @@
   --brand-primary: #DBA982;
   --brand-secondary: var(--ne-primary-soft);
   --brand-accent: var(--brand-primary);
-  --brand-background: color-mix(in srgb, var(--brand-primary) 38%, white);
-  --brand-header: var(--brand-primary);
-  --brand-surface: color-mix(in srgb, var(--brand-primary) 14%, white);
-  --brand-footer: var(--brand-primary);
+  --brand-background: #FFFCF9;
+  --brand-header: #FFFDFB;
+  --brand-surface: #FFFFFF;
+  --brand-footer: #F6F0EA;
   --brand-text: #302018;
   --brand-muted: #593E30;
   --brand-white: #FFFFFF;
@@ -14,14 +14,17 @@
   --brand-primary-text: #593824;
 
   /* Superfícies claras de apoio e estados operacionais do projeto. */
-  --brand-border: color-mix(in srgb, var(--brand-text) 26%, var(--brand-background));
+  --brand-border: #E5D9CE;
+  --brand-control-border: #927A69;
+  --ne-cream: #F9F4EE;
+  --ne-beige: #F3E5D8;
   --ne-light: #FAF8F6;
   --ne-light-alt: #F1ECE7;
   --ne-light-border: #E5DCD4;
   --ne-light-muted: #625850;
   --ne-primary-hover: color-mix(in srgb, var(--brand-primary) 82%, var(--brand-primary-text));
-  --ne-primary-soft: color-mix(in srgb, var(--brand-primary) 24%, var(--brand-text));
-  --ne-focus: rgb(219 169 130 / 55%);
+  --ne-primary-soft: var(--ne-beige);
+  --ne-focus: rgb(89 56 36 / 20%);
   --ne-success: #1C7345;
   --ne-success-bg: #E8F4ED;
   --ne-warning: #8F5B00;

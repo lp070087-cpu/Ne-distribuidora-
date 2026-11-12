@@ -63,7 +63,7 @@
   }].filter(Boolean);
 
   function media(offer) {
-    if (offer.image) return '<div class="campaign-media campaign-media-cutout"><img src="' + escape(offer.image) + '" alt="' + escape(offer.n) + '" loading="lazy" decoding="async"></div>';
+    if (offer.image) return '<div class="campaign-media campaign-media-cutout"><img src="' + escape(offer.image) + '" alt="' + escape(offer.imageAlt || offer.n) + '" loading="lazy" decoding="async"></div>';
     if (!offer.sprite) return '';
     const { file, index, columns, rows } = offer.sprite;
     const x = (index % columns) * 100 / (columns - 1);
@@ -138,7 +138,8 @@
         normalize([offer.n, offer.br, offer.cat, group, offer.notes].join(' ')).includes(query);
     });
     grid.innerHTML = selected.slice(0, limit).map(function (offer) {
-      const original = Number.isFinite(offer.original) ? '<s aria-label="Preço anterior">' + money(offer.original) + '</s>' : '';
+      const savings = Number.isFinite(offer.original) && offer.original > offer.tiers[0].cash ? offer.original - offer.tiers[0].cash : 0;
+      const original = savings ? '<s aria-label="Preço anterior">' + money(offer.original) + '</s>' : '';
       const main = offer.tiers[0];
       const tiers = offer.tiers.slice(1).map(function (tier) {
         const card = Number.isFinite(tier.card) ? ' · ' + money(tier.card) + ' no cartão' : '';
@@ -148,7 +149,8 @@
       return '<article class="campaign-card" id="oferta-' + escape(offer.id) + '" tabindex="-1">' + media(offer) +
         '<div class="campaign-heading"><p class="campaign-meta">' + escape([offer.br, categoryOf(offer)].filter(Boolean).join(' · ')) + '</p>' +
         '<h3>' + escape(offer.n) + '</h3></div>' +
-        '<p class="campaign-price">' + original + '<strong>' + price(offer) + '</strong> <span>à vista</span></p>' +
+        '<p class="campaign-price">' + original + '<strong>' + price(offer) + '</strong> <span>à vista</span>' +
+        (savings ? '<span class="campaign-saving">Economize ' + money(savings) + '</span>' : '') + '</p>' +
         '<div class="campaign-details"><p class="campaign-condition">' + escape(main.condition) + '</p>' +
         (Number.isFinite(main.card) ? '<p class="campaign-note">' + money(main.card) + ' no cartão</p>' : '') +
         (tiers ? '<dl class="campaign-tiers" aria-label="Preços por volume">' + tiers + '</dl>' : '') +

@@ -2,15 +2,16 @@
 .ne-store .hd { box-shadow: 0 1px 0 var(--brand-border); }
 .ne-store .logo { display: inline-flex; width: max-content; max-width: 100%; padding: 6px 8px; border-radius: 5px; background: var(--brand-white); }
 .ne-logo { width: clamp(105px, 13vw, 174px); height: auto; object-fit: contain; }
-.ne-store .srch input { background: var(--brand-secondary); border-color: var(--brand-border); color: var(--brand-text); }
+.ne-store .srch input { background: var(--ne-cream); border-color: var(--brand-control-border); color: var(--brand-text); }
 .ne-store .srch input::placeholder, .ne-store .srch .ic { color: var(--brand-muted); }
 .ne-store .srch input:focus { border-color: var(--brand-primary-text); box-shadow: 0 0 0 2px var(--ne-focus); }
 .ne-store .ha-btn { color: var(--brand-text); }
 .ne-store .ha-btn:hover, .ne-store .ha .btn:hover { background: var(--brand-secondary); }
-.ne-store .ha .btn { border-color: var(--brand-border); }
+.ne-store .ha .btn { border-color: transparent; }
 .ne-store .ha-badge { box-shadow: 0 0 0 2px var(--brand-header); }
 .ne-store .hd :focus-visible { outline-color: var(--brand-primary-text); }
-.ne-store .intro, .ne-store #cat { background: var(--brand-secondary); color: var(--brand-text); }
+.ne-store .intro { background: var(--brand-surface); border-block: 1px solid var(--brand-border); }
+.ne-store #cat { background: var(--brand-background); color: var(--brand-text); }
 .ne-store #cat .sec-tt { color: var(--brand-text); }
 .ne-store #cat .sec-ey, .ne-combos .sec-ey { color: var(--brand-primary-text); }
 .ne-store .tb, .ne-store .intro h1, .ne-store .offers .sec-tt, .ne-store .foot h4 { color: var(--brand-text); }
@@ -19,14 +20,14 @@
 .ne-store .mob-m { border-color: var(--brand-border); }
 .ne-store .mob-m a:hover, .ne-store .intro .btn-o:hover { background: var(--brand-secondary); }
 .ne-store .intro p, .ne-store .offers p.sub { color: var(--brand-muted); }
-.ne-store .intro .btn-o { color: var(--brand-text); border-color: var(--brand-primary-text); }
+.ne-store .intro .btn-o { color: var(--brand-text); border-color: var(--brand-control-border); }
 .ne-store .foot { background: var(--brand-footer); }
 .ne-store .foot, .ne-store .foot a, .ne-store .foot .lk, .ne-store .foot-bt { color: var(--brand-text); }
 .ne-store .foot a:hover, .ne-store .foot .lk:hover { text-decoration: underline; }
 .ne-store .foot-bt { border-color: var(--brand-border); }
 .ne-store .sec-tt { line-height: 1.15; letter-spacing: -.025em; }
 .ne-store .demo-category-grid { margin-bottom: 16px; }
-.ne-store .pimg { background: var(--ne-light); }
+.ne-store .pimg { background: var(--brand-surface); }
 .ne-store .pbody { padding: 12px; }
 .ne-store .pbrand { min-height: 1.3em; }
 .ne-store .pname { min-height: 3.85em; line-height: 1.3; font-size: .94rem; }
@@ -40,7 +41,7 @@
 .ne-combos .combo-desc { min-height: 2.9em; }
 .ne-combos .combo-card .btn { margin-top: auto; min-height: 44px; }
 .demo-combo-note, .ne-accessories p { color: var(--brand-muted); margin-top: 5px; }
-.ne-accessories { background: var(--brand-secondary); }
+.ne-accessories { background: var(--ne-cream); }
 .ne-accessory-note { padding: 16px; border: 1px solid var(--brand-border); border-radius: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: var(--brand-surface); }
 .ne-accessory-note h3 { color: var(--brand-text); font-size: 1.05rem; }
 .ne-accessory-note p { max-width: 65ch; }
@@ -58,7 +59,7 @@
 
 @media (max-width: 600px) {
   .ne-store .ha-btn { padding: 0 7px; }
-  .ne-store .cat-grid.demo-category-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; }
+  .ne-store .cat-grid.demo-category-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
   .ne-store .demo-category-grid .cat-c { padding: 9px; }
   .ne-store .demo-category-grid .cat-c h3 { font-size: .88rem; }
   .ne-store .demo-category-grid .cat-c img, .ne-store .demo-category-grid .go { display: none; }
@@ -68,4 +69,50 @@
   .ne-store .pbody .verified-offer { font-size: .78rem; }
   .ne-store .modal-ov { padding: 10px; }
   .ne-store .modal-bd { padding: 14px; }
+}
+
+html:has(.ne-store) { scroll-padding-top: 118px; }
+.ne-store .wrap { padding-inline: clamp(12px, 3vw, 32px); }
+.ne-store .tb { background: var(--ne-cream); }
+.ne-store .tb-in { min-height: 28px; text-align: center; }
+.ne-store .hd-in { min-height: 60px; gap: 8px clamp(10px, 2vw, 24px); }
+.ne-store .hd .logo { padding-inline: 0; background: transparent; }
+.ne-store .nav { border-top: 1px solid var(--brand-border); }
+.ne-store .nav-lk a { padding-block: 9px; }
+.ne-store .nav-lk a:hover, .ne-store .nav-lk a.ac { background: var(--ne-cream); color: var(--brand-text); }
+.ne-store .ha-btn { min-width: 44px; justify-content: center; }
+.ne-store .account-trigger { min-height: 44px; }
+.ne-store .intro .btn, .ne-store .sec-hd .btn { min-height: 44px; text-align: center; white-space: normal; }
+.ne-store .intro h1 { line-height: 1.2; }
+.ne-store .sec-hd p:not(.sec-ey) { margin-top: 6px; max-width: 66ch; }
+.ne-store .foot { border-top: 1px solid var(--brand-border); padding-top: clamp(22px, 4vw, 40px); }
+.ne-store .foot-in { gap: clamp(18px, 3vw, 38px); }
+.ne-store .foot h4 { margin-bottom: 5px; }
+.ne-store .foot li :is(a, button) { min-height: 36px; }
+.ne-store .combo-card { border: 1px solid var(--brand-border); }
+.ne-store .combo-img { background: var(--brand-surface); padding: 6px; }
+.ne-store .cart-ft { padding-bottom: max(var(--s4), env(safe-area-inset-bottom)); }
+.ne-store :is(.cart-sb, .modal) .btn { min-height: 44px; white-space: normal; }
+.ne-store .cart-qt button { width: 36px; height: 40px; }
+.ne-store .ne-account-links .btn { flex: 1 1 140px; }
+.ne-store .ne-order-list li > * { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 900px) {
+  html:has(.ne-store) { scroll-padding-top: 124px; }
+  .ne-store .nav { border-top: 0; }
+  .ne-store .hd-in { grid-template-columns: minmax(0, 1fr) auto; padding-block: 6px; }
+  .ne-store .ha { grid-column: 2; }
+  .ne-store .srch input { height: 44px; }
+  .ne-store .ha .account-trigger { display: inline-flex; width: 44px; margin-left: 0; padding: 0; background: transparent; border-color: transparent; }
+  .ne-store .account-trigger #ul { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+  .ne-store .mob-m { max-height: min(60dvh, 340px); overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (max-width: 600px) {
+  .ne-store .ha { gap: 0; }
+  .ne-store .intro-act .btn { flex-basis: 135px; }
+  .ne-store .foot li :is(a, button) { min-height: 44px; }
+  .ne-store .foot-in { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ne-store .foot-in > :last-child { grid-column: 1 / -1; }
+  .ne-store .cart-it, .ne-store .cart-ft { padding-inline: 12px; }
+  .ne-store .pname { min-height: 3.9em; }
+  .ne-store .fav { width: 44px; height: 44px; }
 }

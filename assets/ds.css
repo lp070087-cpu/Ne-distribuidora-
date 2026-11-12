@@ -4,7 +4,7 @@
 :root{
   --ink:var(--brand-text);--ink-2:var(--brand-muted);
   --paper:var(--brand-white);--canvas:var(--ne-light);--canvas-2:var(--ne-light-alt);
-  --line:var(--ne-light-border);--line-2:#D5C9BF;
+  --line:var(--ne-light-border);--line-2:var(--brand-control-border);
   --text:var(--brand-text);--muted:var(--ne-light-muted);--faint:#756A60;
   --gold:var(--brand-primary);--gold-2:var(--ne-primary-hover);--gold-soft:var(--ne-primary-soft);--gold-text:var(--brand-primary-text);
   --ok:var(--ne-success);--ok-bg:var(--ne-success-bg);
@@ -34,7 +34,7 @@ h1,h2,h3,h4{font-family:var(--ff-d);color:var(--ink);line-height:1.2;letter-spac
 .num{font-variant-numeric:tabular-nums}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 :focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:var(--r-sm)}
-.on-dark :focus-visible,.sidebar :focus-visible{outline-color:var(--gold)}
+.on-dark :focus-visible,.sidebar :focus-visible{outline-color:var(--brand-primary-text)}
 .skip{position:fixed;left:12px;top:-60px;z-index:1000;background:var(--brand-primary);color:var(--ink);padding:10px 14px;border-radius:var(--r);transition:top var(--t)}
 .skip:focus{top:12px}
 
@@ -102,7 +102,7 @@ h1,h2,h3,h4{font-family:var(--ff-d);color:var(--ink);line-height:1.2;letter-spac
 
 /* ===== Aplicação interna (estoque e vendedor) ===== */
 .app{background:var(--canvas)}
-.sidebar{width:248px;background:var(--brand-primary);color:var(--ink);position:fixed;inset:0 auto 0 0;z-index:100;display:flex;flex-direction:column;transition:transform var(--t) var(--ease)}
+.sidebar{width:248px;background:var(--ne-cream);border-right:1px solid var(--brand-border);color:var(--ink);position:fixed;inset:0 auto 0 0;z-index:100;display:flex;flex-direction:column;transition:transform var(--t) var(--ease)}
 .sidebar-head{height:60px;padding:0 var(--s4);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--brand-border)}
 .mk{width:32px;height:32px;background:var(--gold);color:var(--ink);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-weight:800;font-size:13px;flex:none}
 .sidebar-head strong{display:block;font-family:var(--ff-d);font-size:var(--fs-sm);font-weight:700;line-height:1.2}
@@ -111,7 +111,7 @@ h1,h2,h3,h4{font-family:var(--ff-d);color:var(--ink);line-height:1.2;letter-spac
 .sidebar-sec{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-muted);font-weight:600;padding:var(--s4) var(--s4) 6px}
 .sidebar-link{display:flex;align-items:center;gap:10px;min-height:38px;padding:0 10px;margin:1px var(--s2);width:calc(100% - 16px);border-radius:var(--r);font-size:var(--fs-sm);font-weight:500;color:var(--brand-muted);text-align:left;transition:background var(--t-fast),color var(--t-fast)}
 .sidebar-link:hover{background:var(--brand-border);color:var(--ink)}
-.sidebar-link.on{background:var(--brand-surface);color:var(--ink);font-weight:600}
+.sidebar-link.on{background:var(--ne-beige);color:var(--ink);font-weight:600}
 .sidebar-link .count{margin-left:auto;font-size:11px;font-weight:700;padding:0 6px;border-radius:var(--r-full);background:var(--brand-secondary);color:var(--ink);line-height:18px}
 .sidebar-link.on .count{background:var(--brand-secondary);color:var(--ink)}
 .sidebar-foot{padding:var(--s3) var(--s4);border-top:1px solid var(--brand-border);display:flex;align-items:center;gap:10px}
@@ -194,8 +194,8 @@ td.code{font-family:var(--mono);font-size:var(--fs-xs);color:var(--muted)}
 .notice p{font-size:var(--fs-xs);color:var(--muted);margin-top:2px}
 .group-t{display:flex;align-items:center;gap:var(--s2);font-size:var(--fs-sm);font-weight:600;color:var(--ink);margin:var(--s5) 0 var(--s2)}
 .group-t:first-child{margin-top:0}
-.banner{background:var(--brand-primary);color:var(--ink);border-radius:var(--r-lg);padding:var(--s4) var(--s5);display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s4)}
-.banner .ic{color:var(--gold)}.banner h3{color:#fff;font-size:var(--fs-md);margin-bottom:2px}.banner p{font-size:var(--fs-sm);color:rgba(255,255,255,.72)}
+.banner{background:var(--ne-cream);border:1px solid var(--brand-border);color:var(--ink);border-radius:var(--r-lg);padding:var(--s4) var(--s5);display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s4)}
+.banner .ic{color:var(--brand-primary-text)}.banner h3{color:var(--ink);font-size:var(--fs-md);margin-bottom:2px}.banner p{font-size:var(--fs-sm);color:var(--muted)}
 
 /* Assistente */
 .ai-chat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;height:calc(100dvh - 108px);min-height:420px;max-width:860px;margin:0 auto}

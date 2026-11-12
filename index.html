@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NE Distribuidora · Suplementos no atacado</title>
 <meta name="description" content="Veja as ofertas da Black Friday NE, as condições por quantidade e o catálogo demonstrativo de suplementos no atacado.">
-<meta name="theme-color" content="#141414">
+<meta name="theme-color" content="#FFFDFB">
 <link rel="icon" type="image/png" href="assets/ne-favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -217,7 +217,7 @@
 <body class="ne-store">
 <a class="skip" href="#todos">Ir para o catálogo</a>
 
-<div class="tb on-dark"><div class="wrap tb-in"><span>Suplementos para lojistas, academias e revendedores</span></div></div>
+<div class="tb"><div class="wrap tb-in"><span>Suplementos para lojistas, academias e revendedores</span></div></div>
 
 <header class="hd">
   <div class="wrap hd-in">
@@ -225,16 +225,16 @@
     <form class="srch" role="search" onsubmit="event.preventDefault();ft('',true);goCat()">
       <span data-ic="search"></span>
       <label class="sr" for="si">Buscar produtos</label>
-      <input type="search" id="si" placeholder="Produto, marca ou categoria" autocomplete="off" oninput="ft('',true)">
+      <input type="search" id="si" placeholder="Buscar produto, marca ou categoria" autocomplete="off" oninput="ft('',true)">
     </form>
     <div class="ha">
       <button class="ha-btn" onclick="showFavs()" aria-label="Produtos salvos"><span data-ic="heart" data-ic-cls="ic-lg" style="display:contents"></span><span class="lb">Salvos</span><span class="ha-badge" id="favBg">0</span></button>
       <button class="ha-btn" onclick="tCart()" aria-label="Abrir carrinho"><span data-ic="cart" data-ic-cls="ic-lg" style="display:contents"></span><span class="lb">Carrinho</span><span class="ha-badge" id="cartBg">0</span></button>
-      <button class="btn btn-p btn-sm" onclick="opL()"><span data-ic="user" data-ic-cls="ic-sm" style="display:contents"></span><span id="ul">Entrar</span></button>
+      <button class="btn btn-p btn-sm account-trigger" onclick="opL()" aria-label="Minha conta"><span data-ic="user" data-ic-cls="ic-sm" style="display:contents"></span><span id="ul">Entrar</span></button>
       <button class="ha-btn hamb" id="hb" onclick="tMob()" aria-label="Abrir menu" aria-expanded="false" aria-controls="mm"><span data-ic="menu" data-ic-cls="ic-lg" style="display:contents"></span></button>
     </div>
   </div>
-  <nav class="nav on-dark" aria-label="Principal">
+  <nav class="nav" aria-label="Principal">
     <div class="wrap nav-lk" id="navl"><a href="#inicio" class="ac">Início</a><a href="#combos-demo">Combos</a><a href="#mv">Destaques</a><a href="/ofertas">Ofertas</a><a href="#cat">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a></div>
     <div class="mob-m" id="mm"><a href="#inicio">Início</a><a href="#combos-demo">Combos</a><a href="#mv">Destaques</a><a href="/ofertas">Ofertas</a><a href="#cat">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a><a href="#" onclick="event.preventDefault();opL()">Entrar</a></div>
   </nav>
@@ -246,13 +246,13 @@
   <noscript><p class="wrap">Ative o JavaScript para navegar pelas ofertas e pelo catálogo.</p></noscript>
 </section>
 
-<section class="intro on-dark"><div class="wrap intro-in">
+<section class="intro"><div class="wrap intro-in">
   <div><h1>Suplementos no atacado</h1><p>Consulte ofertas por quantidade, marcas e condições de atacado.</p></div>
   <div class="intro-act"><a class="btn btn-g" href="#ofertas">Conferir ofertas</a><button class="btn btn-o" onclick="opL('revendedor')">Testar área do revendedor</button></div>
 </div></section>
 
 <section class="sec reveal" id="cat"><div class="wrap">
-  <div class="sec-hd"><div><p class="sec-ey">Categorias</p><h2 class="sec-tt">Categorias do catálogo comercial</h2></div></div>
+  <div class="sec-hd"><div><p class="sec-ey">Categorias</p><h2 class="sec-tt">Explore o catálogo comercial</h2></div></div>
   <div id="campaign-categories"></div>
 </div></section>
 
@@ -261,13 +261,15 @@
   <div class="pgrid" id="pgHot"></div>
 </div></section>
 
-<section class="offers on-dark campaign-section" id="ofertas" aria-labelledby="campaign-title"><div class="wrap">
+<section class="offers campaign-section" id="ofertas" aria-labelledby="campaign-title"><div class="wrap">
   <div class="offers-hd">
     <div><p class="sec-ey">Black Friday NE 2026</p><h2 class="sec-tt" id="campaign-title">Ofertas dos encartes</h2><p class="sub">Pedido mínimo de R$ 500 e cartão em até 6×. Os preços e as quantidades variam por oferta. Condições sujeitas à vigência da campanha e ao estoque. Confirme com a NE.</p></div>
     <a id="campaign-store" class="btn btn-g" href="https://www.nedistribuidora.com.br/" target="_blank" rel="noopener">Consultar loja oficial</a>
   </div>
+  <div class="campaign-tools">
   <div class="campaign-search"><label for="campaign-search">Buscar nas ofertas</label><input id="campaign-search" class="fi" type="search" placeholder="Produto, marca ou categoria" autocomplete="off"></div>
   <div class="campaign-controls" id="campaign-filters" aria-label="Filtrar ofertas"><button type="button" class="chip" data-kind="all">Todas</button><button type="button" class="chip" data-kind="product">Produtos</button><button type="button" class="chip" data-kind="combo">Combos</button><span class="campaign-count" id="campaign-count" role="status"></span></div>
+  </div>
   <div class="campaign-grid" id="campaign-grid"></div>
   <a class="btn btn-g campaign-more" id="campaign-more" href="/ofertas" hidden>Mostrar mais ofertas</a>
 </div></section>
@@ -279,17 +281,17 @@
   <div class="cat-grid demo-category-grid" id="cg" aria-label="Categorias demonstrativas"></div>
   <div class="pgrid" id="pgAll"></div>
 </div></section>
-<section class="sec ne-combos on-dark" id="combos-demo" aria-labelledby="demo-combos-title"><div class="wrap">
+<section class="sec ne-combos" id="combos-demo" aria-labelledby="demo-combos-title"><div class="wrap">
   <div class="sec-hd"><div><p class="sec-ey">Simulação de compra</p><h2 class="sec-tt" id="demo-combos-title">Combos de demonstração</h2><p class="demo-combo-note">Kits e preços simulados para testar o carrinho.</p></div><a class="btn btn-g" href="/ofertas?tipo=combo">Ver combos promocionais</a></div>
   <div class="combos-grid" id="combos"></div>
 </div></section>
-<section class="sec ne-accessories on-dark" id="acessorios" aria-labelledby="accessories-title"><div class="wrap">
+<section class="sec ne-accessories" id="acessorios" aria-labelledby="accessories-title"><div class="wrap">
   <div class="sec-hd"><div><h2 class="sec-tt" id="accessories-title">Camisas e Acessórios</h2><p>O catálogo ainda não tem peças e acessórios avulsos cadastrados.</p></div></div>
   <div class="ne-accessory-note"><div><h3>Coqueteleiras em combos</h3><p>Há coqueteleiras de 1 L e 720 ml como brinde em dois combos da campanha, conforme as condições de cada kit.</p></div><a class="btn btn-g" href="/ofertas?tipo=combo&amp;q=coqueteleira">Consultar combos com brinde</a></div>
 </div></section>
 </main>
 
-<footer class="foot on-dark"><div class="wrap">
+<footer class="foot"><div class="wrap">
   <div class="foot-in">
     <div><a href="#inicio" class="logo"><img class="ne-logo" src="assets/ne-logo.png" width="616" height="110" alt="NE Distribuidora"></a><p class="d">Suplementos para lojistas, academias e revendedores.</p></div>
     <div><h4>Categorias</h4><ul id="fcats"></ul></div>
