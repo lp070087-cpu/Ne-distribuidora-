@@ -1,0 +1,17 @@
+{
+  "name": "maxdistrib",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "test": "node --test",
+    "migrate": "node server/migrate.js",
+    "build": "node server/build.js",
+    "create-admin": "node server/create-admin.js"
+  },
+  "dependencies": {
+    "pg": "8.16.3"
+  }
+}
