@@ -21,3 +21,5 @@ Cadastre SKUs, disponibilidade e preços confirmados em Produtos e preços. A ba
 O checkout salva a solicitação com os preços revisados e o endereço da conta. O estoque é validado no envio e reservado na confirmação. A expedição baixa o saldo e a reserva na mesma transação. Cancelamentos antes do envio liberam a reserva. O histórico registra mudanças de status e movimentações.
 
 A automação testa uma instância PostgreSQL descartável. O teste não se conecta à produção nem envia e-mails. Execute `npm run build` para preparar os arquivos públicos em `dist`. As fontes do servidor e das migrações ficam fora da pasta pública.
+
+A validação no navegador usa `npm run test:browser` após o build, com PostgreSQL isolado. Para os endereços de estoque e vendedor, os atalhos operacionais aparecem somente com o portal habilitado.

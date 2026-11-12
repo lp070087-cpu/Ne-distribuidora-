@@ -343,7 +343,8 @@ async function formAction(form,data) {
     await api(action,data); account = await session();
     const hadItems=guestItems.size>0;
     await importGuest().catch(error=>notice(error.message,true));
-    go(hadItems && account?.role!=='ADMIN'?'carrinho':'inicio'); return;
+    const target=location.hash.slice(1);
+    go(account?.role==='ADMIN' && target.startsWith('admin-') ? target : hadItems && account?.role!=='ADMIN' ? 'carrinho' : 'inicio'); return;
   }
   if (action==='forgot') { await api('password.forgot',data); notice('Se houver uma conta para esse e-mail, você receberá um link.'); go('entrar'); return; }
   if (action==='reset') {

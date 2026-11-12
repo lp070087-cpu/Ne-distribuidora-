@@ -1,6 +1,7 @@
 // Preserve the storefront demonstration while the real portal is disabled.
 fetch('/api/portal', {headers:{Accept:'application/json'}}).then(response => response.ok ? response.json() : null).then(config => {
   if (!config?.enabled) return;
+  document.querySelectorAll('[data-portal-entry]').forEach(link => { link.hidden = false; });
   const header = document.getElementById('ul')?.closest('button');
   if (!header) return;
   const title = document.getElementById('ul');

@@ -1,14 +1,14 @@
 name: Portal MaxDistrib
 on:
   push:
-    branches: [main, work/maxdistrib-portal]
+    branches: [main]
   pull_request:
     branches: [main]
 permissions:
   contents: read
 jobs:
   portal-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:16

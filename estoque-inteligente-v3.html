@@ -87,7 +87,7 @@
       <button class="btn btn-gh btn-ic mob-btn" id="menuButton" onclick="toggleSidebar()" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false"><span data-ic="menu" style="display:contents"></span></button>
     </div>
   </div>
-  <div class="wh-launch-bar"><button type="button" class="wh-launch" data-warehouse-launch aria-haspopup="dialog">Centro de Distribuição 3D</button></div>
+  <div class="wh-launch-bar"><a data-portal-entry hidden class="btn btn-o" href="/minha-conta#admin-estoque">Estoque operacional</a> <button type="button" class="wh-launch" data-warehouse-launch aria-haspopup="dialog">Centro de Distribuição 3D</button></div>
   <div class="content" id="pageContent" tabindex="-1"></div>
 </main>
 
@@ -677,5 +677,6 @@ function saveConfig() {
 openTab('dash');
 </script>
 <script src="/assets/warehouse.js" defer></script>
+<script src="/assets/portal-entry.js" defer></script>
 </body>
 </html>
