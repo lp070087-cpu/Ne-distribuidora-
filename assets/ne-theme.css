@@ -1,19 +1,20 @@
-/* Identidade da NE Distribuidora, tema fitness-dark da loja oficial. */
+/* Identidade da NE Distribuidora, paleta aplicada ao projeto. */
 :root {
   --brand-primary: #DBA982;
-  --brand-secondary: #1A1A1A;
+  --brand-secondary: var(--ne-primary-soft);
   --brand-accent: var(--brand-primary);
-  --brand-background: #1A1A1A;
-  --brand-header: #111111;
-  --brand-surface: #141414;
-  --brand-footer: #231C18;
-  --brand-text: #FFFFFF;
-  --brand-muted: #A1A1AA;
+  --brand-background: color-mix(in srgb, var(--brand-primary) 38%, white);
+  --brand-header: var(--brand-primary);
+  --brand-surface: color-mix(in srgb, var(--brand-primary) 14%, white);
+  --brand-footer: var(--brand-primary);
+  --brand-text: #302018;
+  --brand-muted: #593E30;
+  --brand-white: #FFFFFF;
   --brand-on-primary: #231C18;
-  --brand-primary-text: #795139;
+  --brand-primary-text: #593824;
 
   /* Superfícies claras de apoio e estados operacionais do projeto. */
-  --brand-border: color-mix(in srgb, var(--brand-text) 18%, var(--brand-background));
+  --brand-border: color-mix(in srgb, var(--brand-text) 26%, var(--brand-background));
   --ne-light: #FAF8F6;
   --ne-light-alt: #F1ECE7;
   --ne-light-border: #E5DCD4;

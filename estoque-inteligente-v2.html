@@ -28,16 +28,16 @@ h1,h2,h3,.sidebar-head span{font-family:'Montserrat',var(--font)}
 body{font-family:var(--font);color:var(--text);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;min-width:320px;overflow-x:hidden}
 a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:var(--font)}button{cursor:pointer;border:none}
 
-.sidebar{width:250px;min-height:100dvh;background:var(--pri);color:#fff;position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column;transition:transform .25s ease}
-.sidebar-head{padding:18px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sidebar{width:250px;min-height:100dvh;background:var(--brand-primary);color:var(--brand-text);position:fixed;top:0;left:0;bottom:0;z-index:100;display:flex;flex-direction:column;transition:transform .25s ease}
+.sidebar-head{padding:18px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--brand-border)}
 .sidebar-head .mk{width:36px;height:36px;background:var(--acc);color:#141414;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
 .sidebar-head span{font-weight:700;font-size:14px}
 .sidebar-nav{flex:1;overflow-y:auto;padding:6px 0;-webkit-overflow-scrolling:touch}
-.sidebar-sec{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);font-weight:700;padding:14px 16px 4px}
-.sidebar-link{display:flex;align-items:center;gap:9px;padding:9px 14px;margin:2px 8px;border-radius:var(--radius);font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s;background:none;width:calc(100% - 16px);text-align:left}
-.sidebar-link:hover{background:rgba(255,255,255,.08);color:#fff}
-.sidebar-link.active{background:var(--acc);color:#141414;font-weight:700}
-.sidebar-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;font-size:11px}
+.sidebar-sec{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--brand-muted);font-weight:700;padding:14px 16px 4px}
+.sidebar-link{display:flex;align-items:center;gap:9px;padding:9px 14px;margin:2px 8px;border-radius:var(--radius);font-size:13px;font-weight:500;color:var(--brand-muted);cursor:pointer;transition:all .12s;background:none;width:calc(100% - 16px);text-align:left}
+.sidebar-link:hover{background:var(--brand-border);color:var(--brand-text)}
+.sidebar-link.active{background:var(--brand-surface);color:#141414;font-weight:700}
+.sidebar-foot{padding:12px 16px;border-top:1px solid var(--brand-border);display:flex;align-items:center;gap:10px;font-size:11px}
 .sidebar-av{width:32px;height:32px;border-radius:50%;background:var(--acc);color:#141414;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
 
 .main{margin-left:250px;min-height:100dvh}
@@ -73,7 +73,7 @@ table tbody tr:last-child td{border-bottom:none}
 .badge-ok{background:var(--green-light);color:var(--green)}.badge-w{background:var(--amber-light);color:var(--amber)}.badge-c{background:var(--red-light);color:var(--red)}.badge-n{background:var(--pri-bg);color:var(--pri)}
 
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--radius);font-size:12.5px;font-weight:700;transition:all .12s;white-space:nowrap;line-height:1.3}
-.btn-p{background:var(--pri);color:#fff}.btn-p:hover{background:var(--pri-light)}
+.btn-p{background:var(--brand-primary);color:var(--brand-text)}.btn-p:hover{background:var(--ne-primary-hover)}
 .btn-g{background:var(--acc);color:#141414}.btn-g:hover{background:var(--ne-primary-hover)}
 .btn-d{background:var(--red);color:#fff}.btn-d:hover{background:#9E1B1B}
 .btn-o{background:var(--white);color:var(--pri);border:1.5px solid var(--pri)}.btn-o:hover{background:var(--pri-bg)}
@@ -111,13 +111,13 @@ table tbody tr:last-child td{border-bottom:none}
 .aichat{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;height:calc(100dvh - 190px);min-height:440px}
 .aimsgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
 .aim{border-radius:10px;padding:11px 15px;font-size:12.5px;line-height:1.5;max-width:78%}
-.aim.user{align-self:flex-end;background:var(--pri);color:#fff;border-bottom-right-radius:3px}
+.aim.user{align-self:flex-end;background:var(--brand-primary);color:var(--brand-text);border-bottom-right-radius:3px}
 .aim.ast{align-self:flex-start;background:var(--bg);color:var(--text);border-bottom-left-radius:3px}
 .aim.cfm{align-self:flex-start;background:var(--green-light);border:1.5px solid var(--green);max-width:100%;font-size:12px}
 .aim.cfm .acts{margin-top:10px;display:flex;gap:8px}
 .ai-inp{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--white)}
 .ai-inp .form-in{flex:1}.ai-sugs{display:flex;gap:5px;flex-wrap:wrap;padding:8px 16px 0}
-.ai-sug{background:var(--pri-bg);color:var(--pri);border:1px solid var(--pri-border);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s}.ai-sug:hover{background:var(--pri);color:#fff}
+.ai-sug{background:var(--pri-bg);color:var(--pri);border:1px solid var(--pri-border);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s}.ai-sug:hover{background:var(--brand-primary);color:var(--brand-text)}
 
 .empty{padding:36px 16px;text-align:center;color:var(--muted)}.empty .ic{font-size:40px;margin-bottom:8px}.empty h4{color:var(--text);font-size:14px;margin-bottom:4px}.empty p{font-size:12px}
 
@@ -180,7 +180,7 @@ table tbody tr:last-child td{border-bottom:none}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 
-.internal-ne-logo{display:block;object-fit:contain;width:142px;height:auto;max-width:100%;padding:6px 8px;background:var(--brand-text);border-radius:5px}
+.internal-ne-logo{display:block;object-fit:contain;width:142px;height:auto;max-width:100%;padding:6px 8px;background:var(--brand-white);border-radius:5px}
 .sidebar-head{align-items:flex-start;justify-content:center;flex-direction:column;gap:6px}.sidebar-head span{color:var(--brand-muted)}.form-in{font-size:16px}
 </style>
 </head>

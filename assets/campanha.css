@@ -1,17 +1,15 @@
-:root { --campaign-dark: var(--brand-background); --campaign-paper: var(--brand-surface); }
-
-.hero { background: var(--campaign-paper); color: var(--brand-text); }
+.hero { background: var(--brand-primary); color: var(--brand-text); }
 .hero-tr { max-width: none; max-height: none; aspect-ratio: auto; min-height: clamp(420px, 39vw, 530px); }
 .hero-sl { visibility: hidden; transition: opacity .38s ease, visibility 0s .38s; }
 .hero-sl.on { visibility: visible; transition-delay: 0s; }
 .hero-inner { max-width: 1280px; min-height: 100%; margin: auto; padding: 42px 72px 80px; display: grid; grid-template-columns: 1.12fr 1fr; gap: clamp(20px, 4vw, 62px); align-items: center; }
 .hero-copy { position: relative; z-index: 1; }
-.hero-kicker { color: var(--brand-primary); font-size: .82rem; font-weight: 700; letter-spacing: .095em; text-transform: uppercase; }
+.hero-kicker { color: var(--brand-primary-text); font-size: .82rem; font-weight: 700; letter-spacing: .095em; text-transform: uppercase; }
 .hero-title { margin: 10px 0; max-width: 15ch; color: var(--brand-text); font-size: clamp(2.15rem, 5.2vw, 4.75rem); line-height: 1.07; letter-spacing: -.045em; font-weight: 750; overflow-wrap: anywhere; }
 .hero-copy p:not(.hero-kicker) { max-width: 42ch; font-size: 1.05rem; color: var(--brand-muted); line-height: 1.55; }
 .hero-copy .btn { margin-top: 20px; background: var(--brand-primary); color: var(--brand-on-primary); }
 .hero-copy .btn:hover { background: var(--ne-primary-hover); }
-.hero-art { position: relative; width: 100%; height: clamp(250px, 29vw, 365px); overflow: hidden; background: var(--brand-footer); border: 1px solid var(--brand-border); border-radius: 20px; }
+.hero-art { position: relative; width: 100%; height: clamp(250px, 29vw, 365px); overflow: hidden; background: var(--brand-surface); border: 1px solid var(--brand-border); border-radius: 20px; }
 .hero-art img { position: absolute; inset: 6% 5%; width: 90%; height: 88%; object-fit: contain; }
 .hero-sl[data-tone="light"] .hero-art { background: var(--brand-secondary); }
 .hero-sl[data-tone="warm"] .hero-art { background: var(--ne-light-alt); }
@@ -21,27 +19,40 @@
 .hero-actions .harr:hover, .hero-pause:hover { background: var(--brand-footer); }
 .hero-actions .hdot { width: 28px; height: 44px; }
 .hero-actions .hdot::before { background: var(--brand-muted); }
-.hero-actions .hdot.on::before { background: var(--brand-primary); }
-.hero-actions button:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+.hero-actions .hdot.on::before { background: var(--brand-primary-text); }
+.hero-actions button:focus-visible { outline: 2px solid var(--brand-primary-text); outline-offset: 2px; }
 .hero-pause[hidden] { display: none; }
 .hero-tr { touch-action: pan-y; }
 
+@media (prefers-reduced-motion: no-preference) {
+  .hero-sl.on .hero-copy { animation: ne-banner-copy 460ms ease-out both; }
+  .hero-sl.on .hero-art img { animation: ne-banner-product 640ms cubic-bezier(.2, .65, .3, 1) both; }
+}
+@keyframes ne-banner-copy {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes ne-banner-product {
+  from { opacity: 0; transform: translateY(15px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .campaign-section { background: var(--brand-background); }
-.campaign-section .sec-ey { color: var(--brand-primary); }
+.campaign-section .sec-ey { color: var(--brand-primary-text); }
 .campaign-section .offers-hd { align-items: end; }
 .campaign-section .sub { max-width: 65ch; }
 .campaign-search { display: grid; gap: 5px; margin: 0 0 12px; max-width: 440px; color: var(--brand-text); font-size: .9rem; font-weight: 650; }
 .campaign-search input { background: var(--brand-surface); color: var(--brand-text); min-height: 44px; font-size: 16px; border-color: var(--brand-border); }
 .campaign-search input::placeholder { color: var(--brand-muted); }
-.campaign-search input:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+.campaign-search input:focus-visible { outline: 2px solid var(--brand-primary-text); outline-offset: 2px; }
 .campaign-controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
 .campaign-controls .chip { background: transparent; border-color: var(--brand-border); color: var(--brand-text); }
-.campaign-controls .chip.on { background: var(--brand-primary); color: var(--brand-on-primary); border-color: var(--brand-primary); }
-.campaign-controls .chip:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+.campaign-controls .chip.on { background: var(--brand-primary); color: var(--brand-on-primary); border-color: var(--brand-primary-text); }
+.campaign-controls .chip:focus-visible { outline: 2px solid var(--brand-primary-text); outline-offset: 2px; }
 .campaign-count { align-self: center; font-size: .88rem; color: var(--brand-muted); padding-inline: 5px; }
 .campaign-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .campaign-card { display: flex; min-width: 0; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; background: var(--brand-surface); border: 1px solid var(--brand-border); color: var(--brand-text); transition: border-color .2s ease, transform .2s ease; }
-.campaign-card:hover { border-color: var(--brand-primary); transform: translateY(-2px); }
+.campaign-card:hover { border-color: var(--brand-primary-text); transform: translateY(-2px); }
 .campaign-card h3 { margin: 3px 0 0; color: var(--brand-text); font: 700 1rem/1.35 var(--ff); overflow-wrap: anywhere; }
 .campaign-media { display: grid; place-items: center; aspect-ratio: 1.55; border-radius: 7px; background: var(--ne-light-alt); overflow: hidden; }
 .campaign-media img { width: 100%; height: 100%; object-fit: contain; }
@@ -51,7 +62,7 @@
 .campaign-media:has(.campaign-sprite) { aspect-ratio: 4/3; }
 .campaign-meta, .campaign-note { font-size: .85rem; line-height: 1.5; color: var(--brand-muted); overflow-wrap: anywhere; }
 .campaign-note + .campaign-note { margin-top: 5px; }
-.campaign-price { color: var(--brand-primary); font-size: 1rem; }
+.campaign-price { color: var(--brand-primary-text); font-size: 1rem; }
 .campaign-price strong { font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 800; font-variant-numeric: tabular-nums; }
 .campaign-price span { font-size: .8rem; white-space: nowrap; }
 .campaign-price s { display: block; color: var(--brand-muted); font-size: .82rem; font-weight: 500; }
@@ -65,13 +76,13 @@
 .campaign-more { margin-top: 14px; }
 .campaign-more[hidden] { display: none; }
 .campaign-action.btn { min-height: 44px; margin-top: auto; white-space: normal; text-align: center; background: transparent; color: var(--brand-text); border-color: var(--brand-border); }
-.campaign-action.btn:hover:not(:disabled) { background: var(--brand-footer); border-color: var(--brand-primary); }
+.campaign-action.btn:hover:not(:disabled) { background: var(--brand-footer); border-color: var(--brand-primary-text); }
 .campaign-facets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; max-width: 780px; margin-bottom: 14px; }
 .campaign-facets label { display: grid; gap: 5px; min-width: 0; color: var(--brand-muted); font-weight: 600; }
 .campaign-facets .fi { min-height: 44px; background-color: var(--brand-surface); color: var(--brand-text); border-color: var(--brand-border); }
 #campaign-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 9px; }
 #campaign-categories a { display: flex; flex-direction: column; gap: 6px; justify-content: space-between; min-height: 78px; padding: 12px; border: 1px solid var(--brand-border); border-radius: 8px; background: var(--brand-surface); color: var(--brand-text); transition: border-color var(--t); }
-#campaign-categories a:hover { border-color: var(--brand-primary); }
+#campaign-categories a:hover { border-color: var(--brand-primary-text); }
 #campaign-categories span { color: var(--brand-muted); font-size: .86rem; display: flex; align-items: center; gap: 5px; }
 @supports (grid-template-rows: subgrid) {
   .campaign-card { display: grid; grid-template-rows: subgrid; grid-row: span 5; row-gap: 8px; }

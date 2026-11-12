@@ -1,19 +1,29 @@
 .ne-store .tb, .ne-store .hd, .ne-store .nav, .ne-store .mob-m { background: var(--brand-header); }
 .ne-store .hd { box-shadow: 0 1px 0 var(--brand-border); }
-.ne-store .logo { display: inline-flex; width: max-content; max-width: 100%; padding: 6px 8px; border-radius: 5px; background: var(--brand-text); }
+.ne-store .logo { display: inline-flex; width: max-content; max-width: 100%; padding: 6px 8px; border-radius: 5px; background: var(--brand-white); }
 .ne-logo { width: clamp(105px, 13vw, 174px); height: auto; object-fit: contain; }
 .ne-store .srch input { background: var(--brand-secondary); border-color: var(--brand-border); color: var(--brand-text); }
 .ne-store .srch input::placeholder, .ne-store .srch .ic { color: var(--brand-muted); }
-.ne-store .srch input:focus { border-color: var(--brand-primary); box-shadow: 0 0 0 2px var(--ne-focus); }
+.ne-store .srch input:focus { border-color: var(--brand-primary-text); box-shadow: 0 0 0 2px var(--ne-focus); }
 .ne-store .ha-btn { color: var(--brand-text); }
-.ne-store .ha-btn:hover, .ne-store .ha .btn:hover { background: var(--brand-footer); }
+.ne-store .ha-btn:hover, .ne-store .ha .btn:hover { background: var(--brand-secondary); }
 .ne-store .ha .btn { border-color: var(--brand-border); }
 .ne-store .ha-badge { box-shadow: 0 0 0 2px var(--brand-header); }
-.ne-store .hd :focus-visible { outline-color: var(--brand-primary); }
+.ne-store .hd :focus-visible { outline-color: var(--brand-primary-text); }
 .ne-store .intro, .ne-store #cat { background: var(--brand-secondary); color: var(--brand-text); }
 .ne-store #cat .sec-tt { color: var(--brand-text); }
-.ne-store #cat .sec-ey, .ne-combos .sec-ey { color: var(--brand-primary); }
+.ne-store #cat .sec-ey, .ne-combos .sec-ey { color: var(--brand-primary-text); }
+.ne-store .tb, .ne-store .intro h1, .ne-store .offers .sec-tt, .ne-store .foot h4 { color: var(--brand-text); }
+.ne-store .nav-lk a, .ne-store .mob-m a { color: var(--brand-text); }
+.ne-store .nav-lk a::after { background: var(--brand-primary-text); }
+.ne-store .mob-m { border-color: var(--brand-border); }
+.ne-store .mob-m a:hover, .ne-store .intro .btn-o:hover { background: var(--brand-secondary); }
+.ne-store .intro p, .ne-store .offers p.sub { color: var(--brand-muted); }
+.ne-store .intro .btn-o { color: var(--brand-text); border-color: var(--brand-primary-text); }
 .ne-store .foot { background: var(--brand-footer); }
+.ne-store .foot, .ne-store .foot a, .ne-store .foot .lk, .ne-store .foot-bt { color: var(--brand-text); }
+.ne-store .foot a:hover, .ne-store .foot .lk:hover { text-decoration: underline; }
+.ne-store .foot-bt { border-color: var(--brand-border); }
 .ne-store .sec-tt { line-height: 1.15; letter-spacing: -.025em; }
 .ne-store .demo-category-grid { margin-bottom: 16px; }
 .ne-store .pimg { background: var(--ne-light); }

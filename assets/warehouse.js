@@ -258,7 +258,7 @@
     if (canvas.width !== Math.round(width * ratio)) canvas.width = Math.round(width * ratio);
     if (canvas.height !== Math.round(height * ratio)) canvas.height = Math.round(height * ratio);
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    ctx.fillStyle = '#201e1c'; ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = '#dba982'; ctx.fillRect(0, 0, width, height);
     const p = project(width, height);
     const rectangle = (x, z, w, d, y = 0) => [p(x, y, z), p(x + w, y, z), p(x + w, y, z + d), p(x, y, z + d)];
     hits = [];
