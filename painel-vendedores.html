@@ -94,6 +94,7 @@ tr.me{background:var(--gold-soft)}tr.me:hover{background:var(--gold-soft)}
     <span class="demo-context">Demonstração</span>
     <button class="btn btn-gh btn-ic mob-btn" id="vendorMenuButton" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false" data-ic="menu" onclick="toggleSidebar()"></button>
   </div>
+  <div data-portal-entry hidden class="content"><a class="btn btn-o" href="/minha-conta#admin-pedidos">Pedidos do portal</a></div>
   <div class="content" id="pageRoot"></div>
 </main>
 
@@ -448,5 +449,6 @@ function rRank(ct) {
 // ============= INIT =============
 openTag('dash');
 </script>
+<script src="/assets/portal-entry.js" defer></script>
 </body>
 </html>

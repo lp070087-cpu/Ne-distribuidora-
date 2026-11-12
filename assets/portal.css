@@ -1,0 +1,56 @@
+body.portal { background:var(--canvas); min-height:100dvh; }
+.portal [hidden] { display:none!important; }
+.portal-width { width:min(100% - 32px, 1220px); margin-inline:auto; }
+.portal-header { background:var(--brand-primary); border-bottom:1px solid var(--brand-border); }
+.portal-bar, .portal-header-actions { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.portal-bar { min-height:70px; }
+.portal-bar img { width:clamp(100px,17vw,150px); height:auto; display:block; background:#fff; border-radius:5px; padding:5px; }
+.portal .btn { min-height:44px; white-space:normal; text-align:center; }
+.portal-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:28px; margin-block:28px 72px; }
+.portal-layout:has(nav:not([hidden])) { grid-template-columns:200px minmax(0,1fr); }
+.portal nav { align-self:start; display:grid; gap:2px; border:1px solid var(--line); background:var(--paper); border-radius:12px; padding:8px; }
+.portal nav a, .portal nav button { text-align:left; padding:10px; min-height:44px; border-radius:7px; overflow-wrap:anywhere; }
+.portal nav a:hover, .portal nav button:hover { background:var(--canvas-2); }
+.portal nav a[aria-current="page"] { background:var(--gold-soft); font-weight:700; }
+.portal main { min-width:0; overflow-wrap:anywhere; }
+.portal h1 { font-size:clamp(1.6rem,4vw,2.4rem); letter-spacing:-.035em; }
+.portal h2 { font-size:1.15rem; }
+.portal main > header { margin-bottom:20px; }
+.portal main > header p, .portal .muted { color:var(--muted); }
+.portal .card { padding:clamp(12px,3vw,22px); }
+.portal .card + .card, .portal .stack > * + * { margin-top:12px; }
+.portal .entry { max-width:620px; margin-inline:auto; }
+.portal .tiles { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(min(100%,155px),1fr)); }
+.portal .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr)); gap:12px; }
+.portal .products article { display:flex; flex-direction:column; gap:8px; }
+.portal .products article .actions { margin-top:auto; }
+.portal .products img { width:100%; height:150px; object-fit:contain; background:var(--canvas); border-radius:8px; padding:8px; }
+.portal .actions, .portal .row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.portal .row { justify-content:space-between; padding-block:8px; }
+.portal .row + .row { border-top:1px solid var(--line); }
+.portal .fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr)); gap:12px; }
+.portal label { display:block; font-size:.93rem; font-weight:650; }
+.portal .fi { margin-top:4px; font-size:16px; min-height:44px; width:100%; }
+.portal .row .fi, .portal .actions .fi { width:auto; max-width:100%; margin-top:0; }
+.portal .num { width:95px!important; }
+.portal .notice { padding:12px; background:var(--gold-soft); border-radius:8px; }
+.portal .error { color:var(--danger); }
+.portal .price { font-size:1.12rem; font-weight:800; font-variant-numeric:tabular-nums; }
+.portal .metric { display:block; font-size:1.5rem; }
+.portal .role-choice { text-align:left; white-space:normal; align-items:flex-start; flex-direction:column; }
+.portal .role-choice small { color:var(--muted); font-weight:400; }
+.portal .role-choice .ic { width:22px; height:22px; }
+.portal-feedback:not(:empty) { position:fixed; inset:auto 0 12px; background:var(--paper); border:1px solid var(--line-2); border-radius:10px; padding:12px; box-shadow:var(--sh-2); z-index:5; }
+.portal-feedback.error { border-color:var(--danger); }
+.portal details summary { cursor:pointer; padding-block:8px; min-height:44px; }
+.portal ol, .portal ul { margin-left:1.25em; }
+.portal a:not(.btn):not(nav a) { text-decoration:underline; text-underline-offset:3px; }
+.portal #portal-menu { display:none; }
+@media (max-width:760px) {
+  .portal-layout:has(nav:not([hidden])) { grid-template-columns:minmax(0,1fr); }
+  .portal #portal-menu:not([hidden]) { display:inline-flex; }
+  .portal nav:not(.open) { display:none; }
+  .portal-layout { gap:12px; margin-top:16px; }
+}
+
+.portal .tiles > .card { margin-top:0; }

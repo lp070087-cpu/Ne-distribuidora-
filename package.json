@@ -1,0 +1,21 @@
+{
+  "name": "maxdistrib",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "test": "node --test",
+    "migrate": "node server/migrate.js",
+    "build": "node server/build.js",
+    "create-admin": "node server/create-admin.js",
+    "test:browser": "playwright test -c qa/playwright.config.js"
+  },
+  "dependencies": {
+    "pg": "8.16.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.1"
+  }
+}

@@ -1,1 +1,7 @@
 /*.pdf
+node_modules/
+dist/
+.env*
+!.env.example
+test-results/
+playwright-report/
