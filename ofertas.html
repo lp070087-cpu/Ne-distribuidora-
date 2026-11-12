@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="Consulte as ofertas da NE Distribuidora, com preços à vista, no cartão e por quantidade.">
+  <title>Ofertas | NE Distribuidora</title>
+  <link rel="icon" type="image/png" href="assets/ne-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/ds.css">
+  <link rel="stylesheet" href="assets/campanha.css">
+  <style>
+    body { background: var(--brand-background); color: var(--brand-text); }
+    .wrap { width: min(100%, 1280px); padding-inline: clamp(14px, 4vw, 32px); margin-inline: auto; }
+    .offer-head { background: var(--brand-header); border-bottom: 1px solid var(--brand-border); }
+    .offer-head .wrap { display: flex; justify-content: space-between; align-items: center; min-height: 72px; gap: 14px; }
+    .offer-logo { width: clamp(111px, 19vw, 172px); flex: none; background: var(--brand-text); padding: 6px; border-radius: 5px; }
+    .offer-logo img { width: 100%; height: auto; }
+    .offer-head .btn { min-height: 44px; background: transparent; border-color: var(--brand-border); color: var(--brand-text); }
+    .offer-head .btn:hover { background: var(--brand-footer); }
+    .offers-hd { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+    .offers-hd h1 { color: var(--brand-text); font-size: clamp(2rem, 6vw, 3.55rem); letter-spacing: -.045em; line-height: 1.1; margin: 5px 0 9px; }
+    .offers-hd .sub { color: var(--brand-muted); }
+    .sec-ey { font-size: .8rem; letter-spacing: .08em; font-weight: 700; text-transform: uppercase; }
+    .offer-footer { background: var(--brand-footer); border-top: 1px solid var(--brand-border); color: var(--brand-muted); padding-block: 20px; }
+    .offer-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; }
+    .offer-footer a { color: var(--brand-text); text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+  <script src="assets/ds.js" defer></script>
+  <script src="assets/encartes.js" defer></script>
+  <script src="assets/campanha.js" defer></script>
+</head>
+<body data-view="offers" class="on-dark">
+  <a class="skip" href="#ofertas">Ir para as ofertas</a>
+  <header class="offer-head"><div class="wrap">
+    <a class="offer-logo" href="/" aria-label="Início da NE Distribuidora"><img src="assets/ne-logo.png" width="616" height="110" alt="NE Distribuidora"></a>
+    <a class="btn btn-o" href="/#inicio">Voltar à vitrine</a>
+  </div></header>
+  <main class="sec campaign-section" id="ofertas" aria-labelledby="campaign-title"><div class="wrap">
+    <div class="offers-hd">
+      <div><p class="sec-ey">Black Friday NE 2026</p><h1 id="campaign-title">Ofertas no atacado</h1><p class="sub">Pedido mínimo de R$ 500 e cartão em até 6×. Confirme a vigência da campanha e a disponibilidade com a NE.</p></div>
+      <a class="btn btn-g" href="https://www.nedistribuidora.com.br/" target="_blank" rel="noopener">Loja oficial da NE</a>
+    </div>
+    <div class="campaign-search"><label for="campaign-search">Buscar nas ofertas</label><input id="campaign-search" class="fi" type="search" placeholder="Produto, marca ou categoria" autocomplete="off"></div>
+    <div class="campaign-controls" id="campaign-filters" aria-label="Filtrar ofertas">
+      <button type="button" class="chip" data-kind="all">Todas</button>
+      <button type="button" class="chip" data-kind="product">Produtos</button>
+      <button type="button" class="chip" data-kind="combo">Combos</button>
+      <span class="campaign-count" id="campaign-count" role="status"></span>
+    </div>
+    <div class="campaign-grid" id="campaign-grid"></div>
+    <button type="button" class="btn btn-g campaign-more" id="campaign-more" hidden>Carregar mais ofertas</button>
+    <noscript><p>Ative o JavaScript para usar a busca e os filtros de ofertas.</p></noscript>
+  </div></main>
+  <footer class="offer-footer"><div class="wrap"><span>NE Distribuidora · MaxDistrib</span><a href="/#cat">Explorar categorias</a></div></footer>
+</body>
+</html>

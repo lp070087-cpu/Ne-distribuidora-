@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/ofertas", "destination": "/ofertas.html" },
     { "source": "/estoque", "destination": "/estoque-inteligente-v3.html" },
     { "source": "/vendedor", "destination": "/painel-vendedores.html" }
   ],

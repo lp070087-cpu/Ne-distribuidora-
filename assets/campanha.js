@@ -13,21 +13,27 @@
   const escape = NE.esc;
   const money = NE.money;
   const hero = document.getElementById('inicio');
-  const track = hero.querySelector('.hero-tr');
+  const track = hero?.querySelector('.hero-tr');
   const grid = document.getElementById('campaign-grid');
   const filters = document.getElementById('campaign-filters');
   const more = document.getElementById('campaign-more');
   const search = document.getElementById('campaign-search');
+  const directory = document.getElementById('campaign-categories');
+  const offersPage = document.body.dataset.view === 'offers';
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  const pageSize = 12;
-  let filter = 'all';
+  const pageSize = offersPage ? 24 : 12;
+  const url = new URL(location.href);
+  let filter = ['product', 'combo'].includes(url.searchParams.get('tipo')) ? url.searchParams.get('tipo') : 'all';
+  let category = url.searchParams.get('categoria') || '';
+  let brand = url.searchParams.get('marca') || '';
+  let range = url.searchParams.get('preco') || '';
   let limit = pageSize;
   let slide = 0;
   let paused = motion.matches;
   let pointerStart;
 
   function price(offer) {
-    return (offer.tiers.length > 1 ? 'A partir de ' : '') + money(Math.min(...offer.tiers.map(function (tier) { return tier.cash; })));
+    return money(offer.tiers[0].cash);
   }
 
   function bannerProduct(offer) {
@@ -57,6 +63,7 @@
   }].filter(Boolean);
 
   function media(offer) {
+    if (offer.image) return '<div class="campaign-media campaign-media-cutout"><img src="' + escape(offer.image) + '" alt="' + escape(offer.n) + '" loading="lazy" decoding="async"></div>';
     if (!offer.sprite) return '';
     const { file, index, columns, rows } = offer.sprite;
     const x = (index % columns) * 100 / (columns - 1);
@@ -68,37 +75,102 @@
     return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
+  function categoryOf(offer) {
+    if (offer.kind === 'combo') return 'Combos e kits';
+    const groups = {
+      'Proteínas': 'Proteínas e whey',
+      'Vitaminas e Saúde': 'Vitaminas e minerais',
+      'Termogênicos e L-carnitina': 'Termogênicos e L-carnitina',
+      'Endurance e Hidratação': 'Energia e hidratação',
+      'Barrinhas e Snacks': 'Barras e snacks'
+    };
+    if (offer.cat === 'Creatinas e Aminoácidos') return /creatina/i.test(offer.n) ? 'Creatinas' : 'Aminoácidos';
+    return groups[offer.cat] || offer.cat;
+  }
+
+  const categories = [...new Set(available.map(categoryOf))].sort(function (a, b) { return a.localeCompare(b, 'pt-BR'); });
+  const brands = [...new Set(available.flatMap(function (offer) { return offer.br.split(' + '); }))].sort(function (a, b) { return a.localeCompare(b, 'pt-BR'); });
+  const ranges = { ate50: [0, 50], ate100: [50, 100], acima100: [100, Infinity] };
+  if (!categories.includes(category)) category = '';
+  if (!brands.includes(brand)) brand = '';
+  if (!Object.hasOwn(ranges, range)) range = '';
+  search.value = url.searchParams.get('q') || '';
+
+  function offersLink(extra = {}) {
+    const state = { tipo: filter === 'all' ? '' : filter, categoria: category, marca: brand, preco: range, q: search.value.trim(), ...extra };
+    const query = new URLSearchParams(Object.entries(state).filter(function (entry) { return entry[1]; })).toString();
+    return '/ofertas' + (query ? '?' + query : '');
+  }
+
+  function options(values, selected) {
+    return values.map(function ([value, label]) {
+      return '<option value="' + escape(value) + '"' + (value === selected ? ' selected' : '') + '>' + escape(label) + '</option>';
+    }).join('');
+  }
+
+  const facets = document.createElement('div');
+  facets.className = 'campaign-facets';
+  facets.innerHTML = '<label>Categoria<select id="offer-category" class="fi fs">' + options([['', 'Todas as categorias'], ...categories.map(function (item) { return [item, item]; })], category) + '</select></label>' +
+    '<label>Marca<select id="offer-brand" class="fi fs">' + options([['', 'Todas as marcas'], ...brands.map(function (item) { return [item, item]; })], brand) + '</select></label>' +
+    '<label>Preço à vista<select id="offer-price" class="fi fs">' + options([['', 'Todos os preços'], ['ate50', 'Abaixo de R$ 50'], ['ate100', 'De R$ 50 a R$ 99,99'], ['acima100', 'R$ 100 ou mais']], range) + '</select></label>';
+  filters.before(facets);
+  const categorySelect = facets.querySelector('#offer-category');
+  const brandSelect = facets.querySelector('#offer-brand');
+  const rangeSelect = facets.querySelector('#offer-price');
+
+  function resetFacets() {
+    search.value = categorySelect.value = brandSelect.value = rangeSelect.value = '';
+    category = brand = range = '';
+  }
+
+  if (directory) directory.innerHTML = categories.map(function (item) {
+    const total = available.filter(function (offer) { return categoryOf(offer) === item; }).length;
+    return '<a href="' + escape(offersLink({ tipo: '', categoria: item, marca: '', preco: '', q: '' })) + '"><strong>' + escape(item) + '</strong><span>' + total + (total === 1 ? ' oferta' : ' ofertas') + ' ' + NE.ic('arrow', 'ic-sm') + '</span></a>';
+  }).join('');
+
   function renderCards() {
     const query = normalize(search.value.trim());
     const selected = available.filter(function (offer) {
-      return (filter === 'all' || offer.kind === filter) && normalize([offer.n, offer.br, offer.cat, offer.notes].join(' ')).includes(query);
+      const group = categoryOf(offer);
+      const amount = offer.tiers[0].cash;
+      return (filter === 'all' || offer.kind === filter) && (!category || group === category) &&
+        (!brand || offer.br.split(' + ').includes(brand)) && (!range || amount >= ranges[range][0] && amount < ranges[range][1]) &&
+        normalize([offer.n, offer.br, offer.cat, group, offer.notes].join(' ')).includes(query);
     });
     grid.innerHTML = selected.slice(0, limit).map(function (offer) {
       const original = Number.isFinite(offer.original) ? '<s aria-label="Preço anterior">' + money(offer.original) + '</s>' : '';
-      const tiers = offer.tiers.map(function (tier) {
+      const main = offer.tiers[0];
+      const tiers = offer.tiers.slice(1).map(function (tier) {
         const card = Number.isFinite(tier.card) ? ' · ' + money(tier.card) + ' no cartão' : '';
         return '<div><dt>' + escape(tier.condition) + '</dt><dd>' + money(tier.cash) + ' à vista' + card + '</dd></div>';
       }).join('');
+      const storeLink = offer.kind === 'combo' ? 'https://www.nedistribuidora.com.br/' : 'https://www.nedistribuidora.com.br/busca?q=' + encodeURIComponent(offer.n);
       return '<article class="campaign-card" id="oferta-' + escape(offer.id) + '" tabindex="-1">' + media(offer) +
-        '<p class="campaign-meta">' + escape([offer.br, offer.cat].filter(Boolean).join(' · ')) + '</p>' +
-        '<h3>' + escape(offer.n) + '</h3>' +
-        (offer.notes ? '<p class="campaign-note">' + escape(offer.notes) + '</p>' : '') +
-        '<p class="campaign-price">' + original + price(offer) + '</p><dl class="campaign-tiers">' + tiers + '</dl></article>';
-    }).join('') || '<p class="campaign-empty">Sem ofertas nesta categoria. Consulte a loja para saber as condições atuais.</p>';
+        '<div class="campaign-heading"><p class="campaign-meta">' + escape([offer.br, categoryOf(offer)].filter(Boolean).join(' · ')) + '</p>' +
+        '<h3>' + escape(offer.n) + '</h3></div>' +
+        '<p class="campaign-price">' + original + '<strong>' + price(offer) + '</strong> <span>à vista</span></p>' +
+        '<div class="campaign-details"><p class="campaign-condition">' + escape(main.condition) + '</p>' +
+        (Number.isFinite(main.card) ? '<p class="campaign-note">' + money(main.card) + ' no cartão</p>' : '') +
+        (tiers ? '<dl class="campaign-tiers" aria-label="Preços por volume">' + tiers + '</dl>' : '') +
+        (offer.notes ? '<p class="campaign-note">' + escape(offer.notes) + '</p>' : '') + '</div>' +
+        '<a class="btn btn-o campaign-action" href="' + escape(storeLink) + '" target="_blank" rel="noopener">Consultar oferta <span class="sr">' + escape(offer.n) + '</span></a></article>';
+    }).join('') || '<div class="campaign-empty"><p>Nenhuma oferta corresponde aos filtros.</p><button type="button" class="btn btn-o" data-clear-offers>Limpar filtros</button></div>';
     filters.querySelectorAll('button').forEach(function (button) {
       const active = button.dataset.kind === filter;
       button.classList.toggle('on', active);
       button.setAttribute('aria-pressed', String(active));
     });
     document.getElementById('campaign-count').textContent = selected.length + (selected.length === 1 ? ' oferta' : ' ofertas');
-    more.hidden = limit >= selected.length;
+    more.hidden = offersPage ? limit >= selected.length : !selected.length;
+    if (offersPage) history.replaceState(null, '', offersLink() + location.hash);
+    else more.href = offersLink();
   }
 
   function revealOffer(hash) {
     if (!hash.startsWith('#oferta-')) return;
     const index = available.findIndex(function (offer) { return '#oferta-' + offer.id === hash; });
     if (index === -1) return;
-    search.value = '';
+    resetFacets();
     filter = 'all';
     limit = Math.max(pageSize, index + 1);
     renderCards();
@@ -113,16 +185,37 @@
     limit = pageSize;
     renderCards();
   });
-  more.addEventListener('click', function () {
+  more.addEventListener('click', function (event) {
+    if (!offersPage) {
+      if (more.tagName === 'BUTTON') location.assign(offersLink());
+      return;
+    }
+    event.preventDefault();
     const oldLimit = limit;
     limit += pageSize;
     renderCards();
     if (grid.children[oldLimit]) grid.children[oldLimit].focus({ preventScroll: true });
   });
   search.addEventListener('input', function () { limit = pageSize; renderCards(); });
+  facets.addEventListener('change', function () {
+    category = categorySelect.value;
+    brand = brandSelect.value;
+    range = rangeSelect.value;
+    limit = pageSize;
+    renderCards();
+  });
+  grid.addEventListener('click', function (event) {
+    if (!event.target.closest('[data-clear-offers]')) return;
+    resetFacets();
+    filter = 'all';
+    limit = pageSize;
+    renderCards();
+    search.focus();
+  });
   renderCards();
   window.addEventListener('hashchange', function () { revealOffer(location.hash); });
   if (location.hash) requestAnimationFrame(function () { revealOffer(location.hash); });
+  if (!track) return;
 
   track.innerHTML = slides.map(function (item, index) {
     return '<div class="hero-sl' + (index === 0 ? ' on' : '') + '" role="group" aria-roledescription="slide" aria-label="' + (index + 1) + ' de ' + slides.length + '" data-tone="' + item.tone + '"' + (index ? ' inert' : '') + '>' +
@@ -168,7 +261,7 @@
     if (!link) return;
     const item = slides[Number(link.dataset.slideLink)];
     if (item.filter || item.href.startsWith('#oferta-')) {
-      search.value = '';
+      resetFacets();
       filter = item.filter || 'all';
       limit = item.filter ? pageSize : Math.max(pageSize, available.findIndex(function (offer) { return '#oferta-' + offer.id === item.href; }) + 1);
       renderCards();

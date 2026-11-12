@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MaxDistrib · Estoque Inteligente</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#141414">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23141414'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='800' font-size='15' text-anchor='middle' fill='%23F4C430'%3EMD%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#1A1A1A">
+<link rel="icon" href="/assets/ne-favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/ds.css">
 <script src="assets/ds.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<script src="/assets/chart.umd.js"></script>
 <style>
 .split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s3);align-items:start}
 .split .table-card{margin-bottom:0}
@@ -64,13 +64,14 @@
   .ai-chat{min-height:min(420px,calc(100dvh - 102px))}
 }
 </style>
+<link rel="stylesheet" href="/assets/warehouse.css">
 </head>
 <body class="app">
 <a class="btn btn-p skip-link" href="#pageContent">Ir para o conteúdo</a>
 <div class="overlay" id="overlay" aria-hidden="true" onclick="toggleSidebar(true)"></div>
 
 <aside class="sidebar" id="sidebar" aria-label="Menu do sistema">
-  <div class="sidebar-head"><div class="mk">MD</div><div><strong>Estoque Inteligente</strong><small>MaxDistrib</small></div></div>
+  <div class="sidebar-head"><span class="warehouse-brand"><img src="/assets/ne-logo.png" alt="NE Distribuidora"></span><div><strong>Estoque Inteligente</strong><small>MaxDistrib</small></div></div>
   <nav class="sidebar-nav" id="sideNav"></nav>
   <div class="sidebar-foot"><div class="sidebar-av">LM</div><div><strong>Lucas Muniz</strong><small>Administrador</small></div></div>
 </aside>
@@ -86,6 +87,7 @@
       <button class="btn btn-gh btn-ic mob-btn" id="menuButton" onclick="toggleSidebar()" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false"><span data-ic="menu" style="display:contents"></span></button>
     </div>
   </div>
+  <div class="wh-launch-bar"><button type="button" class="wh-launch" data-warehouse-launch aria-haspopup="dialog">Centro de Distribuição 3D</button></div>
   <div class="content" id="pageContent" tabindex="-1"></div>
 </main>
 
@@ -674,5 +676,6 @@ function saveConfig() {
 // ============= INIT =============
 openTab('dash');
 </script>
+<script src="/assets/warehouse.js" defer></script>
 </body>
 </html>

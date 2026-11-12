@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MaxDistrib · Projeto Inteligente</title>
+<link rel="icon" type="image/png" href="assets/ne-favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/ne-theme.css">
 <style>
-:root{--blk:#141414;--wht:#fff;--gld:#F4C430;--gldh:#E2B31F;--red:#BE2323;--rdd:#9E1B1B;--g1:#F6F5F2;--g2:#E6E4DF;--g3:#62605A;--g4:#62605A;--g5:#1F1F1F;--gold-text:#7D6000;--r:6px;--rl:10px;--rxl:16px;--ff:'Inter',sans-serif}
+:root{--blk:#141414;--wht:#fff;--gld:var(--brand-primary);--gldh:var(--ne-primary-hover);--red:#BE2323;--rdd:#9E1B1B;--g1:var(--ne-light);--g2:var(--ne-light-border);--g3:var(--ne-light-muted);--g4:var(--ne-light-muted);--g5:#1F1F1F;--gold-text:var(--brand-primary-text);--r:6px;--rl:10px;--rxl:16px;--ff:'Inter',sans-serif}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 h1,h2,h3{font-family:'Montserrat',var(--ff)}
 body{font-family:var(--ff);color:var(--g5);background:var(--wht);line-height:1.55;-webkit-font-smoothing:antialiased;min-width:320px}
@@ -16,9 +18,9 @@ a{text-decoration:none;color:inherit}button{cursor:pointer;border:none;font-fami
 .tb span{color:var(--gld)}
 
 .hero{background:var(--blk);color:var(--wht);text-align:center;padding:70px 18px 50px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(244,196,48,.08),transparent 60%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgb(219 169 130 / .08),transparent 60%)}
 .hero-inner{max-width:780px;margin:0 auto;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(244,196,48,.15);border:1px solid rgba(244,196,48,.25);color:var(--gld);padding:4px 12px;border-radius:20px;font-size:10.5px;font-weight:700;margin-bottom:14px}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgb(219 169 130 / .15);border:1px solid rgb(219 169 130 / .25);color:var(--gld);padding:4px 12px;border-radius:20px;font-size:10.5px;font-weight:700;margin-bottom:14px}
 .hero h1{font-size:clamp(26px,4.5vw,44px);font-weight:900;line-height:1.12;margin-bottom:12px}
 .hero h1 span{color:var(--gld)}
 .hero .hero-sub{font-size:15px;color:rgba(255,255,255,.6);max-width:550px;margin:0 auto 24px;line-height:1.6}
@@ -100,6 +102,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-text);outline-
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+.internal-ne-logo{display:block;object-fit:contain;width:142px;height:auto;max-width:100%;padding:6px 8px;background:var(--brand-text);border-radius:5px}
+.hero .internal-ne-logo{width:175px;margin:0 auto 18px}.hero-sub{font-size:clamp(1rem,2.15vw,1.2rem);line-height:1.55}.hero h1{letter-spacing:-.035em}
 </style>
 </head>
 <body>
@@ -108,9 +113,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold-text);outline-
 
 <section class="hero">
   <div class="hero-inner">
+    <img class="internal-ne-logo" src="assets/ne-logo.png" width="616" height="110" alt="NE Distribuidora">
     <div class="hero-badge">🤖 Inteligência Artificial Aplicada</div>
     <h1>MaxDistrib —<br><span>Distribuição Inteligente</span></h1>
-    <p class="hero-sub">Um sistema completo que une e-commerce, estoque inteligente com IA e painel de vendedores. Totalmente automatizado — o sistema aprende com cada cliente e indica os produtos certos na hora certa.</p>
+    <p class="hero-sub">Um sistema completo que une e-commerce, estoque inteligente com IA e painel de vendedores. A proposta prevê automação da operação e recomendações de produtos para cada cliente.</p>
     <div class="hero-stats">
       <div class="hero-stat"><strong>3</strong><span>Módulos</span></div>
       <div class="hero-stat"><strong>11</strong><span>Abas no Estoque</span></div>

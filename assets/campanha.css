@@ -1,60 +1,81 @@
-:root { --campaign-dark: #181713; --campaign-paper: #f8f5ec; }
+:root { --campaign-dark: var(--brand-background); --campaign-paper: var(--brand-surface); }
 
-.hero { background: var(--campaign-paper); color: var(--campaign-dark); }
+.hero { background: var(--campaign-paper); color: var(--brand-text); }
 .hero-tr { max-width: none; max-height: none; aspect-ratio: auto; min-height: clamp(420px, 39vw, 530px); }
 .hero-sl { visibility: hidden; transition: opacity .38s ease, visibility 0s .38s; }
 .hero-sl.on { visibility: visible; transition-delay: 0s; }
 .hero-inner { max-width: 1280px; min-height: 100%; margin: auto; padding: 42px 72px 80px; display: grid; grid-template-columns: 1.12fr 1fr; gap: clamp(20px, 4vw, 62px); align-items: center; }
 .hero-copy { position: relative; z-index: 1; }
-.hero-kicker { color: #765500; font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-.hero-title { margin: 10px 0; max-width: 15ch; font-size: clamp(2.15rem, 5.2vw, 4.75rem); line-height: .98; letter-spacing: -.065em; font-weight: 800; }
-.hero-copy p:not(.hero-kicker) { max-width: 42ch; font-size: 1rem; color: #4b473e; line-height: 1.5; }
-.hero-copy .btn { margin-top: 20px; }
-.hero-art { position: relative; width: 100%; height: clamp(250px, 29vw, 365px); overflow: hidden; background: #e8bb35; border: 1px solid #d8aa22; border-radius: 20px; }
+.hero-kicker { color: var(--brand-primary); font-size: .82rem; font-weight: 700; letter-spacing: .095em; text-transform: uppercase; }
+.hero-title { margin: 10px 0; max-width: 15ch; color: var(--brand-text); font-size: clamp(2.15rem, 5.2vw, 4.75rem); line-height: 1.07; letter-spacing: -.045em; font-weight: 750; overflow-wrap: anywhere; }
+.hero-copy p:not(.hero-kicker) { max-width: 42ch; font-size: 1.05rem; color: var(--brand-muted); line-height: 1.55; }
+.hero-copy .btn { margin-top: 20px; background: var(--brand-primary); color: var(--brand-on-primary); }
+.hero-copy .btn:hover { background: var(--ne-primary-hover); }
+.hero-art { position: relative; width: 100%; height: clamp(250px, 29vw, 365px); overflow: hidden; background: var(--brand-footer); border: 1px solid var(--brand-border); border-radius: 20px; }
 .hero-art img { position: absolute; inset: 6% 5%; width: 90%; height: 88%; object-fit: contain; }
-.hero-sl[data-tone="light"] .hero-art { background: #211d13; border-color: #3e3423; }
-.hero-sl[data-tone="warm"] .hero-art { background: #eddcaa; border-color: #dfca8e; }
+.hero-sl[data-tone="light"] .hero-art { background: var(--brand-secondary); }
+.hero-sl[data-tone="warm"] .hero-art { background: var(--ne-light-alt); }
 .hero-actions { position: absolute; z-index: 5; bottom: 17px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 5px; }
 .hero-actions .harr, .hero-actions .hdots { position: static; transform: none; }
-.hero-actions .harr, .hero-pause { display: grid; place-items: center; width: 44px; height: 44px; color: #26241f; background: #fff; border: 1px solid #ded8c9; border-radius: 50%; }
-.hero-actions .harr:hover, .hero-pause:hover { background: #f8e9b7; }
+.hero-actions .harr, .hero-pause { display: grid; place-items: center; width: 44px; height: 44px; color: var(--brand-text); background: var(--brand-secondary); border: 1px solid var(--brand-border); border-radius: 50%; }
+.hero-actions .harr:hover, .hero-pause:hover { background: var(--brand-footer); }
 .hero-actions .hdot { width: 28px; height: 44px; }
-.hero-actions .hdot::before { background: #81796a; }
-.hero-actions .hdot.on::before { background: #26241f; }
-.hero-actions button:focus-visible { outline: 2px solid #745300; outline-offset: 2px; }
+.hero-actions .hdot::before { background: var(--brand-muted); }
+.hero-actions .hdot.on::before { background: var(--brand-primary); }
+.hero-actions button:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
 .hero-pause[hidden] { display: none; }
 .hero-tr { touch-action: pan-y; }
 
-.campaign-section { background: #211e17; }
-.campaign-section .sec-ey { color: #f5cf5c; }
+.campaign-section { background: var(--brand-background); }
+.campaign-section .sec-ey { color: var(--brand-primary); }
 .campaign-section .offers-hd { align-items: end; }
 .campaign-section .sub { max-width: 65ch; }
-.campaign-search { display: grid; gap: 5px; margin: 0 0 12px; max-width: 390px; color: #fff; font-size: .82rem; font-weight: 650; }
-.campaign-search input { background: #fff; color: #26241f; min-height: 44px; font-size: 16px; }
-.campaign-search input:focus-visible { outline: 2px solid #f4c430; outline-offset: 2px; }
+.campaign-search { display: grid; gap: 5px; margin: 0 0 12px; max-width: 440px; color: var(--brand-text); font-size: .9rem; font-weight: 650; }
+.campaign-search input { background: var(--brand-surface); color: var(--brand-text); min-height: 44px; font-size: 16px; border-color: var(--brand-border); }
+.campaign-search input::placeholder { color: var(--brand-muted); }
+.campaign-search input:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
 .campaign-controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
-.campaign-controls .chip { background: transparent; border-color: #958b72; color: #fff; }
-.campaign-controls .chip.on { background: #f4c430; color: #191713; border-color: #f4c430; }
-.campaign-controls .chip:focus-visible { outline: 2px solid #f4c430; outline-offset: 2px; }
-.campaign-count { align-self: center; font-size: .82rem; color: #f4eacb; padding-inline: 5px; }
+.campaign-controls .chip { background: transparent; border-color: var(--brand-border); color: var(--brand-text); }
+.campaign-controls .chip.on { background: var(--brand-primary); color: var(--brand-on-primary); border-color: var(--brand-primary); }
+.campaign-controls .chip:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+.campaign-count { align-self: center; font-size: .88rem; color: var(--brand-muted); padding-inline: 5px; }
 .campaign-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.campaign-card { display: flex; min-width: 0; flex-direction: column; padding: 13px; border-radius: 12px; background: #fff; border: 1px solid #eee8d8; color: #26241f; transition: border-color .2s ease, transform .2s ease; }
-.campaign-card:hover { border-color: #f4c430; transform: translateY(-2px); }
-.campaign-card h3 { margin: 5px 0 8px; font: 700 1rem/1.3 var(--ff); overflow-wrap: anywhere; }
-.campaign-media { display: grid; place-items: center; aspect-ratio: 1.55; margin: 0 0 10px; border-radius: 7px; background: #f7f5ee; overflow: hidden; }
+.campaign-card { display: flex; min-width: 0; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; background: var(--brand-surface); border: 1px solid var(--brand-border); color: var(--brand-text); transition: border-color .2s ease, transform .2s ease; }
+.campaign-card:hover { border-color: var(--brand-primary); transform: translateY(-2px); }
+.campaign-card h3 { margin: 3px 0 0; color: var(--brand-text); font: 700 1rem/1.35 var(--ff); overflow-wrap: anywhere; }
+.campaign-media { display: grid; place-items: center; aspect-ratio: 1.55; border-radius: 7px; background: var(--ne-light-alt); overflow: hidden; }
 .campaign-media img { width: 100%; height: 100%; object-fit: contain; }
+.campaign-media-cutout { position: relative; aspect-ratio: 4/3; }
+.campaign-media-cutout img { position: absolute; inset: 6% 5%; width: 90%; height: 88%; }
 .campaign-sprite { width: 100%; aspect-ratio: 4/3; background-repeat: no-repeat; }
 .campaign-media:has(.campaign-sprite) { aspect-ratio: 4/3; }
-.campaign-meta, .campaign-note { font-size: .75rem; line-height: 1.45; color: #575044; overflow-wrap: anywhere; }
-.campaign-note { margin-bottom: 10px; }
-.campaign-price { margin-top: auto; font-size: clamp(1rem, 3vw, 1.3rem); font-weight: 800; }
-.campaign-price s { display: block; color: #60594f; font-size: .75rem; font-weight: 500; }
-.campaign-tiers { display: grid; gap: 6px; margin: 8px 0 0; color: #504b42; font-size: .75rem; }
-.campaign-tiers div { border-top: 1px solid #eee8d8; padding-top: 5px; }
+.campaign-meta, .campaign-note { font-size: .85rem; line-height: 1.5; color: var(--brand-muted); overflow-wrap: anywhere; }
+.campaign-note + .campaign-note { margin-top: 5px; }
+.campaign-price { color: var(--brand-primary); font-size: 1rem; }
+.campaign-price strong { font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 800; font-variant-numeric: tabular-nums; }
+.campaign-price span { font-size: .8rem; white-space: nowrap; }
+.campaign-price s { display: block; color: var(--brand-muted); font-size: .82rem; font-weight: 500; }
+.campaign-price:not(:has(s))::before { content: ''; display: block; min-height: 1.23rem; }
+.campaign-condition { font-weight: 650; font-size: .9rem; color: var(--brand-text); line-height: 1.45; }
+.campaign-tiers { display: grid; gap: 6px; margin: 8px 0; color: var(--brand-muted); font-size: .85rem; }
+.campaign-tiers div { border-top: 1px solid var(--brand-border); padding-top: 5px; }
 .campaign-tiers dd { margin: 0; font-weight: 650; }
-.campaign-empty { grid-column: 1 / -1; padding: 24px 0; color: #f4eacb; }
+.campaign-empty { grid-column: 1 / -1; padding: 24px 0; color: var(--brand-muted); }
+.campaign-empty .btn { margin-top: 12px; }
 .campaign-more { margin-top: 14px; }
 .campaign-more[hidden] { display: none; }
+.campaign-action.btn { min-height: 44px; margin-top: auto; white-space: normal; text-align: center; background: transparent; color: var(--brand-text); border-color: var(--brand-border); }
+.campaign-action.btn:hover:not(:disabled) { background: var(--brand-footer); border-color: var(--brand-primary); }
+.campaign-facets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; max-width: 780px; margin-bottom: 14px; }
+.campaign-facets label { display: grid; gap: 5px; min-width: 0; color: var(--brand-muted); font-weight: 600; }
+.campaign-facets .fi { min-height: 44px; background-color: var(--brand-surface); color: var(--brand-text); border-color: var(--brand-border); }
+#campaign-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 9px; }
+#campaign-categories a { display: flex; flex-direction: column; gap: 6px; justify-content: space-between; min-height: 78px; padding: 12px; border: 1px solid var(--brand-border); border-radius: 8px; background: var(--brand-surface); color: var(--brand-text); transition: border-color var(--t); }
+#campaign-categories a:hover { border-color: var(--brand-primary); }
+#campaign-categories span { color: var(--brand-muted); font-size: .86rem; display: flex; align-items: center; gap: 5px; }
+@supports (grid-template-rows: subgrid) {
+  .campaign-card { display: grid; grid-template-rows: subgrid; grid-row: span 5; row-gap: 8px; }
+}
 .demo-note { font-size: .81rem; color: var(--muted); margin: 0 0 12px; }
 .demo-combos { margin-top: 24px; border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--paper); }
 .demo-combos summary { cursor: pointer; font-weight: 650; }
@@ -81,19 +102,25 @@
   .hero-tr { min-height: 470px; }
   .hero-inner { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 16px; padding: 21px 18px 66px; }
   .hero-title { font-size: clamp(1.9rem, 7.5vw, 2.75rem); max-width: 18ch; }
-  .hero-copy p:not(.hero-kicker) { font-size: .88rem; }
+  .hero-copy p:not(.hero-kicker) { font-size: .95rem; }
   .hero-copy .btn { margin-top: 12px; min-height: 44px; }
   .hero-art { height: 165px; border-radius: 12px; }
   .hero-actions { bottom: 10px; }
   .campaign-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .campaign-card { padding: 10px; }
-  .campaign-card h3 { font-size: .92rem; }
+  .campaign-card h3 { font-size: .96rem; }
+  .campaign-facets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .campaign-facets .fi { font-size: 16px; }
+  #campaign-categories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .campaign-controls .chip { min-height: 44px; }
   .foot-in > :last-child { overflow-wrap: anywhere; }
 }
 @media (max-width: 350px) {
   .hero-tr { min-height: 475px; }
   .hero-art { height: 143px; }
+  .campaign-grid { grid-template-columns: minmax(0, 1fr); }
+  .campaign-card { grid-row: auto; grid-template-rows: none; }
+  .campaign-facets { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-sl, .hero-sl.on, .campaign-card, .reveal.in { transition: none; animation: none; }

@@ -1,17 +1,18 @@
-/* Design system MaxDistrib: base única da loja, do estoque e do painel do vendedor.
-   Identidade: preto + dourado. Tipografia: Montserrat (títulos) + Inter (interface). */
+@import url("ne-theme.css");
+
+/* Design system MaxDistrib: loja, estoque e painel do vendedor. */
 :root{
-  --ink:#141414;--ink-2:#262626;--ink-3:#3a3a3a;
-  --paper:#fff;--canvas:#F6F5F2;--canvas-2:#EFEDE8;
-  --line:#E6E4DF;--line-2:#D5D2CB;
-  --text:#1F1F1F;--muted:#62605A;--faint:#8A877F;
-  --gold:#F4C430;--gold-2:#E2B31F;--gold-soft:#FDF6DD;--gold-text:#7D6000;
-  --ok:#1C7345;--ok-bg:#E8F4ED;
-  --warn:#8F5B00;--warn-bg:#FCF1D9;
-  --danger:#BE2323;--danger-2:#9E1B1B;--danger-bg:#FBEAE9;
+  --ink:var(--brand-header);--ink-2:var(--brand-background);--ink-3:#3a3a3a;
+  --paper:var(--brand-text);--canvas:var(--ne-light);--canvas-2:var(--ne-light-alt);
+  --line:var(--ne-light-border);--line-2:#D5C9BF;
+  --text:var(--brand-background);--muted:var(--ne-light-muted);--faint:#756A60;
+  --gold:var(--brand-primary);--gold-2:var(--ne-primary-hover);--gold-soft:var(--ne-primary-soft);--gold-text:var(--brand-primary-text);
+  --ok:var(--ne-success);--ok-bg:var(--ne-success-bg);
+  --warn:var(--ne-warning);--warn-bg:var(--ne-warning-bg);
+  --danger:var(--ne-error);--danger-2:var(--ne-error-hover);--danger-bg:var(--ne-error-bg);
   --info:#2B5A87;--info-bg:#E9F0F7;
 
-  --fs-xs:12px;--fs-sm:13px;--fs-md:14px;--fs-lg:16px;--fs-xl:20px;--fs-2xl:24px;--fs-3xl:32px;
+  --fs-xs:12px;--fs-sm:14px;--fs-md:15px;--fs-lg:17px;--fs-xl:20px;--fs-2xl:24px;--fs-3xl:32px;
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;
   --r-sm:6px;--r:8px;--r-lg:12px;--r-xl:16px;--r-full:999px;
   --sh-1:0 1px 2px rgba(20,20,20,.05);--sh-2:0 6px 20px rgba(20,20,20,.08);--sh-3:0 18px 48px rgba(20,20,20,.18);
@@ -57,7 +58,7 @@ h1,h2,h3,h4{font-family:var(--ff-d);color:var(--ink);line-height:1.2;letter-spac
 .fi{width:100%;min-height:40px;padding:8px 12px;border:1px solid var(--line-2);border-radius:var(--r);font-size:var(--fs-md);color:var(--text);background:var(--paper);outline:none;transition:border-color var(--t-fast),box-shadow var(--t-fast)}
 .fi::placeholder{color:var(--faint)}
 .fi:hover:not(:disabled):not([readonly]){border-color:var(--faint)}
-.fi:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(244,196,48,.4)}
+.fi:focus{border-color:var(--brand-primary-text);box-shadow:0 0 0 3px var(--ne-focus)}
 .fi:disabled,.fi[readonly]{background:var(--canvas);color:var(--muted);cursor:not-allowed}
 .fs{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%2362605A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
 .fhint{display:block;margin-top:4px;font-size:var(--fs-xs);color:var(--muted)}

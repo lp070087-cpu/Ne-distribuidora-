@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MaxDistrib · Suplementos no atacado</title>
+<title>NE Distribuidora · Suplementos no atacado</title>
 <meta name="description" content="Veja as ofertas da Black Friday NE, as condições por quantidade e o catálogo demonstrativo de suplementos no atacado.">
 <meta name="theme-color" content="#141414">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23141414'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='800' font-size='15' text-anchor='middle' fill='%23F4C430'%3EMD%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/ne-favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
 .srch .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
 .srch input{width:100%;height:44px;padding:0 var(--s4) 0 42px;border:1px solid var(--line-2);border-radius:var(--r-full);background:var(--canvas);font-size:var(--fs-md);outline:none;transition:background var(--t-fast),border-color var(--t-fast),box-shadow var(--t-fast)}
 .srch input::placeholder{color:var(--muted)}
-.srch input:focus{background:var(--paper);border-color:var(--ink);box-shadow:0 0 0 3px rgba(244,196,48,.4)}
+.srch input:focus{background:var(--paper);border-color:var(--ink);box-shadow:0 0 0 3px var(--ne-focus)}
 .ha{display:flex;align-items:center;gap:var(--s1)}
 .ha-btn{position:relative;display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 10px;border-radius:var(--r);font-size:var(--fs-sm);font-weight:600;color:var(--ink);transition:background var(--t-fast)}
 .ha-btn:hover{background:var(--canvas-2)}
@@ -212,19 +212,20 @@
 @media(max-width:350px){.logo small{display:none}.ha-btn{padding:0 6px}.ppr{font-size:15px}}
 </style>
 <link rel="stylesheet" href="assets/campanha.css">
+<link rel="stylesheet" href="assets/ne-store.css">
 </head>
-<body>
+<body class="ne-store">
 <a class="skip" href="#todos">Ir para o catálogo</a>
 
 <div class="tb on-dark"><div class="wrap tb-in"><span>Suplementos para lojistas, academias e revendedores</span></div></div>
 
 <header class="hd">
   <div class="wrap hd-in">
-    <a href="#inicio" class="logo" aria-label="MaxDistrib, página inicial"><div class="mk">MD</div><div><strong>MaxDistrib</strong><small>Suplementos no atacado</small></div></a>
+    <a href="#inicio" class="logo" aria-label="NE Distribuidora, início"><img class="ne-logo" src="assets/ne-logo.png" width="616" height="110" alt="NE Distribuidora"></a>
     <form class="srch" role="search" onsubmit="event.preventDefault();ft('',true);goCat()">
       <span data-ic="search"></span>
       <label class="sr" for="si">Buscar produtos</label>
-      <input type="search" id="si" placeholder="Buscar por produto, marca ou categoria" autocomplete="off" oninput="ft('',true)">
+      <input type="search" id="si" placeholder="Produto, marca ou categoria" autocomplete="off" oninput="ft('',true)">
     </form>
     <div class="ha">
       <button class="ha-btn" onclick="showFavs()" aria-label="Produtos salvos"><span data-ic="heart" data-ic-cls="ic-lg" style="display:contents"></span><span class="lb">Salvos</span><span class="ha-badge" id="favBg">0</span></button>
@@ -234,8 +235,8 @@
     </div>
   </div>
   <nav class="nav on-dark" aria-label="Principal">
-    <div class="wrap nav-lk" id="navl"><a href="#inicio" class="ac">Início</a><a href="#cat">Categorias</a><a href="#mv">Destaques</a><a href="#ofertas">Ofertas</a><a href="#todos">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a></div>
-    <div class="mob-m" id="mm"><a href="#inicio">Início</a><a href="#cat">Categorias</a><a href="#mv">Destaques</a><a href="#ofertas">Ofertas</a><a href="#todos">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a><a href="#" onclick="event.preventDefault();opL()">Entrar</a></div>
+    <div class="wrap nav-lk" id="navl"><a href="#inicio" class="ac">Início</a><a href="#combos-demo">Combos</a><a href="#mv">Destaques</a><a href="/ofertas">Ofertas</a><a href="#cat">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a></div>
+    <div class="mob-m" id="mm"><a href="#inicio">Início</a><a href="#combos-demo">Combos</a><a href="#mv">Destaques</a><a href="/ofertas">Ofertas</a><a href="#cat">Catálogo</a><a href="#" onclick="event.preventDefault();opL('revendedor')">Revendedor</a><a href="#" onclick="event.preventDefault();opL()">Entrar</a></div>
   </nav>
 </header>
 
@@ -246,13 +247,13 @@
 </section>
 
 <section class="intro on-dark"><div class="wrap intro-in">
-  <div><h1>Suplementos no atacado</h1><p>Confira a campanha da NE e experimente a vitrine de produtos.</p></div>
+  <div><h1>Suplementos no atacado</h1><p>Consulte ofertas por quantidade, marcas e condições de atacado.</p></div>
   <div class="intro-act"><a class="btn btn-g" href="#ofertas">Conferir ofertas</a><button class="btn btn-o" onclick="opL('revendedor')">Testar área do revendedor</button></div>
 </div></section>
 
 <section class="sec reveal" id="cat"><div class="wrap">
-  <div class="sec-hd"><div><p class="sec-ey">Categorias</p><h2 class="sec-tt">Explore por categoria</h2></div></div>
-  <div class="cat-grid" id="cg"></div>
+  <div class="sec-hd"><div><p class="sec-ey">Categorias</p><h2 class="sec-tt">Categorias do catálogo comercial</h2></div></div>
+  <div id="campaign-categories"></div>
 </div></section>
 
 <section class="sec alt reveal" id="mv"><div class="wrap">
@@ -268,23 +269,31 @@
   <div class="campaign-search"><label for="campaign-search">Buscar nas ofertas</label><input id="campaign-search" class="fi" type="search" placeholder="Produto, marca ou categoria" autocomplete="off"></div>
   <div class="campaign-controls" id="campaign-filters" aria-label="Filtrar ofertas"><button type="button" class="chip" data-kind="all">Todas</button><button type="button" class="chip" data-kind="product">Produtos</button><button type="button" class="chip" data-kind="combo">Combos</button><span class="campaign-count" id="campaign-count" role="status"></span></div>
   <div class="campaign-grid" id="campaign-grid"></div>
-  <button type="button" class="btn btn-g campaign-more" id="campaign-more" hidden>Mostrar mais ofertas</button>
+  <a class="btn btn-g campaign-more" id="campaign-more" href="/ofertas" hidden>Mostrar mais ofertas</a>
 </div></section>
 
 <section class="sec alt" id="todos"><div class="wrap">
   <div class="sec-hd" style="margin-bottom:var(--s4)"><div><p class="sec-ey">Catálogo</p><h2 class="sec-tt">Catálogo demonstrativo</h2></div></div>
   <p class="demo-note">Preços, estoque, cadastro e pedidos simulados. Para compras, consulte a loja oficial.</p>
   <div class="cat-bar"><div class="chips" id="chips"></div><span class="cnt" id="cnt" aria-live="polite"></span></div>
+  <div class="cat-grid demo-category-grid" id="cg" aria-label="Categorias demonstrativas"></div>
   <div class="pgrid" id="pgAll"></div>
-  <details class="demo-combos"><summary>Combos de demonstração</summary><div class="combos-grid on-dark" id="combos"></div></details>
+</div></section>
+<section class="sec ne-combos on-dark" id="combos-demo" aria-labelledby="demo-combos-title"><div class="wrap">
+  <div class="sec-hd"><div><p class="sec-ey">Simulação de compra</p><h2 class="sec-tt" id="demo-combos-title">Combos de demonstração</h2><p class="demo-combo-note">Kits e preços simulados para testar o carrinho.</p></div><a class="btn btn-g" href="/ofertas?tipo=combo">Ver combos promocionais</a></div>
+  <div class="combos-grid" id="combos"></div>
+</div></section>
+<section class="sec ne-accessories on-dark" id="acessorios" aria-labelledby="accessories-title"><div class="wrap">
+  <div class="sec-hd"><div><h2 class="sec-tt" id="accessories-title">Camisas e Acessórios</h2><p>O catálogo ainda não tem peças e acessórios avulsos cadastrados.</p></div></div>
+  <div class="ne-accessory-note"><div><h3>Coqueteleiras em combos</h3><p>Há coqueteleiras de 1 L e 720 ml como brinde em dois combos da campanha, conforme as condições de cada kit.</p></div><a class="btn btn-g" href="/ofertas?tipo=combo&amp;q=coqueteleira">Consultar combos com brinde</a></div>
 </div></section>
 </main>
 
 <footer class="foot on-dark"><div class="wrap">
   <div class="foot-in">
-    <div><div class="logo"><div class="mk">MD</div><div><strong>MaxDistrib</strong><small>Suplementos no atacado</small></div></div><p class="d">Distribuidora de suplementos para lojistas, academias e revendedores.</p></div>
+    <div><a href="#inicio" class="logo"><img class="ne-logo" src="assets/ne-logo.png" width="616" height="110" alt="NE Distribuidora"></a><p class="d">Suplementos para lojistas, academias e revendedores.</p></div>
     <div><h4>Categorias</h4><ul id="fcats"></ul></div>
-    <div><h4>Loja</h4><ul><li><a href="#mv">Destaques</a></li><li><a href="#ofertas">Ofertas</a></li><li><a href="#todos">Catálogo</a></li><li><button class="lk" onclick="opL('revendedor')">Área do revendedor</button></li></ul></div>
+    <div><h4>Loja</h4><ul><li><a href="#mv">Destaques</a></li><li><a href="/ofertas">Ofertas</a></li><li><a href="#cat">Catálogo</a></li><li><button class="lk" onclick="opL('revendedor')">Área do revendedor</button></li></ul></div>
     <div><h4>Atendimento</h4><ul><li><a href="https://www.nedistribuidora.com.br/" target="_blank" rel="noopener">Loja oficial da NE</a></li></ul>
     <h4 style="margin-top:var(--s4)">Acesso interno</h4><ul><li><a href="estoque-inteligente-v3.html">Estoque Inteligente</a></li><li><a href="painel-vendedores.html">Painel do vendedor</a></li></ul></div>
   </div>
@@ -325,14 +334,15 @@ var prods=[
 {id:19,n:'Évora PW 300g Frutas Amarelas',cat:'Pré-Treinos',br:'Darkness',img:IP+P+'_VORA_PW___300G_-_FRUTAS_AMARELAS___DARKNESS___PR_-TREINO_ac8e0e2_thumb.webp',dp:58,rp:119.90,q:38,mn:15,sld:0,hot:false,novo:true}
 ];
 var combos=[
-{id:101,n:'Combo Seleção 01',tag:'Mais pedido',d:'Whey 900g + Creatina 300g Max Titanium.',pr:119.90,old:154.90,imgs:[IP+W+'100_WHEY_-_POTE___900G_-_LEITE___MAX_TITANIUM___PROTEINA_1808817_thumb.webp',IP+C+'CREATINA___300G___MAX_TITANIUM___AMINOACIDO_768adf8_thumb.webp'],ft:true},
-{id:102,n:'Combo Pré-Treino',tag:'Reposição',d:'Pré-Treino Évora PW 300g + Creatina 300g.',pr:94.90,old:126.90,imgs:[IP+P+'EVORA_PW_XT_-_POTE___300G_-_NEON_BERRY___DARKNESS___PRE-TREINO_898fb04_thumb.webp']},
-{id:103,n:'Combo Proteína + Creatina',tag:'Novo',d:'Carnbull 900g + Creatina Creapure 250g.',pr:132.90,old:161.90,imgs:[IP+W+'CARNBULL_-_POTE___900G_-_MA___VERDE___TA_SUPLEMENTOS___PROTE_NA_611a214_thumb.webp',IP+C+'CREATINA_CREAPURE_-_POTE___250G___MAX_TITANIUM___CREATINAS_6c27bb8_thumb.webp']}
+{id:101,n:'Combo Seleção 01',tag:'Mais pedido',d:'1 whey de 900 g e 1 creatina de 300 g Max Titanium.',pr:119.90,old:154.90,imgs:[IP+W+'100_WHEY_-_POTE___900G_-_LEITE___MAX_TITANIUM___PROTEINA_1808817_thumb.webp',IP+C+'CREATINA___300G___MAX_TITANIUM___AMINOACIDO_768adf8_thumb.webp'],ft:true},
+{id:102,n:'Combo Pré-Treino',tag:'Reposição',d:'1 pré-treino Évora PW de 300 g e 1 creatina de 300 g.',pr:94.90,old:126.90,imgs:[IP+P+'EVORA_PW_XT_-_POTE___300G_-_NEON_BERRY___DARKNESS___PRE-TREINO_898fb04_thumb.webp']},
+{id:103,n:'Combo Proteína + Creatina',tag:'Novo',d:'1 Carnbull de 900 g e 1 creatina Creapure de 250 g.',pr:132.90,old:161.90,imgs:[IP+W+'CARNBULL_-_POTE___900G_-_MA___VERDE___TA_SUPLEMENTOS___PROTE_NA_611a214_thumb.webp',IP+C+'CREATINA_CREAPURE_-_POTE___250G___MAX_TITANIUM___CREATINAS_6c27bb8_thumb.webp']}
 ];
 var cats=['Proteínas','Creatinas','Pré-Treinos'];
 var vends=['Lucas Silva','Marina Costa','Pedro Santos','Ana Oliveira','Rafael Lima','Juliana Souza','Carlos Eduardo','Fernanda Torres'];
 var verifiedOffers={2:'catalogo-3',9:'catalogo-13',13:'queima-08',17:'queima-01'};
-var cartTrigger;
+var cartTrigger,loginTrigger;
+var demoOrders=[];
 var user=null,cart=[],lt='cliente',curCat='',favOnly=false,favs=[];
 var $=function(i){return document.getElementById(i)},fR=NE.money,to=NE.toast,ic=NE.ic,esc=NE.esc;
 try{favs=JSON.parse(localStorage.getItem('md_favs'))||[]}catch(e){}
@@ -404,22 +414,29 @@ function chk(){
   $('lm').classList.add('on');
   $('lb').innerHTML='<div class="modal-hd"><h3 id="mt">Confirmar pedido</h3><button class="btn btn-gh btn-ic" onclick="clL()" aria-label="Fechar">'+ic('x')+'</button></div><div class="modal-bd"><ul class="sum-l">'+cart.map(function(c){return'<li><span>'+esc(c.n)+' × '+c.q+'</span><strong class="num">'+fR(c.prc*c.q)+'</strong></li>'}).join('')+'</ul><div class="cart-tot" style="margin-top:var(--s3)"><strong>Total</strong><span class="vl num">'+fR(tt)+'</span></div><p class="note">Ambiente de demonstração: nenhum pagamento é processado.</p></div><div class="modal-ft"><button class="btn btn-o" onclick="clL()">Voltar</button><button class="btn btn-g" onclick="doChk()">Confirmar pedido</button></div>';
 }
-function doChk(){cart=[];uCart();rCart();clL();if($('cs').classList.contains('on'))tCart();to('Simulação de pedido concluída')}
+function doChk(){
+  demoOrders.push({email:user.email,id:'DEMO-'+String(demoOrders.length+1).padStart(3,'0'),date:new Date(),qty:cart.reduce(function(sum,item){return sum+item.q},0),total:cart.reduce(function(sum,item){return sum+item.prc*item.q},0)});
+  cart=[];uCart();rCart();clL();if($('cs').classList.contains('on'))tCart();to('Simulação de pedido concluída');
+}
 
 function opL(tab){
-  var isL=!!user;closeMenu();$('lm').classList.add('on');
+  var isL=!!user;loginTrigger=document.activeElement;closeMenu();$('lm').classList.add('on');
   if(isL){
-    $('lb').innerHTML='<div class="modal-hd"><h3 id="mt">Minha conta</h3><button class="btn btn-gh btn-ic" onclick="clL()" aria-label="Fechar">'+ic('x')+'</button></div><div class="modal-bd user-c"><div class="av">'+ic('user','ic-lg')+'</div><h4>'+esc(user.name)+'</h4><p>'+esc(user.email)+' · '+(user.tp==='rev'?'Revendedor'+(user.vend?' · '+esc(user.vend):''):'Cliente')+'</p>'+(user.tp==='rev'?'<div class="tip">Você vê os preços de distribuidora e a referência da loja.</div>':'')+'<button class="btn btn-p btn-w" onclick="doLg()">Sair</button></div>';
+    var isR=user.tp==='rev', history=demoOrders.filter(function(order){return order.email===user.email}).reverse();
+    var orders=history.map(function(order){return '<li><div><strong>'+order.id+'</strong><span>'+order.date.toLocaleDateString('pt-BR')+' · '+order.qty+' un.</span></div><strong>'+fR(order.total)+'</strong></li>'}).join('');
+    $('lb').innerHTML='<div class="modal-hd"><h3 id="mt">Minha conta</h3><button class="btn btn-gh btn-ic" onclick="clL()" aria-label="Fechar">'+ic('x')+'</button></div><div class="modal-bd ne-account"><p class="ne-account-kicker">Demonstração · '+(isR?'Revendedor':'Cliente')+'</p><h4>'+esc(user.name)+'</h4><p>'+esc(user.email)+(user.vend?' · '+esc(user.vend):'')+'</p><div class="ne-account-links"><button class="btn btn-o" onclick="clL();showFavs()">Produtos salvos</button><button class="btn btn-o" onclick="clL();tCart()">Carrinho</button></div>'+(isR?'<p class="tip">Preços de revenda simulados. Consulte os encartes para condições comerciais da campanha.</p>':'')+'<h4>Pedidos nesta sessão</h4>'+(history.length?'<ul class="ne-order-list">'+orders+'</ul>':'<p class="note">Nenhum pedido simulado nesta sessão.</p>')+'<button class="btn btn-p btn-w" onclick="doLg()">Sair</button></div>';
+    $('lb').querySelector('button').focus();
     return;
   }
   lt=tab==='revendedor'?'revendedor':'cliente';var r=lt==='revendedor';
-  $('lb').innerHTML='<div class="modal-hd"><h3 id="mt">Entrar</h3><button class="btn btn-gh btn-ic" onclick="clL()" aria-label="Fechar">'+ic('x')+'</button></div><div class="modal-bd"><div class="seg" id="lt" style="margin-bottom:var(--s4)"><button class="'+(r?'':'on')+'" onclick="swLT(\'cliente\',this)">Cliente</button><button class="'+(r?'on':'')+'" onclick="swLT(\'revendedor\',this)">Revendedor</button></div><form onsubmit="doL(event)"><div class="fg"><label for="lfN">Nome</label><input class="fi" id="lfN" autocomplete="name" required></div><div class="fg"><label for="lfE">E-mail</label><input type="email" class="fi" id="lfE" autocomplete="email" required></div><div class="fg"><label for="lfP">WhatsApp</label><input class="fi" id="lfP" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"></div><div class="fg" id="vg" style="display:'+(r?'block':'none')+'"><label for="lfV">Seu vendedor</label><select class="fi fs" id="lfV"><option value="">Selecione</option>'+vends.map(function(v){return'<option>'+v+'</option>'}).join('')+'</select><span class="fhint">Ele acompanha seus pedidos e pode aplicar descontos.</span></div><button type="submit" class="btn btn-g btn-w">Entrar</button></form><p class="note">Ambiente de demonstração: qualquer e-mail é aceito.</p></div>';
+  $('lb').innerHTML='<div class="modal-hd"><h3 id="mt">Acesso demonstrativo</h3><button class="btn btn-gh btn-ic" onclick="clL()" aria-label="Fechar">'+ic('x')+'</button></div><div class="modal-bd"><div class="seg" id="lt" style="margin-bottom:var(--s4)"><button class="'+(r?'':'on')+'" onclick="swLT(\'cliente\',this)">Cliente</button><button class="'+(r?'on':'')+'" onclick="swLT(\'revendedor\',this)">Revendedor</button></div><form onsubmit="doL(event)"><div class="fg"><label for="lfN">Nome</label><input class="fi" id="lfN" autocomplete="name" required></div><div class="fg"><label for="lfE">E-mail</label><input type="email" class="fi" id="lfE" autocomplete="email" required></div><div class="fg"><label for="lfP">WhatsApp</label><input class="fi" id="lfP" inputmode="tel" autocomplete="tel" placeholder="(81) 99999-9999"></div><div class="fg" id="vg" style="display:'+(r?'block':'none')+'"><label for="lfV">Seu vendedor</label><select class="fi fs" id="lfV"><option value="">Selecione</option>'+vends.map(function(v){return'<option>'+v+'</option>'}).join('')+'</select><span class="fhint">Ele acompanha seus pedidos e pode aplicar descontos.</span></div><button type="submit" class="btn btn-g btn-w">Entrar</button></form><p class="note">Acesso demonstrativo nesta sessão. Use dados de teste.</p></div>';
   setTimeout(function(){var f=$('lfN');if(f)f.focus()},60);
 }
 function swLT(t,b){lt=t;document.querySelectorAll('#lt button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');$('vg').style.display=t==='revendedor'?'block':'none'}
-function doL(e){e.preventDefault();var n=$('lfN').value.trim(),em=$('lfE').value.trim(),v=lt==='revendedor'?$('lfV').value:'';if(!n||!em){to('Preencha nome e e-mail','err');return}user={tp:lt==='revendedor'?'rev':lt,name:n,email:em,vend:v||undefined};clL();rAll();$('ul').textContent=n.split(' ')[0];to('Bem-vindo, '+n.split(' ')[0])}
-function doLg(){user=null;rAll();$('ul').textContent='Entrar';clL();to('Você saiu da conta')}
-function clL(){$('lm').classList.remove('on')}
+function doL(e){e.preventDefault();var n=$('lfN').value.trim(),em=$('lfE').value.trim(),v=lt==='revendedor'?$('lfV').value:'';if(!n||!em){to('Preencha nome e e-mail','err');return}user={tp:lt==='revendedor'?'rev':lt,name:n,email:em,vend:v||undefined};clL();rAll();$('ul').textContent=n.split(' ')[0];refreshCartPrices();to('Bem-vindo, '+n.split(' ')[0])}
+function refreshCartPrices(){cart.forEach(function(item){var product=prods.find(function(p){return p.id===item.id});if(product)item.prc=user&&user.tp==='rev'?product.dp:product.rp});rCart()}
+function doLg(){user=null;refreshCartPrices();rAll();$('ul').textContent='Entrar';clL();to('Você saiu da conta')}
+function clL(){var open=$('lm').classList.contains('on');$('lm').classList.remove('on');if(open&&loginTrigger&&loginTrigger.getClientRects().length)loginTrigger.focus()}
 $('lm').addEventListener('click',function(e){if(e.target===this)clL()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){clL();if($('cs').classList.contains('on'))tCart();closeMenu()}});
 

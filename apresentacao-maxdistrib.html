@@ -4,17 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaxDistrib — Proposta de Projeto</title>
+<link rel="icon" type="image/png" href="assets/ne-favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/ne-theme.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 h1,h2,h3,h4,.section-title{font-family:'Montserrat','Inter',sans-serif}
-body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height:1.7;overflow-x:hidden;min-width:320px;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;color:#3a3a3a;background:var(--ne-light);line-height:1.7;overflow-x:hidden;min-width:320px;-webkit-font-smoothing:antialiased}
 :root{
-  --blue:#141414;--blue-mid:#2a2a2a;--blue-light:#EFEDE8;--blue-dark:#0c0c0c;
-  --orange:#F4C430;--orange-dark:#E2B31F;--orange-light:#FDF6DD;--gold-text:#7D6000;
+  --blue:#141414;--blue-mid:#2a2a2a;--blue-light:var(--ne-light-alt);--blue-dark:#0c0c0c;
+  --orange:var(--brand-primary);--orange-dark:var(--ne-primary-hover);--orange-light:var(--ne-primary-soft);--gold-text:var(--brand-primary-text);
   --teal:#1C7345;--teal-light:#E8F4ED;
-  --gray-bg:#F6F5F2;--gray-border:#E6E4DF;--gray-text:#3a3a3a;--gray-muted:#6f6d66;
+  --gray-bg:var(--ne-light);--gray-border:var(--ne-light-border);--gray-text:#3a3a3a;--gray-muted:var(--ne-light-muted);
   --white:#fff;
   --shadow-sm:0 1px 3px rgba(0,0,0,.06);
   --shadow-md:0 4px 14px rgba(0,0,0,.08);
@@ -28,10 +30,10 @@ body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height
 
 /* Hero */
 .hero{background:linear-gradient(135deg,var(--blue) 0%,#2a2a2a 100%);color:#fff;padding:80px 20px 60px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(244,196,48,.25) 0%,transparent 70%);pointer-events:none}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgb(219 169 130 / .25) 0%,transparent 70%);pointer-events:none}
 .hero::after{content:'';position:absolute;bottom:-80px;left:-80px;width:350px;height:350px;background:radial-gradient(circle,rgba(30,74,140,.3) 0%,transparent 70%);pointer-events:none}
 .hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(244,196,48,.2);border:1px solid rgba(244,196,48,.4);color:var(--orange);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgb(219 169 130 / .2);border:1px solid rgb(219 169 130 / .4);color:var(--orange);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px}
 .hero-badge span{width:7px;height:7px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
 .hero h1{font-size:clamp(30px,4.5vw,50px);font-weight:900;line-height:1.15;letter-spacing:-1px;margin-bottom:16px}
@@ -129,13 +131,13 @@ body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height
 
 /* CTA */
 .cta{background:linear-gradient(135deg,var(--blue) 0%,#2a2a2a 100%);color:#fff;padding:70px 20px;text-align:center;position:relative;overflow:hidden}
-.cta::before{content:'';position:absolute;top:-50px;right:-50px;width:250px;height:250px;background:radial-gradient(circle,rgba(244,196,48,.2) 0%,transparent 70%);pointer-events:none}
+.cta::before{content:'';position:absolute;top:-50px;right:-50px;width:250px;height:250px;background:radial-gradient(circle,rgb(219 169 130 / .2) 0%,transparent 70%);pointer-events:none}
 .cta-inner{max-width:700px;margin:0 auto;position:relative;z-index:1}
 .cta h2{font-size:clamp(24px,3vw,38px);font-weight:900;margin-bottom:14px;letter-spacing:-.5px}
 .cta h2 span{color:var(--orange)}
 .cta p{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:30px}
 .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn-primary{background:var(--orange);color:#141414;padding:14px 30px;border-radius:10px;font-size:15px;font-weight:800;border:none;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(244,196,48,.35)}
+.btn-primary{background:var(--orange);color:#141414;padding:14px 30px;border-radius:10px;font-size:15px;font-weight:800;border:none;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgb(219 169 130 / .35)}
 .btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px)}
 .btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:2px solid rgba(255,255,255,.3);padding:12px 26px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .btn-ghost:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5)}
@@ -212,6 +214,9 @@ body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+.internal-ne-logo{display:block;object-fit:contain;width:142px;height:auto;max-width:100%;padding:6px 8px;background:var(--brand-text);border-radius:5px}
+.hero .internal-ne-logo{width:175px;margin:0 auto 18px}.hero-sub{font-size:clamp(1rem,2.15vw,1.2rem);line-height:1.55}.hero h1{letter-spacing:-.035em}
 </style>
 </head>
 <body>
@@ -224,6 +229,7 @@ body{font-family:'Inter',sans-serif;color:#3a3a3a;background:#F6F5F2;line-height
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="hero-inner">
+    <img class="internal-ne-logo" src="assets/ne-logo.png" width="616" height="110" alt="NE Distribuidora">
     <div class="hero-badge"><span></span> Proposta Comercial</div>
     <h1>MaxDistrib —<br><span>Distribuição Inteligente</span></h1>
     <p class="hero-sub">Uma plataforma completa que une e-commerce público, estoque inteligente com IA, e painel de vendedores com metas e links exclusivos — tudo integrado em um só sistema.</p>

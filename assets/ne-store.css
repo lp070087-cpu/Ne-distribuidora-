@@ -1,0 +1,61 @@
+.ne-store .tb, .ne-store .hd, .ne-store .nav, .ne-store .mob-m { background: var(--brand-header); }
+.ne-store .hd { box-shadow: 0 1px 0 var(--brand-border); }
+.ne-store .logo { display: inline-flex; width: max-content; max-width: 100%; padding: 6px 8px; border-radius: 5px; background: var(--brand-text); }
+.ne-logo { width: clamp(105px, 13vw, 174px); height: auto; object-fit: contain; }
+.ne-store .srch input { background: var(--brand-secondary); border-color: var(--brand-border); color: var(--brand-text); }
+.ne-store .srch input::placeholder, .ne-store .srch .ic { color: var(--brand-muted); }
+.ne-store .srch input:focus { border-color: var(--brand-primary); box-shadow: 0 0 0 2px var(--ne-focus); }
+.ne-store .ha-btn { color: var(--brand-text); }
+.ne-store .ha-btn:hover, .ne-store .ha .btn:hover { background: var(--brand-footer); }
+.ne-store .ha .btn { border-color: var(--brand-border); }
+.ne-store .ha-badge { box-shadow: 0 0 0 2px var(--brand-header); }
+.ne-store .hd :focus-visible { outline-color: var(--brand-primary); }
+.ne-store .intro, .ne-store #cat { background: var(--brand-secondary); color: var(--brand-text); }
+.ne-store #cat .sec-tt { color: var(--brand-text); }
+.ne-store #cat .sec-ey, .ne-combos .sec-ey { color: var(--brand-primary); }
+.ne-store .foot { background: var(--brand-footer); }
+.ne-store .sec-tt { line-height: 1.15; letter-spacing: -.025em; }
+.ne-store .demo-category-grid { margin-bottom: 16px; }
+.ne-store .pimg { background: var(--ne-light); }
+.ne-store .pbody { padding: 12px; }
+.ne-store .pbrand { min-height: 1.3em; }
+.ne-store .pname { min-height: 3.85em; line-height: 1.3; font-size: .94rem; }
+.ne-store .ppr { font-size: 1.15rem; margin-top: 0; }
+.ne-store .pcard .btn { padding-inline: 7px; min-height: 44px; }
+.ne-store .pbody:not(:has(.verified-offer))::after { content: ''; min-height: 1.55rem; }
+.ne-store .pbody .verified-offer { color: var(--brand-primary-text); min-height: 1.2rem; }
+.ne-combos { background: var(--brand-surface); }
+.ne-combos .combo-img { background: var(--ne-light-alt); border-radius: 8px; }
+.ne-combos .combo-name { margin-top: 4px; }
+.ne-combos .combo-desc { min-height: 2.9em; }
+.ne-combos .combo-card .btn { margin-top: auto; min-height: 44px; }
+.demo-combo-note, .ne-accessories p { color: var(--brand-muted); margin-top: 5px; }
+.ne-accessories { background: var(--brand-secondary); }
+.ne-accessory-note { padding: 16px; border: 1px solid var(--brand-border); border-radius: 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: var(--brand-surface); }
+.ne-accessory-note h3 { color: var(--brand-text); font-size: 1.05rem; }
+.ne-accessory-note p { max-width: 65ch; }
+.ne-accessory-note .btn { min-height: 44px; white-space: normal; text-align: center; }
+.ne-account { display: grid; gap: 9px; overflow-wrap: anywhere; }
+.ne-account h4 { font-family: var(--ff); font-size: 1rem; }
+.ne-account .tip { text-align: left; }
+.ne-account .note { margin-top: 0; text-align: left; }
+.ne-account-kicker { color: var(--brand-primary-text); font-weight: 700; }
+.ne-account-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.ne-order-list { list-style: none; }
+.ne-order-list li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+.ne-order-list span { display: block; color: var(--muted); }
+.ne-store .modal input, .ne-store .modal select { font-size: 16px; }
+
+@media (max-width: 600px) {
+  .ne-store .ha-btn { padding: 0 7px; }
+  .ne-store .cat-grid.demo-category-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; }
+  .ne-store .demo-category-grid .cat-c { padding: 9px; }
+  .ne-store .demo-category-grid .cat-c h3 { font-size: .88rem; }
+  .ne-store .demo-category-grid .cat-c img, .ne-store .demo-category-grid .go { display: none; }
+  .ne-store .pbody { padding: 9px; }
+  .ne-store .pname { min-height: 5.15em; }
+  .ne-store .pimg img { inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); }
+  .ne-store .pbody .verified-offer { font-size: .78rem; }
+  .ne-store .modal-ov { padding: 10px; }
+  .ne-store .modal-bd { padding: 14px; }
+}

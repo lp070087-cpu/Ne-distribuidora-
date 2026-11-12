@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>MaxDistrib · Painel do Vendedor</title>
+<link rel="icon" type="image/png" href="assets/ne-favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/ds.css">
 <script src="assets/ds.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<script src="/assets/chart.umd.js"></script>
 <style>
 .meta-bar{background:var(--canvas-2);border-radius:var(--r);height:12px;overflow:hidden;margin:var(--s2) 0}
 .meta-fill{height:100%;background:var(--gold);border-radius:var(--r);transition:width .5s var(--ease)}
@@ -63,6 +64,9 @@ tr.me{background:var(--gold-soft)}tr.me:hover{background:var(--gold-soft)}
   .chart-box{height:190px}
   .modal-ft .btn,.link-acts .btn{min-height:44px}
 }
+
+.internal-ne-logo{display:block;object-fit:contain;width:142px;height:auto;max-width:100%;padding:6px 8px;background:var(--brand-text);border-radius:5px}
+.sidebar-head{min-height:72px;height:auto;align-items:flex-start;justify-content:center;flex-direction:column;gap:5px}.sidebar-head small{color:var(--brand-muted)}
 </style>
 </head>
 <body class="app">
@@ -70,7 +74,7 @@ tr.me{background:var(--gold-soft)}tr.me:hover{background:var(--gold-soft)}
 <div class="overlay" id="overlay" onclick="toggleSidebar(true)"></div>
 
 <aside class="sidebar" id="sidebar" aria-label="Menu do painel">
-  <div class="sidebar-head"><div class="mk">MD</div><div><strong>MaxDistrib</strong><small>Painel do Vendedor</small></div></div>
+  <div class="sidebar-head"><img class="internal-ne-logo" src="assets/ne-logo.png" width="616" height="110" alt="NE Distribuidora"><small>Painel do Vendedor</small></div>
   <nav class="sidebar-nav">
     <button class="sidebar-link stag-link on" data-tag="dash" data-ic="dash" onclick="openTag('dash')">Visão geral</button>
     <button class="sidebar-link stag-link" data-tag="pedidos" data-ic="list" onclick="openTag('pedidos')">Pedidos por cliente</button>
@@ -156,7 +160,7 @@ function drawBar(id, labels, values, label, colors) {
   var prev = Chart.getChart(c); if (prev) prev.destroy();
   Chart.defaults.font.family = "'Inter',sans-serif";
   Chart.defaults.color = '#62605A';
-  new Chart(c, {type:'bar',data:{labels:labels,datasets:[{label:label,data:values,backgroundColor:colors || '#F4C430',hoverBackgroundColor:'#141414',borderRadius:6,maxBarThickness:44}]},options:{responsive:true,maintainAspectRatio:false,animation:matchMedia('(prefers-reduced-motion: reduce)').matches ? false : {duration:250},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{beginAtZero:true,grid:{color:'#EFEDE8'},border:{display:false}}}}});
+  new Chart(c, {type:'bar',data:{labels:labels,datasets:[{label:label,data:values,backgroundColor:colors || getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim(),hoverBackgroundColor:'#141414',borderRadius:6,maxBarThickness:44}]},options:{responsive:true,maintainAspectRatio:false,animation:matchMedia('(prefers-reduced-motion: reduce)').matches ? false : {duration:250},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{beginAtZero:true,grid:{color:'#EFEDE8'},border:{display:false}}}}});
 }
 
 function toggleSidebar(force) {
@@ -372,7 +376,7 @@ function openClientDetail(clientName) {
   setTimeout(function() {
     var prods = {}; cos.forEach(function(o) { prods[o.product] = (prods[o.product] || 0) + o.qty; });
     var sorted = Object.entries(prods).sort(function(a,b) { return b[1] - a[1]; });
-    drawBar('chPrd', sorted.map(function(d) { return d[0]; }), sorted.map(function(d) { return d[1]; }), 'Un', ['#F4C430','#141414','#3a3a3a','#62605A','#8A877F']);
+    drawBar('chPrd', sorted.map(function(d) { return d[0]; }), sorted.map(function(d) { return d[1]; }), 'Un', [getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim(),'#141414','#3a3a3a','#62605A','#8A877F']);
   }, 60);
 }
 
