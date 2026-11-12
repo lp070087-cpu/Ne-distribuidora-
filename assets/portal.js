@@ -15,6 +15,41 @@ const pages = [['inicio','Visão geral'],['produtos','Comprar produtos'],['carri
   ['perfil','Meu perfil'],['configuracoes','Configurações']];
 let account, config, review, checkoutKey, timer, renderVersion = 0;
 let catalogSearch = '', catalogCategory = '';
+const guestKey = 'maxdistrib-guest-cart';
+let guestItems;
+try {
+  const saved = JSON.parse(localStorage.getItem(guestKey)||'[]');
+  guestItems = new Map((Array.isArray(saved) ? saved : []).filter(item =>
+    typeof item?.sku==='string' && Number.isInteger(item.quantity) && item.quantity>0 && item.quantity<=10000
+  ).slice(0,100).map(item=>[item.sku,item.quantity]));
+} catch { guestItems = new Map(); }
+function saveGuest() {
+  try { localStorage.setItem(guestKey,JSON.stringify([...guestItems].map(([sku,quantity])=>({sku,quantity})))); }
+  catch { /* The in-memory selection stays available for this tab. */ }
+}
+async function importGuest() {
+  if (!account || account.role==='ADMIN' || !guestItems.size) return;
+  const items = [...guestItems].map(([sku,quantity])=>({sku,quantity}));
+  const {ignored} = await api('cart.import',{items});
+  for (const {sku} of items) if (!ignored.includes(sku)) guestItems.delete(sku);
+  saveGuest();
+  if (ignored.length) notice('Alguns itens da seleção visitante ficaram pendentes. Confira as quantidades no catálogo.',true);
+}
+async function guestPage(page) {
+  const list = await api('catalog.public',{search:page==='produtos'?catalogSearch:''});
+  if (page==='produtos') return heading('Comprar produtos')+`<div class="stack">
+    <form class="card actions" data-form="search">${field('search','Buscar produtos','type="search" maxlength="100"',catalogSearch)}
+    ${submit('Buscar')}${link('Ver seleção','#carrinho')}${link('Entrar','#entrar')}</form>
+    ${products(list,new Set())}</div>`;
+  const available = new Map(list.map(product=>[product.sku,product]));
+  return heading('Meu carrinho')+`<section class="card stack">${[...guestItems].map(([sku,quantity])=>{
+    const p = available.get(sku);
+    return `<div class="row"><span>${esc(p?.name || sku)} × ${quantity}${p?.retail_cents && p.available>=quantity?' · '+money(p.retail_cents*quantity):' · Disponibilidade a confirmar'}</span>
+      ${button('Remover','data-action="guest.remove" data-sku="'+esc(sku)+'"',true)}</div>`;
+  }).join('')||'<p>Sua seleção está vazia.</p>'}
+  <p>Entre na sua conta para recuperar a seleção e revisar as condições de compra.</p>
+  <div class="actions">${link('Entrar para continuar','#entrar')}${link('Continuar comprando','#produtos')}</div></section>`;
+}
 const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money = value => Number(value/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const date = value => new Date(value).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
@@ -98,7 +133,7 @@ function authView(page) {
   return login + `<form data-form="login" class="card entry stack"><h2>Entrar</h2>
     ${field('email','E-mail','type="email" autocomplete="username" required maxlength="254"')}
     ${field('password','Senha','type="password" autocomplete="current-password" required maxlength="128"')}
-    <div class="actions">${submit('Entrar')}${terms?link('Criar conta','#criar'):''}${config.recovery?link('Esqueci minha senha','#recuperar'):''}</div></form>`;
+    <div class="actions">${submit('Entrar')}${terms?link('Criar conta','#criar'):''}${config.recovery?link('Esqueci minha senha','#recuperar'):''}${link('Ver catálogo','#produtos')}</div></form>`;
 }
 function ordersList(list) {
   return list.length ? list.map(order=>`<div class="row"><div><strong>${esc(order.code)}</strong>
@@ -119,7 +154,7 @@ async function overview() {
 }
 function products(list, favorites, favoritePage=false) {
   if (!list.length) return empty(favoritePage?'Você ainda não salvou produtos.':'Nenhum produto disponível para esta seleção.',favoritePage?link('Ver produtos','#produtos'):'');
-  const reseller = account.role===WHOLESALE;
+  const reseller = account?.role===WHOLESALE;
   return `<div class="products">${list.map(product=>{
     const saved = favorites.has(product.sku);
     const tiers = reseller ? product.tiers || [] : [];
@@ -136,7 +171,7 @@ function products(list, favorites, favoritePage=false) {
       }).join('')+'</ul>':''}
       <p class="muted">${available?'Disponível':'Indisponível para compra'}</p>
       <div class="actions">${available?button('Adicionar ao carrinho','data-action="cart.set" data-sku="'+esc(product.sku)+'" data-quantity="'+minimum+'"') : ''}
-      ${button(saved?'Remover dos favoritos':'Salvar nos favoritos','data-action="favorite.set" data-sku="'+esc(product.sku)+'" data-saved="'+(!saved)+'"',true)}</div>
+      ${account ? button(saved?'Remover dos favoritos':'Salvar nos favoritos','data-action="favorite.set" data-sku="'+esc(product.sku)+'" data-saved="'+(!saved)+'"',true) : ''}</div>
     </article>`;
   }).join('')}</div>`;
 }
@@ -219,9 +254,12 @@ function reviewPage() {
 function orderDetails(order, admin=false) {
   return `<section class="card stack"><p><strong>${badge(order.status)}</strong> · ${date(order.created_at)}</p>
     ${order.cancellation_requested_at?'<p class="notice">Cancelamento solicitado.</p>':''}
-    <p>${badge(order.role)} · Entrega mediante cotação</p><p>${addressLabel(order.address)}</p>
+    <p>${badge(order.role)} · ${order.freight_cents==null?'Frete a cotar':'Frete cotado: '+money(order.freight_cents)}</p><p>${addressLabel(order.address)}</p>
+    ${order.carrier?'<p>Transportadora: '+esc(order.carrier)+'</p>':''}
+    ${order.tracking_code?'<p>Rastreio: '+esc(order.tracking_code)+'</p>':''}
     ${order.items.map(i=>`<div class="row"><span>${esc(i.name)} × ${i.quantity}</span><strong>${money(i.unit_cents*i.quantity)}</strong></div>`).join('')}
-    <p class="price">Subtotal dos produtos · ${money(order.subtotal_cents)}</p><h2>Histórico do pedido</h2>
+    <p class="price">Subtotal dos produtos · ${money(order.subtotal_cents)}</p>
+    ${order.freight_cents==null?'':'<p class="price">Total com frete · '+money(Number(order.subtotal_cents)+order.freight_cents)+'</p>'}<h2>Histórico do pedido</h2>
     <ol>${order.events.map(e=>`<li>${badge(e.status)} · ${date(e.created_at)}</li>`).join('')}</ol>
     ${admin?'':`<div class="actions">${button('Comprar novamente','data-action="order.reorder" data-id="'+order.id+'"')}
       ${link('Solicitar atendimento','#atendimento='+order.id)}
@@ -289,7 +327,7 @@ async function draw() {
   main.setAttribute('aria-busy','true');
   try {
     const html = !config?.enabled ? heading('Minha Conta')+empty('O portal está temporariamente indisponível.',link('Voltar à vitrine','/'))
-      : !account ? authView(page) : isAdmin ? await admin.render(page) : await customerPage(page);
+      : !account ? (['produtos','carrinho'].includes(page) ? await guestPage(page) : authView(page)) : isAdmin ? await admin.render(page) : await customerPage(page);
     if (version===renderVersion) main.innerHTML = html;
   } catch (error) {
     if (version===renderVersion) main.innerHTML = heading('Minha Conta')+empty(esc(error.message),button('Tentar novamente','data-action="reload"',true));
@@ -302,14 +340,17 @@ async function formAction(form,data) {
   if (action.startsWith('admin.')) { await admin.form(action,form,data); draw(); return; }
   if (action==='login' || action==='register') {
     if (action==='register') Object.assign(data,{role:form.dataset.role,accepted:data.accepted==='on',termsVersion:config.termsVersion});
-    await api(action,data); account = await session(); go('inicio'); return;
+    await api(action,data); account = await session();
+    const hadItems=guestItems.size>0;
+    await importGuest().catch(error=>notice(error.message,true));
+    go(hadItems && account?.role!=='ADMIN'?'carrinho':'inicio'); return;
   }
   if (action==='forgot') { await api('password.forgot',data); notice('Se houver uma conta para esse e-mail, você receberá um link.'); go('entrar'); return; }
   if (action==='reset') {
     await api('password.reset',{...data,token:location.hash.slice('#recuperar='.length)});
     account = null; notice('Senha redefinida. Entre novamente.'); go('entrar'); return;
   }
-  if (action==='search') { catalogSearch=data.search; catalogCategory=data.category; draw(); return; }
+  if (action==='search') { catalogSearch=data.search; catalogCategory=data.category||''; draw(); return; }
   if (action==='quantity') { await api('cart.set',{sku:form.dataset.sku,quantity:Number(data.quantity)}); draw(); return; }
   if (action==='address') { await api('address.save',{...data,id:form.dataset.id,primary:data.primary==='on'}); go(form.dataset.back.slice(1)); return; }
   if (action==='review') {
@@ -327,7 +368,16 @@ async function clickAction(el) {
   const {action,id,sku,quantity,saved} = el.dataset;
   if (action==='reload') { await start(); return; }
   if (action==='logout') { await api('logout'); account=null; review=null; go('entrar'); return; }
-  if (action==='cart.set') { await api(action,{sku,quantity:Number(quantity),add:true}); notice('Produto adicionado ao carrinho.'); return; }
+  if (action==='guest.remove') { guestItems.delete(sku); saveGuest(); draw(); return; }
+  if (action==='cart.set') {
+    if (account) await api(action,{sku,quantity:Number(quantity),add:true});
+    else {
+      const next=(guestItems.get(sku)||0)+Number(quantity);
+      if (next>10000 || (!guestItems.has(sku) && guestItems.size>=100)) throw new Error('Limite da seleção atingido.');
+      guestItems.set(sku,next); saveGuest();
+    }
+    notice('Produto adicionado ao carrinho.'); return;
+  }
   if (action==='cart.remove') await api('cart.set',{sku,quantity:0});
   else if (action==='favorite.set') await api(action,{sku,saved:saved==='true'});
   else if (action==='checkout') {
@@ -366,7 +416,10 @@ async function start() {
     const response = await fetch('/api/portal',{headers:{Accept:'application/json'}});
     if (!response.ok) throw new Error('Não foi possível acessar o portal.');
     config = await response.json();
-    if (config.enabled) account = await session();
+    if (config.enabled) {
+      account = await session();
+      await importGuest().catch(error=>notice(error.message,true));
+    }
     await draw();
   } catch (error) { notice(error.message,true); await draw(); }
 }

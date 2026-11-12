@@ -40,6 +40,16 @@ export async function adminAction(db, account, action, data) {
   }
   if (action === 'admin.order') return detail(db,uuid(data.id));
   if (action === 'admin.orderStatus') return updateOrder(db,account,data);
+  if (action === 'admin.delivery') {
+    const id = uuid(data.id);
+    const freight = data.freight_cents === null ? null : integer(data.freight_cents,0,100000000,'Frete');
+    const carrier = field(data.carrier,'Transportadora',120,0);
+    const tracking = field(data.tracking,'Rastreio',120,0);
+    const updated = await first(db,`UPDATE maxdistrib.orders SET freight_cents=$2,carrier=$3,tracking_code=$4
+      WHERE id=$1 AND status<>'CANCELLED' RETURNING id`,[id,freight,carrier||null,tracking||null]);
+    requireValue(updated,'Pedido indisponível para editar a entrega.',409);
+    return detail(db,id);
+  }
   if (action === 'admin.note') {
     await detail(db,uuid(data.id));
     await db.query('INSERT INTO maxdistrib.order_notes(order_id,actor_id,message) VALUES($1,$2,$3)',

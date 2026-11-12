@@ -64,6 +64,11 @@ test('isolated PostgreSQL: retail, wholesale, session boundaries, orders and con
   await wholesale('cart.set',{sku,quantity:16},409);
   assert.equal((await retail('cart.set',{sku,quantity:2})).subtotal,24000);
   assert.equal((await retail('cart.set',{sku,quantity:1})).subtotal,12000);
+  assert.equal((await anonymous('catalog.public',{search:sku}))[0].tiers,undefined);
+  const imported=await retail('cart.import',{items:[{sku,quantity:1},{sku:'missing',quantity:1}]});
+  assert.deepEqual(imported.ignored,['missing']);
+  await retail('cart.import',{items:[{sku,quantity:1}]});
+  assert.equal((await retail('cart')).items[0].quantity,1);
   await retail('favorite.set',{sku,saved:true});
   await retail('logout');
   await retail('favorites',{},401);
@@ -100,6 +105,9 @@ test('isolated PostgreSQL: retail, wholesale, session boundaries, orders and con
   assert.equal(rOrder.id,rRetry.id);
   assert.equal((await retail('orders')).length,1);
   await wholesale('order',{id:rOrder.id},404);
+  await admin('admin.delivery',{id:rOrder.id,freight_cents:1500,carrier:'Transportadora de teste',tracking:'COD-TESTE'});
+  assert.equal((await retail('order',{id:rOrder.id})).freight_cents,1500);
+  assert.equal((await retail('order',{id:rOrder.id})).tracking_code,'COD-TESTE');
   await retail('support',{id:wOrder.id,message:'Tentativa de ver outro pedido'},404);
   await retail('support',{id:rOrder.id,message:'Dúvida sobre meu pedido'});
   assert.equal((await retail('order.reorder',{id:rOrder.id})).subtotal,12000);

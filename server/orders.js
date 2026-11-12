@@ -31,7 +31,7 @@ export async function setCart(db, account, data) {
     DO UPDATE SET quantity=excluded.quantity`,[account.id,sku,quantity]);
 }
 export async function detail(db, id, owner = null) {
-  const order = await first(db,`SELECT id,code,account_id,role,status,address,subtotal_cents,created_at,cancellation_requested_at
+  const order = await first(db,`SELECT id,code,account_id,role,status,address,subtotal_cents,freight_cents,carrier,tracking_code,created_at,cancellation_requested_at
     FROM maxdistrib.orders WHERE id=$1 AND ($2::uuid IS NULL OR account_id=$2)`,[id,owner]);
   requireValue(order,'Pedido não encontrado.',404);
   const items = await rows(db,'SELECT sku,name,quantity,unit_cents FROM maxdistrib.order_items WHERE order_id=$1 ORDER BY sku',[id]);

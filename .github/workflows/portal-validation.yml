@@ -34,3 +34,5 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: test -f dist/minha-conta.html && test -f dist/assets/portal.js && test ! -e dist/server
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser

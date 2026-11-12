@@ -52,6 +52,12 @@ export function adminView(ui) {
       return heading(esc(order.code))+`<div class="stack">${orderDetails(order,true)}
         ${next.length?`<form data-form="admin.orderStatus" data-id="${id}" class="card stack"><label>Novo status
         <select class="fi" name="status">${options(next,'')}</select></label>${submit('Atualizar status')}</form>`:''}
+        ${order.status==='CANCELLED'?'':`<form data-form="admin.delivery" data-id="${id}" class="card stack">
+        <h2>Entrega</h2><div class="fields">
+        ${field('freight','Frete cotado em R$','type="number" min="0" max="1000000" step=".01"',order.freight_cents==null?'':(order.freight_cents/100).toFixed(2))}
+        ${field('carrier','Transportadora','maxlength="120"',order.carrier)}
+        ${field('tracking','Código de rastreio','maxlength="120"',order.tracking_code)}
+        </div>${submit('Salvar entrega')}</form>`}
         <form data-form="admin.note" data-id="${id}" class="card stack"><h2>Observações internas</h2>
         ${order.notes.map(n=>'<p>'+esc(n.message)+' · '+date(n.created_at)+'</p>').join('')}
         <label>Observação<textarea class="fi" name="message" maxlength="2000" required></textarea></label>${submit('Adicionar observação')}</form></div>`;
@@ -89,6 +95,8 @@ export function adminView(ui) {
         tiers,multiple:Number(values.multiple),until:values.until?new Date(values.until).toISOString():null,
         stockDelta:Number(values.stockDelta),active:values.active==='on'});
       if (location.hash==='#admin-novo-produto') location.hash='admin-produtos';
+    } else if (action==='admin.delivery') {
+      await api(action,{...values,id:form.dataset.id,freight_cents:values.freight?Math.round(Number(values.freight)*100):null});
     } else {
       await api(action,{...values,id:form.dataset.id});
     }

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { database, transaction, first, rows } from '../server/db.js';
-import { RETAIL, WHOLESALE, field, email, phone, address, uuid, productView, requireValue } from '../server/rules.js';
+import { RETAIL, WHOLESALE, field, email, phone, address, uuid, productView, requireValue, integer } from '../server/rules.js';
 import { configuration, register, accountView, cookie, currentAccount, hash, isToken, issueSession,
   passwordHash, rateLimit, resetEmail, sessionToken, verifyPassword } from '../server/auth.js';
 import { cart, setCart, checkout, detail } from '../server/orders.js';
@@ -31,7 +31,7 @@ async function payload(request) {
 
 function reply(body,status=200,session) {
   const headers = {'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
-  if (session !== undefined) headers['Set-Cookie'] = cookie(session,process.env.NODE_ENV==='production');
+  if (session !== undefined) headers['Set-Cookie'] = cookie(session,process.env.NODE_ENV!=='test' && process.env.NODE_ENV!=='development');
   return Response.json(body,{status,headers});
 }
 
@@ -59,6 +59,14 @@ async function addressAction(db, account, action, data) {
   return {id};
 }
 
+async function catalog(db, account, data) {
+    const term = '%' + field(data.search,'Busca',100,0) + '%';
+    const category = field(data.category,'Categoria',120,0);
+    const list = await rows(db,`SELECT * FROM maxdistrib.products WHERE active AND (name ILIKE $1 OR category ILIKE $1 OR brand ILIKE $1 OR sku ILIKE $1)
+      AND ($2='' OR category=$2) ORDER BY name,sku LIMIT 250`,[term,category]);
+    return list.map(product => productView(product,account));
+}
+
 async function customerAction(db, account, action, data, config, request) {
   const id = account.id;
   if (action === 'overview') {
@@ -73,12 +81,23 @@ async function customerAction(db, account, action, data, config, request) {
       GROUP BY i.sku,i.name ORDER BY quantity DESC LIMIT 4`,[id]);
     return {counts,favorites:favorites.total,recent,frequent};
   }
-  if (action === 'catalog') {
-    const term = '%' + field(data.search,'Busca',100,0) + '%';
-    const category = field(data.category,'Categoria',120,0);
-    const list = await rows(db,`SELECT * FROM maxdistrib.products WHERE active AND (name ILIKE $1 OR category ILIKE $1 OR brand ILIKE $1 OR sku ILIKE $1)
-      AND ($2='' OR category=$2) ORDER BY name,sku LIMIT 250`,[term,category]);
-    return list.map(product => productView(product,account));
+  if (action === 'catalog') return catalog(db,account,data);
+  if (action === 'cart.import') {
+    requireValue(Array.isArray(data.items) && data.items.length <= 100, 'Seleção inválida.');
+    const ignored = [];
+    for (const item of data.items) {
+      requireValue(item && typeof item === 'object','Item inválido.');
+      const sku = field(item.sku,'SKU',100);
+      const quantity = integer(item.quantity,1,10000,'Quantidade');
+      const present = await first(db,'SELECT quantity FROM maxdistrib.cart WHERE account_id=$1 AND sku=$2',[id,sku]);
+      if (present?.quantity >= quantity) continue;
+      try { await setCart(db,account,{sku,quantity}); }
+      catch (error) {
+        if (!error.status) throw error;
+        ignored.push(sku);
+      }
+    }
+    return {ignored};
   }
   if (action === 'cart') return cart(db,account);
   if (action === 'cart.set') { await setCart(db,account,data); return cart(db,account); }
@@ -152,6 +171,7 @@ export default async function handler(request) {
     const data = await payload(request);
     const action = field(data.action,'Ação',45);
     const pool = await database();
+    if (action === 'catalog.public') return reply(await catalog(pool,{role:RETAIL,status:'ACTIVE'},data));
     if (action === 'session') {
       const account = await currentAccount(pool,request);
       return reply({account:account ? accountView(account) : null});

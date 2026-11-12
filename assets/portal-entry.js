@@ -5,6 +5,14 @@ fetch('/api/portal', {headers:{Accept:'application/json'}}).then(response => res
   if (!header) return;
   const title = document.getElementById('ul');
   title.textContent = 'Minha conta';
+  const intro = document.querySelector('.intro-act');
+  if (intro) {
+    const link = document.createElement('a');
+    link.className = 'btn btn-o';
+    link.href = '/minha-conta#produtos';
+    link.textContent = 'Comprar pelo portal';
+    intro.append(link);
+  }
   header.addEventListener('click',event => {
     event.stopImmediatePropagation();
     location.assign('/minha-conta');
