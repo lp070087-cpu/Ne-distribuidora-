@@ -37,18 +37,18 @@ export function state(value) {
   return result;
 }
 export function taxId(value) {
-  const number = field(value, 'CPF ou CNPJ', 24).replace(/\D/g, '');
-  const cpf = number.length === 11;
-  requireValue((cpf || number.length === 14) && !/^(\d)\1+$/.test(number), 'CPF ou CNPJ inválido.');
+  const document = field(value,'CPF ou CNPJ',24).toUpperCase().replace(/[.\s/-]/g,'');
+  const cpf = /^\d{11}$/.test(document);
+  requireValue((cpf || /^[0-9A-Z]{12}\d{2}$/.test(document)) && !/^(\d)\1+$/.test(document), 'CPF ou CNPJ inválido.');
   const valid = (length, weights) => {
-    const sum = weights.reduce((total, weight, i) => total + weight * Number(number[i]), 0);
+    const sum = weights.reduce((total, weight, i) => total + weight * (document.charCodeAt(i)-48), 0);
     const digit = cpf ? (sum * 10) % 11 : 11 - (sum % 11);
-    return Number(number[length]) === (digit >= 10 ? 0 : digit);
+    return Number(document[length]) === (digit >= 10 ? 0 : digit);
   };
-  const weights = length => Array.from({ length }, (_, i) => length + 1 - i);
-  requireValue(cpf ? valid(9, weights(9)) && valid(10, weights(10))
-    : valid(12, [5,4,3,2,9,8,7,6,5,4,3,2]) && valid(13, [6,5,4,3,2,9,8,7,6,5,4,3,2]), 'CPF ou CNPJ inválido.');
-  return number;
+  const weights = length => Array.from({length},(_,i)=>length+1-i);
+  requireValue(cpf ? valid(9,weights(9)) && valid(10,weights(10))
+    : valid(12,[5,4,3,2,9,8,7,6,5,4,3,2]) && valid(13,[6,5,4,3,2,9,8,7,6,5,4,3,2]), 'CPF ou CNPJ inválido.');
+  return document;
 }
 export function address(data) {
   const zip = field(data.zip, 'CEP', 10).replace(/\D/g, '');

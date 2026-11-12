@@ -120,7 +120,7 @@ function authView(page) {
       ${field('email','E-mail','type="email" autocomplete="email" required maxlength="254"')}
       ${field('phone','Telefone / WhatsApp','type="tel" autocomplete="tel" required maxlength="30"')}
       ${reseller?field('business','Nome comercial ou razão social','autocomplete="organization" required maxlength="120"')
-        + field('taxId','CPF ou CNPJ','inputmode="numeric" required maxlength="24"')
+        + field('taxId','CPF ou CNPJ','autocapitalize="characters" required maxlength="24"')
         + field('city','Cidade','autocomplete="address-level2" required maxlength="120"')
         + field('state','UF','autocomplete="address-level1" required maxlength="2"') : ''}
       ${field('password','Senha','type="password" autocomplete="new-password" required minlength="12" maxlength="128"')}
@@ -400,6 +400,9 @@ async function perform(button, action) {
   try { await action(); } catch (error) { notice(error.message,true); }
   finally { if (button) button.disabled=false; }
 }
+main.addEventListener('change',event=>{
+  if (event.target.matches('[data-campaign-reference]')) admin.showCampaign(event.target);
+});
 main.addEventListener('submit',event=>{
   const form=event.target.closest('form[data-form]');
   if (!form) return;

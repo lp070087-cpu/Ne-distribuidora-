@@ -48,6 +48,8 @@ test('passwords are salted, session cookies are secure and portal is off by defa
 test('CPF/CNPJ, addresses and asset paths are validated',()=>{
   assert.equal(taxId('529.982.247-25'),'52998224725');
   assert.equal(taxId('04.252.011/0001-10'),'04252011000110');
+  assert.equal(taxId('12.ABC.345/01DE-35'),'12ABC34501DE35');
+  assert.throws(()=>taxId('12.ABC.345/01DE-36'),{status:400});
   assert.throws(()=>taxId('000.000.000-00'),{status:400});
   assert.throws(()=>address({zip:'123'}),{status:400});
   assert.throws(()=>imagePath('/Public/../file.webp'),{status:400});

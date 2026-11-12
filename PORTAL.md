@@ -14,7 +14,7 @@ A vitrine estática continua disponível. O portal em `/minha-conta` usa a funç
 
 Execute `npm install`, `npm run migrate` e `npm test`. Aplique a migração primeiro em homologação. O script `npm run create-admin` recebe `MAXDISTRIB_ADMIN_EMAIL`, `MAXDISTRIB_ADMIN_PASSWORD`, `MAXDISTRIB_ADMIN_NAME` e `MAXDISTRIB_ADMIN_PHONE` do ambiente restrito em que é executado. Essas variáveis são necessárias só no provisionamento da conta administrativa.
 
-Cadastre SKUs, disponibilidade e preços confirmados em Produtos e preços. A base começa vazia. Os dados demonstrativos e os preços públicos dos encartes ficam na vitrine. Preços promocionais operacionais exigem identificação do SKU, validade e disponibilidade confirmadas. As faixas de atacado restritas só são retornadas para contas aprovadas.
+Cadastre SKUs, disponibilidade e preços confirmados em Produtos e preços. O painel oferece consulta às condições e à fonte dos encartes durante o cadastro. A base começa vazia. Os dados demonstrativos e os preços públicos dos encartes ficam na vitrine. Preços promocionais operacionais exigem identificação do SKU, validade e disponibilidade confirmadas. As faixas de atacado restritas só são retornadas para contas aprovadas.
 
 ## Pedidos e estoque
 

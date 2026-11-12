@@ -4,7 +4,7 @@ export function adminView(ui) {
   const statuses = ['PENDING_APPROVAL','ACTIVE','REJECTED','SUSPENDED','RECEIVED','AWAITING_CONFIRMATION','CONFIRMED','PICKING','SHIPPED','DELIVERED','CANCELLED'];
   const transitions = {RECEIVED:['AWAITING_CONFIRMATION','CONFIRMED','CANCELLED'],AWAITING_CONFIRMATION:['CONFIRMED','CANCELLED'],
     CONFIRMED:['PICKING','CANCELLED'],PICKING:['SHIPPED','CANCELLED'],SHIPPED:['DELIVERED']};
-  let search='',status='';
+  let search='',status='',campaign;
   const options = (values,current) => values.map(value=>`<option value="${value}" ${value===current?'selected':''}>${badge(value)}</option>`).join('');
   const localDate = value => {
     if (!value) return '';
@@ -16,6 +16,24 @@ export function adminView(ui) {
   const orderRow = (o) => `<div class="row"><div><strong>${esc(o.code)}</strong><p>${esc(o.name||'')} · ${badge(o.status)} · ${date(o.created_at)}</p>
     ${o.cancellation_requested_at?'<p class="error">Cancelamento solicitado</p>':''}</div><strong>${money(o.subtotal_cents)}</strong>
     ${link('Abrir pedido','#admin-pedido='+o.id)}</div>`;
+  async function campaignReference() {
+    if (!campaign) {
+      await import('./encartes.js');
+      campaign = window.NE_CAMPAIGN || [];
+    }
+    return `<details><summary>Consultar os encartes da NE</summary>
+      <label>Produto ou combo do encarte<select class="fi" data-campaign-reference>
+      <option value="">Selecione uma oferta</option>${campaign.map(item=>`<option value="${esc(item.id)}">${esc(item.n)}</option>`).join('')}</select></label>
+      <div class="stack" data-campaign-details></div></details>`;
+  }
+  function showCampaign(select) {
+    const item = campaign?.find(offer=>offer.id===select.value);
+    const details = select.closest('details').querySelector('[data-campaign-details]');
+    details.innerHTML = item ? `<p><strong>${esc(item.n)}</strong> · ${esc(item.br)} · ${esc(item.source)}</p>
+      <ul>${item.tiers.map(t=>`<li>${esc(t.condition)} · ${money(Math.round(t.cash*100))} à vista
+      ${t.card==null?'':' · '+money(Math.round(t.card*100))+' no cartão'}</li>`).join('')}</ul>
+      <p class="muted">Confirme SKU, vigência, embalagem, sabor e mínimos antes de configurar as faixas. O encarte não define o preço de varejo.</p>` : '';
+  }
   function productForm(p={}) {
     const tiers = (p.wholesale_tiers||[]).map(t=>t.minimum+':'+t.cents).join('\n');
     return `<form class="card stack" data-form="admin.product">
@@ -62,12 +80,13 @@ export function adminView(ui) {
         ${order.notes.map(n=>'<p>'+esc(n.message)+' · '+date(n.created_at)+'</p>').join('')}
         <label>Observação<textarea class="fi" name="message" maxlength="2000" required></textarea></label>${submit('Adicionar observação')}</form></div>`;
     }
-    if (section==='admin-novo-produto') return heading('Cadastrar produto')+productForm();
+    if (section==='admin-novo-produto') return heading('Cadastrar produto')+`<div class="stack">
+      <section class="card">${await campaignReference()}</section>${productForm()}</div>`;
     const data = await api('admin.dashboard',{search,status});
     if (section==='admin-pedidos') return heading('Pedidos')+`<div class="stack">${filter()}<section class="card">
       ${data.orders.map(orderRow).join('')||'<p>Nenhum pedido encontrado.</p>'}</section></div>`;
     if (section==='admin-produtos') return heading('Produtos e preços')+`<div class="stack">${filter()}${link('Cadastrar produto','#admin-novo-produto')}
-      <section class="card">${data.products.map(p=>'<details><summary>'+esc(p.name)+' · '+esc(p.sku)+'</summary>'+productForm(p)+'</details>').join('')||'<p>Nenhum produto cadastrado.</p>'}</section></div>`;
+      <section class="card">${await campaignReference()}</section><section class="card">${data.products.map(p=>'<details><summary>'+esc(p.name)+' · '+esc(p.sku)+'</summary>'+productForm(p)+'</details>').join('')||'<p>Nenhum produto cadastrado.</p>'}</section></div>`;
     if (section==='admin-estoque') return heading('Estoque operacional','Saldos utilizados pelo catálogo e pelos pedidos.')+`<div class="stack">
       ${link('Ajustar saldo em Produtos e preços','#admin-produtos')}
       <section class="card"><h2>Saldos</h2>${data.products.map(p=>`<div class="row"><strong>${esc(p.name)}</strong><p>${p.on_hand} em estoque · ${p.reserved} reservados</p></div>`).join('')||'<p>Nenhum saldo cadastrado.</p>'}</section>
@@ -102,5 +121,5 @@ export function adminView(ui) {
     }
     notice('Alteração registrada.');
   }
-  return {render,links,form};
+  return {render,links,form,showCampaign};
 }
